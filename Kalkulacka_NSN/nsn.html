@@ -26,9 +26,18 @@
     }
 
   </style>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
   <h1>Kalkulacka Najmensieho Spolocneho Nasobku</h1>
+
+  <div id="g_id_onload"
+     data-client_id="322952334301-5bu0bcbnc0b4ou5fr0ceo3a9f1b27hs7.apps.googleusercontent.com"
+     data-callback="handleCredentialResponse">
+  </div>
+
+ <div class="g_id_signin" data-type="standard"></div>
+ 
   <input type="number" id="num1" placeholder="Zadaj prve cislo">
   <input type="number" id="num2" placeholder="Zadaj druhe cislo">
   <button onclick="calculateSum()">Vypocitaj NSN</button>
