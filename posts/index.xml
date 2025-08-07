@@ -2,17 +2,33 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Posts on sbezo.github.io</title>
-    <link>https://sbezo.github.io/posts/</link>
+    <link>http://localhost:1313/posts/</link>
     <description>Recent content in Posts on sbezo.github.io</description>
     <generator>Hugo -- 0.149.0-DEV</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 06 Aug 2025 18:11:33 +0000</lastBuildDate>
-    <atom:link href="https://sbezo.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 07 Aug 2025 10:09:54 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Publishing to github.io</title>
+      <link>http://localhost:1313/posts/hugo-2/</link>
+      <pubDate>Thu, 07 Aug 2025 10:09:54 +0000</pubDate>
+      <guid>http://localhost:1313/posts/hugo-2/</guid>
+      <description>&lt;p&gt;I have my simple web page with blog running locally on HUGO server - as a container.&lt;br&gt;
+Now it is time to make it public&amp;hellip;&lt;/p&gt;
+&lt;h3 id=&#34;what-i-want&#34;&gt;What I want?&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Generate code for my web page&lt;/li&gt;
+&lt;li&gt;Setup workflow for publishing&lt;/li&gt;
+&lt;li&gt;And finally see my page on internet :)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Primary goal of HUGO, as static site generator, is simply generate html, css and js code for web site.&lt;br&gt;
+And next step is very easy. Just attach shell to container and type &lt;code&gt;hugo&lt;/code&gt;.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>HUGO from Docker</title>
-      <link>https://sbezo.github.io/posts/hugo/</link>
+      <link>http://localhost:1313/posts/hugo/</link>
       <pubDate>Wed, 06 Aug 2025 18:11:33 +0000</pubDate>
-      <guid>https://sbezo.github.io/posts/hugo/</guid>
+      <guid>http://localhost:1313/posts/hugo/</guid>
       <description>Very Quick Start with the PaperMod theme</description>
     </item>
   </channel>

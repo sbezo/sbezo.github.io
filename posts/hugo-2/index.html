@@ -5,9 +5,18 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="noindex, nofollow">
-<title>HUGO 2 | sbezo.github.io</title>
+<title>Publishing to github.io | sbezo.github.io</title>
 <meta name="keywords" content="">
-<meta name="description" content="After I made my content run locally via HUGO server, I want to publish it via github pages.">
+<meta name="description" content="I have my simple web page with blog running locally on HUGO server - as a container.
+Now it is time to make it public&hellip;
+What I want?
+
+Generate code for my web page
+Setup workflow for publishing
+And finally see my page on internet :)
+
+Primary goal of HUGO, as static site generator, is simply generate html, css and js code for web site.
+And next step is very easy. Just attach shell to container and type hugo.">
 <meta name="author" content="">
 <link rel="canonical" href="http://localhost:1313/posts/hugo-2/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.8fe10233a706bc87f2e08b3cf97b8bd4c0a80f10675a143675d59212121037c0.css" integrity="sha256-j&#43;ECM6cGvIfy4Is8&#43;XuL1MCoDxBnWhQ2ddWSEhIQN8A=" rel="preload stylesheet" as="style">
@@ -117,7 +126,7 @@
   <header class="post-header">
     
     <h1 class="post-title entry-hint-parent">
-      HUGO 2
+      Publishing to github.io
       <span class="entry-hint" title="Draft">
         <svg xmlns="http://www.w3.org/2000/svg" height="35" viewBox="0 -960 960 960" fill="currentColor">
           <path
@@ -129,7 +138,77 @@
 
 </div>
   </header> 
-  <div class="post-content"><p>After I made my content run locally via HUGO server, I want to publish it via github pages.</p>
+  <div class="post-content"><p>I have my simple web page with blog running locally on HUGO server - as a container.<br>
+Now it is time to make it public&hellip;</p>
+<h3 id="what-i-want">What I want?<a hidden class="anchor" aria-hidden="true" href="#what-i-want">#</a></h3>
+<ul>
+<li>Generate code for my web page</li>
+<li>Setup workflow for publishing</li>
+<li>And finally see my page on internet :)</li>
+</ul>
+<p>Primary goal of HUGO, as static site generator, is simply generate html, css and js code for web site.<br>
+And next step is very easy. Just attach shell to container and type <code>hugo</code>.</p>
+<pre tabindex="0"><code>docker exec -it hugo_2025-server-1 bash
+hugo
+</code></pre><p>Now I have complete code generated in <code>/public</code> folder of my <code>sbezo.github.io</code> project.<br>
+And I need to get it to github server.</p>
+<p>First a little bit a git woodoo ;)
+I have already git initiated in parent folder <code>HUGO</code> of my site folder <code>sbezo.github.io</code>.<br>
+<code>public</code> folder is inside site.
+Simply something like this:</p>
+<pre tabindex="0"><code>📁 HUGO
+├── 📄 .gitignore
+├── 📄 docker-compose.yml
+├── 📁 .git/
+├── 📁 sbezo.github.io/
+    ├── 📁 public/
+    ├── 📁 content/
+    ├── 📁 content/
+    ├── 📁 ...
+    └── 📄 hugo.yaml
+</code></pre><p>As I want to push complete <code>HUGO</code> folder as private repository to github.com, I did it in VSCode as usually. Nothing special to explain.<br>
+But I also want to push <code>/public</code> folder as public repository to one special github repository with name <code>sbezo/sbezo.github.io</code>.</p>
+<blockquote>
+<p>Each Github user can publish static web content from this special repository with name <code>username/username.github.io</code> and can be served on <code>https://username.github.io</code> for free.</p></blockquote>
+<p>So I excluded <code>/public</code> from git by modifying <code>.gitignore</code> file under <code>HUGO</code> folder by adding record:</p>
+<pre tabindex="0"><code>sbezo.github.io/public/
+</code></pre><p>And then I initialized another git inside <code>/public/</code> folder and push repository to remote.</p>
+<pre tabindex="0"><code>cd public
+git init
+git add * 
+git commit -m &#34;1st commit&#34; 
+git remote add origin git@github.com:sbezo/sbezo.github.io.git
+git push origin main --force
+</code></pre><blockquote>
+<p>I had repository <code>sbezo/sbezo.github.io</code> already on github.com with some obsolete data.</p></blockquote>
+<p>Small tunning on github repository under Settings &gt; Pages is necessary:</p>
+<p><img loading="lazy" src="/img/hugo2-gh-pages.png">.</p>
+<p>Also some changes in VSCode to see both repositories in Source Control are necessary:</p>
+<ul>
+<li>go to <code>File &gt; Add Folder to Workspace…</code></li>
+<li>Select the <code>public/</code> folder</li>
+<li>go to <code>File &gt; Save Workspace As</code></li>
+</ul>
+<h3 id="final-workflow">Final workflow<a hidden class="anchor" aria-hidden="true" href="#final-workflow">#</a></h3>
+<ol>
+<li>Create new post with HUGO</li>
+</ol>
+<pre tabindex="0"><code>docker compose up
+docker exec -it hugo_2025-server-1 bash
+hugo new posts/My_new_post.md
+</code></pre><ol start="2">
+<li>
+<p>Edit <code>My_new_post.md</code> as needed</p>
+</li>
+<li>
+<p>Generate new content for web site</p>
+</li>
+</ol>
+<pre tabindex="0"><code>docker exec -it hugo_2025-server-1 bash
+hugo
+</code></pre><ol start="4">
+<li>Commit and push both repositories to remote github.com</li>
+</ol>
 
 
   </div>
