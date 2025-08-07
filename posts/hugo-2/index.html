@@ -162,7 +162,7 @@ But I also want to push <code>/public</code> folder as public repository to one 
 <blockquote>
 <p>Each Github user can publish static web content from this special repository with name <code>username/username.github.io</code> and can be served on <code>https://username.github.io</code> for free.</p></blockquote>
 <p>So I excluded <code>/public</code> from git by modifying <code>.gitignore</code> file under <code>HUGO</code> folder by adding record:</p>
-<pre tabindex="0"><code>sbezo.github.io/public/
+<pre tabindex="0"><code>sbezo.github.io/public
 </code></pre><p>And then I initialized another git inside <code>/public/</code> folder and push repository to remote.</p>
 <pre tabindex="0"><code>cd public
 git init
