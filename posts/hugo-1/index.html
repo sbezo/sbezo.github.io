@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><meta charset="utf-8">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="noindex, nofollow">
 <title>HUGO from Docker | sbezo.github.io</title>
 <meta name="keywords" content="">
 <meta name="description" content="Very Quick Start with the PaperMod theme">
 <meta name="author" content="">
-<link rel="canonical" href="https://sbezo.github.io/posts/hugo-1/">
+<link rel="canonical" href="http://localhost:1313/posts/hugo-1/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.8fe10233a706bc87f2e08b3cf97b8bd4c0a80f10675a143675d59212121037c0.css" integrity="sha256-j&#43;ECM6cGvIfy4Is8&#43;XuL1MCoDxBnWhQ2ddWSEhIQN8A=" rel="preload stylesheet" as="style">
-<link rel="icon" href="https://sbezo.github.io/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="https://sbezo.github.io/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://sbezo.github.io/favicon-32x32.png">
-<link rel="apple-touch-icon" href="https://sbezo.github.io/apple-touch-icon.png">
-<link rel="mask-icon" href="https://sbezo.github.io/safari-pinned-tab.svg">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="https://sbezo.github.io/posts/hugo-1/">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/hugo-1/">
 <noscript>
     <style>
         #theme-toggle,
@@ -55,69 +55,7 @@
         }
 
     </style>
-</noscript><meta property="og:url" content="https://sbezo.github.io/posts/hugo-1/">
-  <meta property="og:site_name" content="sbezo.github.io">
-  <meta property="og:title" content="HUGO from Docker">
-  <meta property="og:description" content="Very Quick Start with the PaperMod theme">
-  <meta property="og:locale" content="en-us">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2025-08-06T18:11:33+00:00">
-    <meta property="article:modified_time" content="2025-08-06T18:11:33+00:00">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="HUGO from Docker">
-<meta name="twitter:description" content="Very Quick Start with the PaperMod theme">
-
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "Posts",
-      "item": "https://sbezo.github.io/posts/"
-    }, 
-    {
-      "@type": "ListItem",
-      "position":  2 ,
-      "name": "HUGO from Docker",
-      "item": "https://sbezo.github.io/posts/hugo-1/"
-    }
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "HUGO from Docker",
-  "name": "HUGO from Docker",
-  "description": "Very Quick Start with the PaperMod theme",
-  "keywords": [
-    
-  ],
-  "articleBody": "This post is about my short journey with Hugo, a static site generator.\nMy expectations were: As usual, I prefer Docker — if possible. I want to back up and track my work on GitHub. And I expect speed and simplicity - of course. I started by creating a parent folder called HUGO.\nInside this folder, I created a new site named sbezo.github.io using the Hugo container and initialized a Git repository.\nmkdir HUGO cd HUGO docker run --rm -v $(pwd):/src hugomods/hugo:debian-nightly new site sbezo.github.io --format yaml git init --format yaml is used because I chose the PaperMod theme. Each theme has its own configuration preferences. Without this flag, the default .toml format would be used.\nNext, I prepared a docker-compose.yml file directly in the HUGO folder to make it easy to run the site locally:\nservices: server: image: hugomods/hugo:debian-nightly command: server -D --poll 700ms volumes: - \"./sbezo.github.io:/src\" ports: - \"1313:1313\" Now I had a new site under the sbezo.github.io subfolder with default settings.\nSince I chose the PaperMod theme, the next step was to install it into the generated site:\ncd sbezo.github.io git submodule add https://github.com/adityatelange/hugo-PaperMod.git themes/PaperMod Then I replaced the default hugo.yaml with this simple setup:\nbaseURL: \"https://sbezo.github.io\" languageCode: en-us title: sbezo.github.io theme: PaperMod params: profileMode: enabled: true title: \"Stefan Bezo\" subtitle: \"Sometimes, I just feel like putting thoughts into words ;)\" imageUrl: \"/img/me.jpeg\" imageWidth: 120 imageHeight: 120 socialIcons: - name: \"linkedin\" url: \"https://www.linkedin.com/in/stefanbezo\" - name: \"github\" url: \"https://github.com/sbezo\" defaultTheme: auto ShowCodeCopyButtons: true ShowPostNavLinks: true menus: main: - name: Blog pageRef: /posts weight: 10 I copied the me.jpeg file to the assets/img folder.\nNow it was time to bring the site up locally — simple as that:\ndocker compose up Adding my first post Checked the name of the running container, attached a shell to it, and created a new post using Hugo:\ndocker ps docker exec -it hugo_2025-server-1 bash hugo new posts/HUGO.md And I can start write the content/posts/HUGO.md file and preview it in browser:\nHugo serves the site at: http://localhost:1313\nResult Now I have a really simple personal website running locally with a blog.\nLooking forward to publishing it — stay tuned! 😉\n",
-  "wordCount" : "357",
-  "inLanguage": "en",
-  "datePublished": "2025-08-06T18:11:33Z",
-  "dateModified": "2025-08-06T18:11:33Z",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://sbezo.github.io/posts/hugo-1/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "sbezo.github.io",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://sbezo.github.io/favicon.ico"
-    }
-  }
-}
-</script>
+</noscript>
 </head>
 
 <body class="" id="top">
@@ -135,7 +73,7 @@
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="https://sbezo.github.io/" accesskey="h" title="sbezo.github.io (Alt + H)">sbezo.github.io</a>
+            <a href="http://localhost:1313/" accesskey="h" title="sbezo.github.io (Alt + H)">sbezo.github.io</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -161,12 +99,12 @@
         </div>
         <ul id="menu">
             <li>
-                <a href="https://sbezo.github.io/posts/" title="Posts">
+                <a href="http://localhost:1313/posts/" title="Posts">
                     <span>Blog</span>
                 </a>
             </li>
             <li>
-                <a href="https://sbezo.github.io/projects/" title="Projects">
+                <a href="http://localhost:1313/projects/" title="Projects">
                     <span>Projects</span>
                 </a>
             </li>
@@ -274,7 +212,7 @@ Looking forward to publishing it — stay tuned! 😉</p>
     </main>
     
 <footer class="footer">
-        <span>&copy; 2025 <a href="https://sbezo.github.io/">sbezo.github.io</a></span> · 
+        <span>&copy; 2025 <a href="http://localhost:1313/">sbezo.github.io</a></span> · 
 
     <span>
         Powered by
