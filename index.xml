@@ -2,31 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>sbezo.github.io</title>
-    <link>http://localhost:1313/</link>
+    <link>https://sbezo.github.io/</link>
     <description>Recent content on sbezo.github.io</description>
     <generator>Hugo -- 0.149.0-DEV</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 07 Aug 2025 10:09:54 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>HUGO to github.io</title>
-      <link>http://localhost:1313/posts/hugo-2/</link>
-      <pubDate>Thu, 07 Aug 2025 10:09:54 +0000</pubDate>
-      <guid>http://localhost:1313/posts/hugo-2/</guid>
-      <description>Continue with publishing of personal web site</description>
-    </item>
+    <lastBuildDate>Thu, 07 Aug 2025 09:18:20 +0000</lastBuildDate>
+    <atom:link href="https://sbezo.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Chess Pairing</title>
-      <link>http://localhost:1313/projects/chess-pairing/</link>
+      <link>https://sbezo.github.io/projects/chess-pairing/</link>
       <pubDate>Thu, 07 Aug 2025 09:18:20 +0000</pubDate>
-      <guid>http://localhost:1313/projects/chess-pairing/</guid>
+      <guid>https://sbezo.github.io/projects/chess-pairing/</guid>
       <description>The simplest website for chess pairing ever ;)</description>
     </item>
     <item>
       <title>HUGO from Docker</title>
-      <link>http://localhost:1313/posts/hugo-1/</link>
+      <link>https://sbezo.github.io/posts/hugo-1/</link>
       <pubDate>Wed, 06 Aug 2025 18:11:33 +0000</pubDate>
-      <guid>http://localhost:1313/posts/hugo-1/</guid>
+      <guid>https://sbezo.github.io/posts/hugo-1/</guid>
       <description>Very Quick Start with the PaperMod theme</description>
     </item>
   </channel>
