@@ -1,31 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="index, follow">
 <title>Lattices by example 1 | sbezo.github.io</title>
 <meta name="keywords" content="">
-<meta name="description" content="First of all - I&rsquo;m not mathematician, but engineer who loves challenges;)
-I&rsquo;m going to explain how I came to this topic by solving some interesting problems.
-Challenge 1
-
-$a\sqrt{2} &#43; b\sqrt{3} &#43; c\sqrt{5} = 640.53550337526478156252876765&hellip;$
-Find coefficients a, b, c in $\Z$
-
-This can be quickly solved by Brute-force, but my topic is Lattice this time. And I want to explain how I think about it from Lattice perspective. And we can also easy extend challenge to 20 coefficients which makes BF method effectively out.">
+<meta name="description" content="!!! Under construction !!!">
 <meta name="author" content="">
-<link rel="canonical" href="http://localhost:1313/posts/lattices_by_example_1/">
+<link rel="canonical" href="https://sbezo.github.io/posts/lattices_by_example_1/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.8fe10233a706bc87f2e08b3cf97b8bd4c0a80f10675a143675d59212121037c0.css" integrity="sha256-j&#43;ECM6cGvIfy4Is8&#43;XuL1MCoDxBnWhQ2ddWSEhIQN8A=" rel="preload stylesheet" as="style">
-<link rel="icon" href="http://localhost:1313/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
-<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
-<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<link rel="icon" href="https://sbezo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://sbezo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://sbezo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://sbezo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://sbezo.github.io/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/lattices_by_example_1/">
+<link rel="alternate" hreflang="en" href="https://sbezo.github.io/posts/lattices_by_example_1/">
 <noscript>
     <style>
         #theme-toggle,
@@ -82,7 +75,69 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
+<meta property="og:url" content="https://sbezo.github.io/posts/lattices_by_example_1/">
+  <meta property="og:site_name" content="sbezo.github.io">
+  <meta property="og:title" content="Lattices by example 1">
+  <meta property="og:description" content="!!! Under construction !!!">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-08-08T11:38:28+00:00">
+    <meta property="article:modified_time" content="2025-08-08T11:38:28+00:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Lattices by example 1">
+<meta name="twitter:description" content="!!! Under construction !!!">
 
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://sbezo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Lattices by example 1",
+      "item": "https://sbezo.github.io/posts/lattices_by_example_1/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Lattices by example 1",
+  "name": "Lattices by example 1",
+  "description": "!!! Under construction !!!",
+  "keywords": [
+    
+  ],
+  "articleBody": "First of all, I’m not a mathematician, but an engineer who loves challenges. :).\nI’m going to explain how I came to this topic by solving some interesting problems.\nI’m starting this series with a challenge that has a nice graphical interpretation in 3-dimensional space.\nChallenge 1 $a\\sqrt{2} + b\\sqrt{3} = 7.5959858026829237684897…$\nFind coefficients a, b in $\\Z$\nConstraint: Coefficients should be small (say, from -256 to 256).\nThis can be quickly solved by Brute-force, but our topic is Lattice this time. And I want to explain how I think about it from Lattice perspective. And we can also easily extend the challenge to 20 coefficients, which makes the brute-force method effectively unusable.\nAn important note is that the square root of a prime is an irrational number (it cannot be expressed as a fraction of two integers). So each coefficient is multiplied by irrational number and result is also irrational.\nIf we want to solve similar challenge, but with rational numbers, for example:\n$a\\frac{2}{3} + b\\frac{3}{4} = 8$.\nwe quickly find that there is infinite number of solution in $\\Z$ ring. For any b we have corresponding a. And it holds for any rational numbers (fractions).\n$\\frac{8a + 9b}{12} = 8$.\n$a = \\frac{96 - 9b}{8}$\nThe same thing will happen if we round irrational numbers to a certain number of decimal digits; the coefficients will just be quite large, depending on the precision of the rounding.\nSo back to our irrational numbers which assure unique solution. We are trying to find coefficients a, b such as left side of given equation is as much as possible close to irrational number on right side.\nAnd exactly this bolded expression brings Lattice topic to the scene:\nLattice introduction There is a lot of articles and videos about Lattices, basis vectors and finding shortest (SVP) or closest(CVP) vector.\nAwesome introduction video is for example here.\nI do not want to write general introduction to Lattices in this post, but rather focus on explanation by example. I just point to few important things, how I understand them and how they are related to my challenge.\nI will talk exclusively about Lattices over Integers ($\\Z$), Such Lattice is exactly what its names suggest - group of points in space with integer coordinates Important parameter of each Lattice is its dimension. Thus 2 or 3 dimensional Lattice is easy to imagine as some periodical structure in 2 or 3 dimensions. When I started with this topic, I tried to extend this image to higher dimensions, but it is hard. This is reason why my first challenge is with 3 coefficients and it really works also in higher dimensions. Lattice structure is always determined by basis vectors. In two dimensional space by two linear vectors, in three dimensional by three linear vectors and so on. Non intuitive fact is, that all Lattices points can be always constructed from any basis vectors by infinite numbers of operations between basis vectors. Lifting from irrational numbers to Integers. As I want to work with Lattices over Integers ($\\Z$), I need to “lift” irrational numbers $\\sqrt{2}$ and $\\sqrt{3}$ to Integers. So I need to multiply them by some lifting coefficient (say M), then round and make it integer. Precision of rounding by lifting depends on two factors:\nHow big could be coefficients, which are we trying to find. I have constrain them up to 256 in may challenge. But more bigger coefficients require bigger precision of rounding and thus bigger M. How many coefficients (and irrational numbers) are in challenge. We have just 2. But more coefficients require bigger precision of rounding and again bigger M. It is simple - as bigger coefficients are allowed and the more we have them, the density of possible solutions around the real solution increases, and we need to distinguish between close possible solutions and the real solution.\nFor the current toy challenge lifting and rounding by $M = 10^3$ will be enough. But based on my experience, when number of coefficients in challenge is about 20, we will need $M = 10^{45}$ to find correct solution (even we are still try finding small coefficients). In following calculations I will use $M = 10^{12}$ to clearly distinguish the real solution from other candidates.\nNow we are prepared to proceed to cardinal task of the challenge.\nLattice construction for challenge The most difficult task of any challenge, solvable by Lattice, is to Spot the Lattice\nI drew how the basis vectors v1 (blue), v2 (green), and v3 (yellow) of my challenge could look in 3-dimensional space.\n.\nWhere: $M = 10^{12}$\nk1 = $M\\sqrt{2}$ rounded to integer\nk2 = $M\\sqrt{3}$ rounded to integer\nI came to this by following thought process:\nIf all vectors lived only on the Z axis (purely one-dimensional), the question of finding a solution would be: how many times should I multiply the lengths of v1 and v2 to get exactly the length of v3?\n$a\\vert\\overrightarrow{v1}\\vert + b\\vert\\overrightarrow{v2}\\vert = \\vert\\overrightarrow{v3}\\vert$\n$a, b, \\in \\Z$, so they can be also negative of course\nAnd now the key part. I want to bring this idea to the lattice world by adding two more dimensions, A and B.\nI do this by “shifting” vectors $\\overrightarrow{v1}$ and $\\overrightarrow{v2}$ to the side (each to its own axis).\nWhy?\nI want to create a basis for Lattice structure from 3 vectors, which is impossible with vectors in one dimension. The axes A and B will “track” the coefficients a and b (so I will know how many times to multiply the vectors by a and b). I can reformulate question to the more Lattice fashion’s question: “Find the vector closest to v3: “Shift” of vectors $\\overrightarrow{v1}$ and $\\overrightarrow{v2}$ to side should be small against their length and value 1 is a good choice.\nSo finally our Lattice will be infinite structure of points in 3 dimensional space, where each point is some combination of basis vectors v1, v2, v3, where values of a and b will be tracked on Axis A and B\nLLL - finding the solution. The Second most important task after spotting and constructing “right” Lattice is to solve some of Lattice’s typical question. In our case:\n“Find the vector’s combination closest to v3, with non-zero v1, v2:.\nAnd exactly this kind of problem solves LLL (Lenstra-Lenstra-Lovasz) algorithm.\nActually, it tries to find the smallest non-zero vector in the given lattice structure, but this is a very similar problem. I just need to use a small trick with the negative sign of v3.\nLet’s look to LLL as BlackBox for now and keep focus to challenge solution. We just need to know that LLL takes Lattice structure (defined by any basis’s vectors) structured in a matrix and try to find the smallest non-zero vector using mathematical operations over given vectors.\nI will use SageMath tool to write Lattice matrix and solve it by LLL.\nCalculation Now comes the easiest part of the challenge: defining the vectors and matrix, and solving it using LLL in SageMath.\n# unknown coefficients, which we will try to find, say: a = -13 b = 15 sqrt2 = sqrt(2) sqrt3 = sqrt(3) target = a*sqrt2 + b*sqrt3 # this is known right side of our challenge # lifting coefficient, I choose this one, but smaller will also work in this case M = 10**12 # constructing vectors (note negative sign with vector v3) v1 = vector([int(round(M * sqrt2)), 1, 0]) v2 = vector([int(round(M * sqrt3)), 0, 1]) v3 = vector([-int(round(M * target)), 0, 0]) # constructing final Lattice B = Matrix([v1, v2, v3]) # applying LLL algorithm B_lll = B.LLL() print(B_lll) And output is:\n[ 3 -13 15] [ 333326 -141751 -189521] [ 468120 649131 468948] In the first row, we can see a “nice small vector”, which points to the lattice point closest to [0, 0, 0]. The other points are much farther away, so we can be quite sure that this is our solution.\nSo answer to challenge is:\na = -13 b = 15\nAnd final check:\nsage: (-13*sqrt(2) + 15*sqrt(3)).n(80) 7.5959858026829237684897 What is exactly right side of challenge.\nConclusion And that’s all. I did my best and hope this will help someone. In the next challenge, I’ll try to explain how to solve modular congruence using lattices.\n",
+  "wordCount" : "1383",
+  "inLanguage": "en",
+  "datePublished": "2025-08-08T11:38:28Z",
+  "dateModified": "2025-08-08T11:38:28Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://sbezo.github.io/posts/lattices_by_example_1/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "sbezo.github.io",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://sbezo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
 </head>
 
 <body class="" id="top">
@@ -100,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="http://localhost:1313/" accesskey="h" title="sbezo.github.io (Alt + H)">sbezo.github.io</a>
+            <a href="https://sbezo.github.io/" accesskey="h" title="sbezo.github.io (Alt + H)">sbezo.github.io</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -126,12 +181,12 @@ document.addEventListener("DOMContentLoaded", function() {
         </div>
         <ul id="menu">
             <li>
-                <a href="http://localhost:1313/posts/" title="Posts">
+                <a href="https://sbezo.github.io/posts/" title="Posts">
                     <span>Blog</span>
                 </a>
             </li>
             <li>
-                <a href="http://localhost:1313/projects/" title="Projects">
+                <a href="https://sbezo.github.io/projects/" title="Projects">
                     <span>Projects</span>
                 </a>
             </li>
@@ -145,45 +200,126 @@ document.addEventListener("DOMContentLoaded", function() {
     
     <h1 class="post-title entry-hint-parent">
       Lattices by example 1
-      <span class="entry-hint" title="Draft">
-        <svg xmlns="http://www.w3.org/2000/svg" height="35" viewBox="0 -960 960 960" fill="currentColor">
-          <path
-            d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z" />
-        </svg>
-      </span>
     </h1>
     <div class="post-meta"><span title='2025-08-08 11:38:28 +0000 UTC'>August 8, 2025</span>
 
 </div>
   </header> 
-  <div class="post-content"><p>First of all - I&rsquo;m not mathematician, but engineer who loves challenges;)<br>
-I&rsquo;m going to explain how I came to this topic by solving some interesting problems.</p>
+  <div class="post-content"><p>First of all, I&rsquo;m not a mathematician, but an engineer who loves challenges. :).<br>
+I&rsquo;m going to explain how I came to this topic by solving some interesting problems.<br>
+I&rsquo;m starting this series with a challenge that has a nice graphical interpretation in 3-dimensional space.</p>
 <h2 id="challenge-1">Challenge 1<a hidden class="anchor" aria-hidden="true" href="#challenge-1">#</a></h2>
 <hr>
-<p>$a\sqrt{2} + b\sqrt{3} + c\sqrt{5} = 640.53550337526478156252876765&hellip;$</p>
-<p>Find coefficients a, b, c in $\Z$</p>
+<p>$a\sqrt{2} + b\sqrt{3} = 7.5959858026829237684897&hellip;$</p>
+<p>Find coefficients a, b in $\Z$<br>
+<em>Constraint: Coefficients should be small (say, from -256 to 256).</em></p>
 <hr>
-<p>This can be quickly solved by Brute-force, but my topic is Lattice this time. And I want to explain how I think about it from Lattice perspective. And we can also easy extend challenge to 20 coefficients which makes BF method effectively out.</p>
-<p>Important thing is that square root of prime is irrational number (cannot be expressed as fraction of two integers).<br>
-So each coefficient is multiplied by irrational number and result is also irrational.</p>
-<p>If we want to solve similar challenge, but with rational numbers, say:</p>
-<p>$a\frac{2}{3} + b\frac{3}{4} + c \frac{5}{6} = 8$.</p>
-<p>we quickly find that there is infinite number of solution in  $\Z$ ring. For any b, c we have corresponding a. And it holds for any rational numbers (fractions).</p>
+<p>This can be quickly solved by Brute-force, but our topic is Lattice this time. And I want to explain how I think about it from Lattice perspective. And we can also easily extend the challenge to 20 coefficients, which makes the brute-force method effectively unusable.</p>
 <blockquote>
-<p>$\frac{8a + 9b + 10c}{12} = 8$.</p>
-<p>$a = \frac{96 - 9b - 10c}{8}$</p></blockquote>
-<p>The same thing will happen if we round irrational numbers to some number of decimal digits, just coefficients will be pretty large depending od precision of rounding.</p>
-<p>So back our to irrational numbers which assure unique solution.
-We are trying to find coefficients a, b, c such as left side of given equation is <strong>as much as possible close</strong> to irrational number on right side.</p>
+<p>An important note is that the square root of a prime is an irrational number (it cannot be expressed as a fraction of two integers).
+So each coefficient is multiplied by irrational number and result is also irrational.</p>
+<p>If we want to solve similar challenge, but with rational numbers, for example:</p>
+<p>$a\frac{2}{3} + b\frac{3}{4} = 8$.</p>
+<p>we quickly find that there is infinite number of solution in  $\Z$ ring. For any b we have corresponding a. And it holds for any rational numbers (fractions).</p>
+<p>$\frac{8a + 9b}{12} = 8$.</p>
+<p>$a = \frac{96 - 9b}{8}$</p>
+<p>The same thing will happen if we round irrational numbers to a certain number of decimal digits; the coefficients will just be quite large, depending on the precision of the rounding.</p></blockquote>
+<p>So back to our irrational numbers which assure unique solution.
+We are trying to find coefficients a, b such as left side of given equation is <strong>as much as possible close</strong> to irrational number on right side.</p>
 <p>And exactly this bolded expression brings Lattice topic to the scene:</p>
-<h2 id="lattice">Lattice<a hidden class="anchor" aria-hidden="true" href="#lattice">#</a></h2>
-<p>There is a lot of articles and videos about Lattices, basis vectors and finding shortest (SVP) or closest(CVP) vector. I do not want to repeat it, but we will need some brief intro for context.<br>
-I point to the most important things, how I understand them and how they are related to my challenge.</p>
+<h2 id="lattice-introduction">Lattice introduction<a hidden class="anchor" aria-hidden="true" href="#lattice-introduction">#</a></h2>
+<p>There is a lot of articles and videos about Lattices, basis vectors and finding shortest (SVP) or closest(CVP) vector.<br>
+Awesome introduction video is for example <a href="https://youtu.be/QDdOoYdb748?si=zoIcSzQlScnSsTiS">here</a>.</p>
+<p>I do not want to write general introduction to Lattices in this post, but rather focus on explanation by example.
+I just point to few important things, how I understand them and how they are related to my challenge.</p>
 <ul>
 <li>I will talk exclusively about Lattices over Integers ($\Z$), Such Lattice is exactly what its names suggest - group of points in space with integer coordinates</li>
 <li>Important parameter of each Lattice is its dimension. Thus 2 or 3 dimensional Lattice is easy to imagine as some periodical structure in 2 or 3 dimensions. When I started with this topic, I tried to extend this image to higher dimensions, but it is hard. This is reason why my first challenge is with 3 coefficients and it really works also in higher dimensions.</li>
-<li>Lattice structure is defined by basis vectors. In two dimensional space by two non-linear vectors, in three dimensional by three non-linear vectors and so on. Interesting thing is that if I do all</li>
+<li>Lattice structure is always determined by basis vectors. In two dimensional space by two linear vectors, in three dimensional by three linear vectors and so on.</li>
+<li>Non intuitive fact is, that <em><strong>all</strong></em> Lattices points can be always constructed from <em><strong>any</strong></em> basis vectors by infinite numbers of operations between basis vectors.</li>
 </ul>
+<h2 id="lifting-from-irrational-numbers-to-integers">Lifting from irrational numbers to Integers.<a hidden class="anchor" aria-hidden="true" href="#lifting-from-irrational-numbers-to-integers">#</a></h2>
+<p>As I want to work with Lattices over Integers ($\Z$), I need to &ldquo;lift&rdquo; irrational numbers $\sqrt{2}$ and $\sqrt{3}$ to Integers. So I need to multiply them by some lifting coefficient (say M), then round and make it integer.
+Precision of rounding by lifting depends on two factors:</p>
+<ul>
+<li>How big could be coefficients, which are we trying to find. I have constrain them up to 256 in may challenge. But more bigger coefficients require bigger precision of rounding and thus bigger M.</li>
+<li>How many coefficients (and irrational numbers) are in challenge. We have just 2. But more coefficients require bigger precision of rounding and again bigger M.</li>
+</ul>
+<p>It is simple - as bigger coefficients are allowed and the more we have them, <em><strong>the density</strong></em> of possible solutions around the real solution increases, and we need to distinguish between close possible solutions and the real solution.</p>
+<p>For the current toy challenge lifting and rounding by $M = 10^3$ will be enough. But based on my experience, when number of coefficients in challenge is about 20, we will need $M = 10^{45}$ to find correct solution (even we are still try finding small coefficients). In following calculations I will use $M = 10^{12}$ to clearly distinguish the real solution from other candidates.</p>
+<p>Now we are prepared to proceed to cardinal task of the challenge.</p>
+<h2 id="lattice-construction-for-challenge">Lattice construction for challenge<a hidden class="anchor" aria-hidden="true" href="#lattice-construction-for-challenge">#</a></h2>
+<p>The most difficult task of any challenge, solvable by Lattice, is to <em><strong>Spot the Lattice</strong></em></p>
+<p>I drew how the basis vectors v1 (blue), v2 (green), and v3 (yellow) of my challenge could look in 3-dimensional space.</p>
+<p><img loading="lazy" src="/img/lattice1-lattice.png">.</p>
+<p>Where:
+$M = 10^{12}$<br>
+k1 = $M\sqrt{2}$ rounded to integer<br>
+k2 = $M\sqrt{3}$ rounded to integer</p>
+<p>I came to this by following thought process:<br>
+If all vectors lived only on the Z axis (purely one-dimensional), the question of finding a solution would be:
+how many times should I multiply the lengths of v1 and v2 to get exactly the length of v3?</p>
+<p>$a\vert\overrightarrow{v1}\vert + b\vert\overrightarrow{v2}\vert = \vert\overrightarrow{v3}\vert$</p>
+<blockquote>
+<p>$a, b, \in \Z$, so they can be also negative of course</p></blockquote>
+<h3 id="and-now-the-key-part">And now the key part.<a hidden class="anchor" aria-hidden="true" href="#and-now-the-key-part">#</a></h3>
+<p>I want to bring this idea to the lattice world by adding two more dimensions, A and B.<br>
+I do this by &ldquo;shifting&rdquo; vectors $\overrightarrow{v1}$ and $\overrightarrow{v2}$ to the side (each to its own axis).<br>
+Why?</p>
+<ol>
+<li>I want to create a basis for Lattice structure from 3 vectors, which is impossible with vectors in one dimension.</li>
+<li>The axes A and B will &ldquo;track&rdquo; the coefficients a and b (so I will know how many times to multiply the vectors by a and b).</li>
+<li>I can reformulate question to the more Lattice fashion&rsquo;s question: <em><strong>&ldquo;Find the vector closest to v3:</strong></em></li>
+</ol>
+<blockquote>
+<p>&ldquo;Shift&rdquo; of vectors $\overrightarrow{v1}$ and $\overrightarrow{v2}$ to side should be small against their length and value 1 is a good choice.</p></blockquote>
+<p>So finally our Lattice will be infinite structure of points in 3 dimensional space, where each point is some combination of basis vectors v1, v2, v3, where values of a and b will be tracked on  Axis A and B</p>
+<h2 id="lll---finding-the-solution">LLL - finding the solution.<a hidden class="anchor" aria-hidden="true" href="#lll---finding-the-solution">#</a></h2>
+<p>The Second most important task after spotting and constructing &ldquo;right&rdquo; Lattice is to solve some of Lattice&rsquo;s typical question. In our case:</p>
+<p><em><strong>&ldquo;Find the vector&rsquo;s combination closest to v3, with non-zero v1, v2:</strong></em>.</p>
+<p>And exactly this kind of problem solves LLL (Lenstra-Lenstra-Lovasz) algorithm.<br>
+Actually, it tries to find the smallest non-zero vector in the given lattice structure, but this is a very similar problem. I just need to use a small trick with the negative sign of v3.</p>
+<p>Let&rsquo;s look to LLL as BlackBox for now and keep focus to challenge solution. We just need to know that LLL takes Lattice structure (defined by any basis&rsquo;s vectors) structured in a matrix and try to find the smallest non-zero vector using mathematical operations over given vectors.</p>
+<p>I will use SageMath tool to write Lattice matrix and solve it by LLL.</p>
+<h2 id="calculation">Calculation<a hidden class="anchor" aria-hidden="true" href="#calculation">#</a></h2>
+<p>Now comes the easiest part of the challenge: defining the vectors and matrix, and solving it using LLL in SageMath.</p>
+<pre tabindex="0"><code># unknown coefficients, which we will try to find, say:
+a = -13
+b = 15
+
+sqrt2 = sqrt(2)
+sqrt3 = sqrt(3)
+target = a*sqrt2 + b*sqrt3  # this is known right side of our challenge
+
+# lifting coefficient, I choose this one, but smaller will also work in this case
+M = 10**12
+
+# constructing vectors (note negative sign with vector v3)
+v1 = vector([int(round(M * sqrt2)), 1, 0])
+v2 = vector([int(round(M * sqrt3)), 0, 1])
+v3 = vector([-int(round(M * target)), 0, 0])
+
+# constructing final Lattice
+B = Matrix([v1, v2, v3])
+
+# applying LLL algorithm
+B_lll = B.LLL()
+print(B_lll)
+</code></pre><p>And output is:</p>
+<pre tabindex="0"><code>[      3     -13      15]
+[ 333326 -141751 -189521]
+[ 468120  649131  468948]
+</code></pre><p>In the first row, we can see a &ldquo;nice small vector&rdquo;, which points to the lattice point closest to [0, 0, 0]. The other points are much farther away, so we can be quite sure that this is our solution.</p>
+<p>So answer to challenge is:<br>
+a = -13  <br>
+b = 15</p>
+<p>And final check:</p>
+<pre tabindex="0"><code>sage: (-13*sqrt(2) + 15*sqrt(3)).n(80)
+7.5959858026829237684897
+</code></pre><p>What is exactly right side of challenge.</p>
+<h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
+<p>And that&rsquo;s all. I did my best and hope this will help someone.
+In the next challenge, I&rsquo;ll try to explain how to solve modular congruence using lattices.</p>
 
 
   </div>
@@ -196,7 +332,7 @@ I point to the most important things, how I understand them and how they are rel
     </main>
     
 <footer class="footer">
-        <span>&copy; 2025 <a href="http://localhost:1313/">sbezo.github.io</a></span> · 
+        <span>&copy; 2025 <a href="https://sbezo.github.io/">sbezo.github.io</a></span> · 
 
     <span>
         Powered by

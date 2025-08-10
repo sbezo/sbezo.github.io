@@ -6,8 +6,15 @@
     <description>Recent content on sbezo.github.io</description>
     <generator>Hugo -- 0.149.0-DEV</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 07 Aug 2025 10:09:54 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 08 Aug 2025 11:38:28 +0000</lastBuildDate>
     <atom:link href="https://sbezo.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Lattices by example 1</title>
+      <link>https://sbezo.github.io/posts/lattices_by_example_1/</link>
+      <pubDate>Fri, 08 Aug 2025 11:38:28 +0000</pubDate>
+      <guid>https://sbezo.github.io/posts/lattices_by_example_1/</guid>
+      <description>!!! Under construction !!!</description>
+    </item>
     <item>
       <title>HUGO to github.io (HUGO-2)</title>
       <link>https://sbezo.github.io/posts/hugo-2/</link>
