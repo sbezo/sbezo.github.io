@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><meta charset="utf-8">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="noindex, nofollow">
 <title>Lattices by example 1 | sbezo.github.io</title>
 <meta name="keywords" content="">
-<meta name="description" content="How lattice closest vector problem fits to a solution of equation with irrational numbers">
+<meta name="description" content="Solving an equation with irrational numbers with Lattice">
 <meta name="author" content="">
-<link rel="canonical" href="https://sbezo.github.io/posts/lattices_by_example_1/">
+<link rel="canonical" href="http://localhost:1313/posts/lattices_by_example_1/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.8fe10233a706bc87f2e08b3cf97b8bd4c0a80f10675a143675d59212121037c0.css" integrity="sha256-j&#43;ECM6cGvIfy4Is8&#43;XuL1MCoDxBnWhQ2ddWSEhIQN8A=" rel="preload stylesheet" as="style">
-<link rel="icon" href="https://sbezo.github.io/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="https://sbezo.github.io/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://sbezo.github.io/favicon-32x32.png">
-<link rel="apple-touch-icon" href="https://sbezo.github.io/apple-touch-icon.png">
-<link rel="mask-icon" href="https://sbezo.github.io/safari-pinned-tab.svg">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="https://sbezo.github.io/posts/lattices_by_example_1/">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/lattices_by_example_1/">
 <noscript>
     <style>
         #theme-toggle,
@@ -75,69 +75,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
-<meta property="og:url" content="https://sbezo.github.io/posts/lattices_by_example_1/">
-  <meta property="og:site_name" content="sbezo.github.io">
-  <meta property="og:title" content="Lattices by example 1">
-  <meta property="og:description" content="How lattice closest vector problem fits to a solution of equation with irrational numbers">
-  <meta property="og:locale" content="en-us">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2025-08-08T11:38:28+00:00">
-    <meta property="article:modified_time" content="2025-08-08T11:38:28+00:00">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Lattices by example 1">
-<meta name="twitter:description" content="How lattice closest vector problem fits to a solution of equation with irrational numbers">
 
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "Posts",
-      "item": "https://sbezo.github.io/posts/"
-    }, 
-    {
-      "@type": "ListItem",
-      "position":  2 ,
-      "name": "Lattices by example 1",
-      "item": "https://sbezo.github.io/posts/lattices_by_example_1/"
-    }
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Lattices by example 1",
-  "name": "Lattices by example 1",
-  "description": "How lattice closest vector problem fits to a solution of equation with irrational numbers",
-  "keywords": [
-    
-  ],
-  "articleBody": "First of all, I’m not a mathematician, but an engineer who loves challenges. :).\nI’m going to explain how I came to this topic by solving some interesting problems.\nI’m starting this series with a challenge that has a nice graphical interpretation in 3-dimensional space.\nChallenge 1 $a\\sqrt{2} + b\\sqrt{3} = 7.5959858026829237684897…$\nFind coefficients a, b in $\\Z$\nConstraint: Coefficients should be small (say, from -256 to 256).\nThis can be quickly solved by Brute-force, but our topic is Lattice this time. And I want to explain how I think about it from Lattice perspective. And we can also easily extend the challenge to 20 coefficients, which makes the brute-force method effectively unusable.\nAn important note is that the square root of a prime is an irrational number (it cannot be expressed as a fraction of two integers). So each coefficient is multiplied by irrational number and result is also irrational.\nIf we want to solve similar challenge, but with rational numbers, for example:\n$a\\frac{2}{3} + b\\frac{3}{4} = 8$.\nwe quickly find that there is infinite number of solution in $\\Z$ ring. For any b we have corresponding a. And it holds for any rational numbers (fractions).\n$\\frac{8a + 9b}{12} = 8$.\n$a = \\frac{96 - 9b}{8}$\nThe same thing will happen if we round irrational numbers to a certain number of decimal digits; the coefficients will just be quite large, depending on the precision of the rounding.\nSo back to our irrational numbers which assure unique solution. We are trying to find coefficients a, b such as left side of given equation is as much as possible close to irrational number on right side.\nAnd exactly this bolded expression brings Lattice topic to the scene:\nLattice introduction There is a lot of articles and videos about Lattices, basis vectors and finding shortest (SVP) or closest(CVP) vector.\nAwesome introduction video is for example here.\nI do not want to write general introduction to Lattices in this post, but rather focus on explanation by example. I just point to few important things, how I understand them and how they are related to my challenge.\nI will talk exclusively about Lattices over Integers ($\\Z$), Such Lattice is exactly what its names suggest - group of points in space with integer coordinates Important parameter of each Lattice is its dimension. Thus 2 or 3 dimensional Lattice is easy to imagine as some periodical structure in 2 or 3 dimensions. When I started with this topic, I tried to extend this image to higher dimensions, but it is hard. This is reason why my first challenge is with 2 coefficients and it really works also in higher dimensions. Lattice structure is always determined by basis vectors. In two dimensional space by two linear vectors, in three dimensional by three linear vectors and so on. Non intuitive fact is, that all Lattices points can be always constructed from any basis vectors by infinite numbers of operations between basis vectors. Lifting from irrational numbers to Integers. As I want to work with Lattices over Integers ($\\Z$), I need to “lift” irrational numbers $\\sqrt{2}$ and $\\sqrt{3}$ to Integers. So I need to multiply them by some lifting coefficient (say M), then round and make it integer. Precision of rounding by lifting depends on two factors:\nHow big could be coefficients, which are we trying to find. I have constrain them up to 256 in my challenge. Larger coefficients require higher rounding precision, which in turn means a larger M. How many coefficients (and irrational numbers) are in challenge. We have just 2. But more coefficients require bigger precision of rounding and again bigger M. It is simple - as bigger coefficients are allowed and the more we have them, the density of possible solutions around the real solution increases, and we need to distinguish between close possible solutions and the real solution.\nFor the current toy challenge lifting and rounding by $M = 10^3$ will be enough. But based on my experience, when number of coefficients in challenge is about 20, we will need $M = 10^{45}$ to find correct solution (even when we are still trying to find small coefficients). In following calculations I will use $M = 10^{12}$ to clearly distinguish the real solution from other candidates.\nNow we are prepared to proceed to cardinal task of the challenge.\nLattice construction for challenge The most difficult task of any challenge, solvable by Lattice, is to Spot the Lattice\nI drew how the basis vectors v1 (blue), v2 (green), and v3 (yellow) of my challenge could look in 3-dimensional space.\n.\nWhere: $M = 10^{12}$\nk1 = $M\\sqrt{2}$ rounded to integer\nk2 = $M\\sqrt{3}$ rounded to integer\nI came to this by following thought process:\nIf all vectors lived only on the Z axis (purely one-dimensional), the question of finding a solution would be: how many times should I multiply the lengths of v1 and v2 to get exactly the length of v3?\n$a\\vert\\overrightarrow{v1}\\vert + b\\vert\\overrightarrow{v2}\\vert = \\vert\\overrightarrow{v3}\\vert$\n$a, b, \\in \\Z$, so they can be also negative of course\nAnd now the key part. I want to bring this idea to the lattice world by adding two more dimensions, A and B.\nI do this by “shifting” vectors $\\overrightarrow{v1}$ and $\\overrightarrow{v2}$ to the side (each to its own axis).\nWhy?\nI want to create a basis for Lattice structure from 3 vectors, which is impossible with vectors in one dimension. The axes A and B will “track” the coefficients a and b (so I will know how many times to multiply the vectors by a and b). I can reformulate question to the more Lattice fashion’s question: “Find the vector closest to v3: “Shift” of vectors $\\overrightarrow{v1}$ and $\\overrightarrow{v2}$ to side should be small against their length and value 1 is a good choice.\nSo finally our Lattice will be infinite structure of points in 3 dimensional space, where each point is some combination of basis vectors v1, v2, v3, where values of a and b will be tracked on Axis A and B\nLLL - finding the solution. The Second most important task after spotting and constructing “right” Lattice is to solve some of Lattice’s typical question. In our case:\n“Find the vector’s combination closest to v3, with non-zero v1, v2:.\nAnd exactly this kind of problem solves LLL (Lenstra-Lenstra-Lovasz) algorithm.\nActually, it tries to find the smallest non-zero vector in the given lattice structure, but this is a very similar problem. I just need to use a small trick with the negative sign of v3.\nLet’s look to LLL as BlackBox for now and keep focus to challenge solution. We just need to know that LLL takes Lattice structure (defined by any basis’s vectors) structured in a matrix and try to find the smallest non-zero vector using mathematical operations over given vectors.\nI will use SageMath tool to write Lattice matrix and solve it by LLL.\nCalculation Now comes the easiest part of the challenge: defining the vectors and matrix, and solving it using LLL in SageMath.\n# unknown coefficients, which we will try to find, say: a = -13 b = 15 sqrt2 = sqrt(2) sqrt3 = sqrt(3) target = a*sqrt2 + b*sqrt3 # this is known right side of our challenge # lifting coefficient, I choose this one, but smaller will also work in this case M = 10**12 # constructing vectors (note negative sign with vector v3) v1 = vector([int(round(M * sqrt2)), 1, 0]) v2 = vector([int(round(M * sqrt3)), 0, 1]) v3 = vector([-int(round(M * target)), 0, 0]) # constructing final Lattice B = Matrix([v1, v2, v3]) # applying LLL algorithm B_lll = B.LLL() print(B_lll) And output is:\n[ 3 -13 15] [ 333326 -141751 -189521] [ 468120 649131 468948] In the first row, we can see a “nice small vector”, which points to the lattice point closest to [0, 0, 0]. The other points are much farther away, so we can be quite sure that this is our solution.\nSo answer to challenge is:\na = -13 b = 15\nAnd final check:\nsage: (-13*sqrt(2) + 15*sqrt(3)).n(80) 7.5959858026829237684897 What is exactly right side of challenge.\nConclusion And that’s all. This example shows how a simple problem in irrational combinations maps naturally into a lattice closest vector problem — and how tools like LLL can solve it efficiently.\nI did my best and hope this will help someone. In the next challenge, I’ll try to explain how to solve modular congruence using lattices.\n",
-  "wordCount" : "1413",
-  "inLanguage": "en",
-  "datePublished": "2025-08-08T11:38:28Z",
-  "dateModified": "2025-08-08T11:38:28Z",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://sbezo.github.io/posts/lattices_by_example_1/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "sbezo.github.io",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://sbezo.github.io/favicon.ico"
-    }
-  }
-}
-</script>
 </head>
 
 <body class="" id="top">
@@ -155,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="https://sbezo.github.io/" accesskey="h" title="sbezo.github.io (Alt + H)">sbezo.github.io</a>
+            <a href="http://localhost:1313/" accesskey="h" title="sbezo.github.io (Alt + H)">sbezo.github.io</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -181,12 +119,12 @@ document.addEventListener("DOMContentLoaded", function() {
         </div>
         <ul id="menu">
             <li>
-                <a href="https://sbezo.github.io/posts/" title="Posts">
+                <a href="http://localhost:1313/posts/" title="Posts">
                     <span>Blog</span>
                 </a>
             </li>
             <li>
-                <a href="https://sbezo.github.io/projects/" title="Projects">
+                <a href="http://localhost:1313/projects/" title="Projects">
                     <span>Projects</span>
                 </a>
             </li>
@@ -333,7 +271,7 @@ In the next challenge, I&rsquo;ll try to explain how to solve modular congruence
 <ul class="share-buttons">
     <li>
         <a target="_blank" rel="noopener noreferrer" aria-label="share Lattices by example 1 on linkedin"
-            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fsbezo.github.io%2fposts%2flattices_by_example_1%2f&amp;title=Lattices%20by%20example%201&amp;summary=Lattices%20by%20example%201&amp;source=https%3a%2f%2fsbezo.github.io%2fposts%2flattices_by_example_1%2f">
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2flocalhost%3a1313%2fposts%2flattices_by_example_1%2f&amp;title=Lattices%20by%20example%201&amp;summary=Lattices%20by%20example%201&amp;source=http%3a%2f%2flocalhost%3a1313%2fposts%2flattices_by_example_1%2f">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
@@ -342,7 +280,7 @@ In the next challenge, I&rsquo;ll try to explain how to solve modular congruence
     </li>
     <li>
         <a target="_blank" rel="noopener noreferrer" aria-label="share Lattices by example 1 on reddit"
-            href="https://reddit.com/submit?url=https%3a%2f%2fsbezo.github.io%2fposts%2flattices_by_example_1%2f&title=Lattices%20by%20example%201">
+            href="https://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fposts%2flattices_by_example_1%2f&title=Lattices%20by%20example%201">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
@@ -356,7 +294,7 @@ In the next challenge, I&rsquo;ll try to explain how to solve modular congruence
     </main>
     
 <footer class="footer">
-        <span>&copy; 2025 <a href="https://sbezo.github.io/">sbezo.github.io</a></span> · 
+        <span>&copy; 2025 <a href="http://localhost:1313/">sbezo.github.io</a></span> · 
 
     <span>
         Powered by
