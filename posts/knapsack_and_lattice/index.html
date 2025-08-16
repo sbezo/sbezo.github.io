@@ -1,29 +1,28 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
 <title>Knapsack and Lattice | sbezo.github.io</title>
 <meta name="keywords" content="">
-<meta name="description" content="In this post I&rsquo;m going to tell you about famous breaking of Merkle–Hellman knapsack cryptosystem by Lattice. And as in my previous article I&rsquo;ll try to focus to explaining how to spot and construct lattice in real example.
+<meta name="description" content="In this post I&rsquo;m going to tell you about another example of Lattice usage. It is inspired by famous breaking of Merkle–Hellman knapsack cryptosystem. And as in my previous article I&rsquo;ll try to focus to explaining how to spot and construct Lattice in the real challenge.
+I recommend to read my previous post, which provides good background to next reading.
 History
-Merkle–Hellman knapsack cryptosystem is based on general knapsack problem: wiki
-It was published in 1978, year after introduction of RSA. And broken in 1984 by author of RSA:).
-How this cryptosystem works?
-Each cryptosystem is based on some &ldquo;Hard problem&rdquo;. Two of them dominates contemporary crypto world:">
+Merkle–Hellman knapsack cryptosystem is based on general knapsack problem:
+It was published in 1978, year after introduction of RSA. It was promising due to effective decryption and ease of implementation. But it was first broken in 1982 by Adi Shamir, co-author of RSA. And two years later by Lagarias and Odlyzko using newly developed LLL Lattice reduction.">
 <meta name="author" content="">
-<link rel="canonical" href="http://localhost:1313/posts/knapsack_and_lattice/">
+<link rel="canonical" href="https://sbezo.github.io/posts/knapsack_and_lattice/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.8fe10233a706bc87f2e08b3cf97b8bd4c0a80f10675a143675d59212121037c0.css" integrity="sha256-j&#43;ECM6cGvIfy4Is8&#43;XuL1MCoDxBnWhQ2ddWSEhIQN8A=" rel="preload stylesheet" as="style">
-<link rel="icon" href="http://localhost:1313/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
-<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
-<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<link rel="icon" href="https://sbezo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://sbezo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://sbezo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://sbezo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://sbezo.github.io/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/knapsack_and_lattice/">
+<link rel="alternate" hreflang="en" href="https://sbezo.github.io/posts/knapsack_and_lattice/">
 <noscript>
     <style>
         #theme-toggle,
@@ -94,13 +93,13 @@ document.addEventListener("DOMContentLoaded", function() {
           gtag('js', new Date());
           gtag('config', 'G-X37ESW6JQL');
         }
-      </script><meta property="og:url" content="http://localhost:1313/posts/knapsack_and_lattice/">
+      </script><meta property="og:url" content="https://sbezo.github.io/posts/knapsack_and_lattice/">
   <meta property="og:site_name" content="sbezo.github.io">
   <meta property="og:title" content="Knapsack and Lattice">
-  <meta property="og:description" content="In this post I’m going to tell you about famous breaking of Merkle–Hellman knapsack cryptosystem by Lattice. And as in my previous article I’ll try to focus to explaining how to spot and construct lattice in real example.
-History Merkle–Hellman knapsack cryptosystem is based on general knapsack problem: wiki
-It was published in 1978, year after introduction of RSA. And broken in 1984 by author of RSA:).
-How this cryptosystem works? Each cryptosystem is based on some “Hard problem”. Two of them dominates contemporary crypto world:">
+  <meta property="og:description" content="In this post I’m going to tell you about another example of Lattice usage. It is inspired by famous breaking of Merkle–Hellman knapsack cryptosystem. And as in my previous article I’ll try to focus to explaining how to spot and construct Lattice in the real challenge.
+I recommend to read my previous post, which provides good background to next reading.
+History Merkle–Hellman knapsack cryptosystem is based on general knapsack problem:
+It was published in 1978, year after introduction of RSA. It was promising due to effective decryption and ease of implementation. But it was first broken in 1982 by Adi Shamir, co-author of RSA. And two years later by Lagarias and Odlyzko using newly developed LLL Lattice reduction.">
   <meta property="og:locale" content="en-us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
@@ -108,12 +107,11 @@ How this cryptosystem works? Each cryptosystem is based on some “Hard problem�
     <meta property="article:modified_time" content="2025-08-14T12:57:15+00:00">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Knapsack and Lattice">
-<meta name="twitter:description" content="In this post I&rsquo;m going to tell you about famous breaking of Merkle–Hellman knapsack cryptosystem by Lattice. And as in my previous article I&rsquo;ll try to focus to explaining how to spot and construct lattice in real example.
+<meta name="twitter:description" content="In this post I&rsquo;m going to tell you about another example of Lattice usage. It is inspired by famous breaking of Merkle–Hellman knapsack cryptosystem. And as in my previous article I&rsquo;ll try to focus to explaining how to spot and construct Lattice in the real challenge.
+I recommend to read my previous post, which provides good background to next reading.
 History
-Merkle–Hellman knapsack cryptosystem is based on general knapsack problem: wiki
-It was published in 1978, year after introduction of RSA. And broken in 1984 by author of RSA:).
-How this cryptosystem works?
-Each cryptosystem is based on some &ldquo;Hard problem&rdquo;. Two of them dominates contemporary crypto world:">
+Merkle–Hellman knapsack cryptosystem is based on general knapsack problem:
+It was published in 1978, year after introduction of RSA. It was promising due to effective decryption and ease of implementation. But it was first broken in 1982 by Adi Shamir, co-author of RSA. And two years later by Lagarias and Odlyzko using newly developed LLL Lattice reduction.">
 
 
 <script type="application/ld+json">
@@ -125,13 +123,13 @@ Each cryptosystem is based on some &ldquo;Hard problem&rdquo;. Two of them domin
       "@type": "ListItem",
       "position":  1 ,
       "name": "Posts",
-      "item": "http://localhost:1313/posts/"
+      "item": "https://sbezo.github.io/posts/"
     }, 
     {
       "@type": "ListItem",
       "position":  2 ,
       "name": "Knapsack and Lattice",
-      "item": "http://localhost:1313/posts/knapsack_and_lattice/"
+      "item": "https://sbezo.github.io/posts/knapsack_and_lattice/"
     }
   ]
 }
@@ -142,25 +140,25 @@ Each cryptosystem is based on some &ldquo;Hard problem&rdquo;. Two of them domin
   "@type": "BlogPosting",
   "headline": "Knapsack and Lattice",
   "name": "Knapsack and Lattice",
-  "description": "In this post I\u0026rsquo;m going to tell you about famous breaking of Merkle–Hellman knapsack cryptosystem by Lattice. And as in my previous article I\u0026rsquo;ll try to focus to explaining how to spot and construct lattice in real example.\nHistory Merkle–Hellman knapsack cryptosystem is based on general knapsack problem: wiki\nIt was published in 1978, year after introduction of RSA. And broken in 1984 by author of RSA:).\nHow this cryptosystem works? Each cryptosystem is based on some \u0026ldquo;Hard problem\u0026rdquo;. Two of them dominates contemporary crypto world:\n",
+  "description": "In this post I\u0026rsquo;m going to tell you about another example of Lattice usage. It is inspired by famous breaking of Merkle–Hellman knapsack cryptosystem. And as in my previous article I\u0026rsquo;ll try to focus to explaining how to spot and construct Lattice in the real challenge.\nI recommend to read my previous post, which provides good background to next reading.\nHistory Merkle–Hellman knapsack cryptosystem is based on general knapsack problem:\nIt was published in 1978, year after introduction of RSA. It was promising due to effective decryption and ease of implementation. But it was first broken in 1982 by Adi Shamir, co-author of RSA. And two years later by Lagarias and Odlyzko using newly developed LLL Lattice reduction.\n",
   "keywords": [
     
   ],
-  "articleBody": "In this post I’m going to tell you about famous breaking of Merkle–Hellman knapsack cryptosystem by Lattice. And as in my previous article I’ll try to focus to explaining how to spot and construct lattice in real example.\nHistory Merkle–Hellman knapsack cryptosystem is based on general knapsack problem: wiki\nIt was published in 1978, year after introduction of RSA. And broken in 1984 by author of RSA:).\nHow this cryptosystem works? Each cryptosystem is based on some “Hard problem”. Two of them dominates contemporary crypto world:\nInteger factorization Discrete Logarithm Merkle–Hellman knapsack cryptosystem is based on another “Hard problem” : The Subset-Sum Problem\nThere is a list of positive integers, say:\nM = [3, 4, 7, 11, 14, 21, 31, 45, 46]\nAnd you are given number, say:\nb = 70\nYou should find subset of list M, where the sum of subset values gives n. It is considered to be “Hard problem” and it really is if number of values in list S is big enough.\nBut as for all cryptosystems there should be some kind of “key”. And knowledge of this key allows quick solution of generally hard problem. And nobody without this secret cannot solve the problem effectively.\nMerkle and Hellman came with such key in form of supeincreasing list of positive integers. This is simply sequence of positive integers, where each next is at least two times bigger then previous.\nMathematically precisely:\n$M = (m_1, m_2, m_3, … m_n)$\nis a superincreasing sequence of integers if:\n$m_{i+1} \u003e= m_i$ for all members of $M$\nExample could be:\nM = [3, 7, 14, 30, 63, 150, 311]\nAnd in this case is very easy to find subset for given number b.\nM = [3, 7, 14, 30, 63, 150, 311] # random supeincreasing list of positive integers S = [] # subset of M, where sum of values gives b b = 51 # given b, which is sum of unknown members of subset S b_temp = b for number in reversed(M): # for all numbers in M starting from end if b_temp \u003e= number: # if n is bigger or equal of tested value of M S.append(number) # add new member of subset b_temp = b_temp - number # set new b_temp print(S) and output is:\n[30, 14, 7] So exactly such superincreasing list of positive integers (M) will be Alice’s private key, her secret magic to solve hard problem.\nBut how she can make this task difficult for somebody in the middle?\nModular congruencies looks like very promising choice. So Alice choose two secret big numbers A, B such as:\n$ A, B \u003e 2 m_n$ and $gcd(A, B) = 1$\nwhere $m_n$ is a last number in superincreasing sequence M.\nAnd then compute\n$n_i \\equiv Am_i (mod B)$\nfor each value of M and create new sequence $N = (n_1, n_2, n_3… n_n)$\nSo wrapping Alice’s private list around modulo B makes new sequence N definitelly non-superincreasing.\nLet’s take our example of short superincreasing sequence M = [3, 7, 14, 30, 63, 150, 311], choose two random primes A, B and then calculate new $N$\nM = [3, 7, 14, 30, 63, 150, 311] A = 773 B = 829 N = [] for value in M: new_value = (A * value) % B N.append(new_value) print(f\"N = {N}\") and output is:\nN = [661, 437, 45, 807, 617, 719, 822] Sequence N is public key.\nAnd now Bob want to send some secret message to Alice. This message represent subset-sum of new public key, which Alice can publish to everyone. So secret message s could be for example:\ns = [1, 0, 1, 0, 1, 0, 1]\nAnd now Bob encrypt this message using Alice’s public key to get encrypted message c:\nc = 1*661 + 0*437 + 1*45 + 0*807 + 1*617 + 0*719 + 1*822 print(c) or simply\nc = vector(s) * vector(L) print(c) both gives:\n2145 And as we already know, it is generally hard to find which numbers from sequence N gives us exactly this sum. So anyone can see value of c along with public key N.\nBut Alice knows her secret M. And she also has A and B.\nAlice can first solve subset-sum problem using following by formula:\n$b = A^{-1}c (mod B)$\nb = (inverse_mod(A, B) * c) % B print(b) output is\n391 Here Alice computes b - sum of subset determined by Bob’s message s, BUT over her original superincreasing sequence M.\nAnd as we show earlier, this is easy to compute:\nM = [3, 7, 14, 30, 63, 150, 311] # private key - superincreasing sequence choosen by Alice S = [] # recovered subset of M s = [] # recovered message b = 391 # we know this from: b = (inverse_mod(A, B) * c) % B b_temp = b for number in reversed(M): if b_temp \u003e= number: S.append(number) b_temp = b_temp - number for value in M: if value in S: s.append(1) else: s.append(0) print(f\"s = {s}\") and output is exactly Bob’s secret message:\ns = [1, 0, 1, 0, 1, 0, 1] Why this decryption works? $b \\equiv A^{-1}c \\equiv A^{-1}\\displaystyle\\sum_{i=1}^n s_i N_i \\equiv A^{-1}\\displaystyle\\sum_{i=1}^n s_i A M_i. \\equiv \\displaystyle\\sum_{i=1}^n s_i M_i (mod B)$\nSo through this congruence we can transpose secret message c to subset-sum b determined by plain message s over secret superincresing sequence M. And then easily recover message s by finding right values in original superincresing sequence.\nBreaking Merkle–Hellman knapsack cryptosystem by Lattice. After pretty long introduction, which was necessary for understanding following break, we can continue with key part of this post.\n",
-  "wordCount" : "938",
+  "articleBody": "In this post I’m going to tell you about another example of Lattice usage. It is inspired by famous breaking of Merkle–Hellman knapsack cryptosystem. And as in my previous article I’ll try to focus to explaining how to spot and construct Lattice in the real challenge.\nI recommend to read my previous post, which provides good background to next reading.\nHistory Merkle–Hellman knapsack cryptosystem is based on general knapsack problem:\nIt was published in 1978, year after introduction of RSA. It was promising due to effective decryption and ease of implementation. But it was first broken in 1982 by Adi Shamir, co-author of RSA. And two years later by Lagarias and Odlyzko using newly developed LLL Lattice reduction.\nHow this cryptosystem works? Each cryptosystem is based on some “hard problem”. Two of them dominate contemporary crypto world:\nInteger factorization Discrete Logarithm Merkle–Hellman knapsack cryptosystem is based on another “hard problem” The Subset-Sum Problem :\nThere is a list of positive integers, say:\n$M = [3, 4, 7, 11, 14, 21, 31, 45, 46]$ chosen And you are given number, say:\n$b = 70$\nYou should find subset of list $M$, where the sum of subset values gives $b$. It is considered to be a hard problem and it really is if number of values in list $M$ is big enough.\nBut as for all cryptosystems there should be some kind of magic key. And knowledge of this key allows quick solution of generally hard problem. Nobody without this secret shouldn’t solve the problem effectively.\nMerkle and Hellman came with such key in form of superincreasing list of positive integers. This is simply sequence of positive integers, where each next is at least two times bigger then previous.\nMathematically precisely:\n$M = (m_1, m_2, m_3, … m_n)$\nis a superincreasing sequence of integers if:\n$m_{i+1} \u003e= \\displaystyle\\sum_{j=1}^{i} m_j$ for all members of $M$\nSimply each next number should be bigger than sum of all previous numbers.\nExample of such superincreasing sequence could be:\n$M = [3, 7, 14, 30, 63, 150, 311]$\nAnd in this case it is very easy to find subset for given number b by following algorithm.\nM = [3, 7, 14, 30, 63, 150, 311] # random superincreasing list of positive integers S = [] # subset of M, where sum of values gives b b = 51 # given b, which is sum of unknown members of subset S b_temp = b for number in reversed(M): # for all numbers in M starting from end if b_temp \u003e= number: # if n is bigger or equal of tested value of M S.append(number) # add new member of subset b_temp = b_temp - number # set new b_temp print(S) and output is:\n[30, 14, 7] Distances between members assure easy solution. It is analogy to decimal numerical system - you can simple decompose number 11 011 110 to ones, tens, hundreds and so on.\nSo exactly such superincreasing list of positive integers (M) will be Alice’s private key, her secret magic to solve hard problem.\nBut how she can make this task difficult for somebody in the middle?\nModular congruencies looks like very promising choice. So Alice choose two secret big numbers A, B such as:\n$ A, B \u003e 2 m_n$\n$gcd(A, B) = 1$\nwhere $m_n$ is a last number of superincreasing sequence M.\nAnd then compute\n$n_i \\equiv Am_i (mod B)$\nfor each value of M and create new sequence $N = (n_1, n_2, n_3… n_n)$\nSo wrapping Alice’s private list around modulo B makes new sequence N definitelly non-superincreasing.\nLet’s take our example of short superincreasing sequence M = [3, 7, 14, 30, 63, 150, 311], choose two random primes A, B and then calculate new $N$\nM = [3, 7, 14, 30, 63, 150, 311] A = 773 B = 829 N = [] for value in M: new_value = (A * value) % B N.append(new_value) print(f\"N = {N}\") and output is:\nN = [661, 437, 45, 807, 617, 719, 822] Sequence N is public key.\nAnd now Bob want to send some secret message to Alice. This message represent subset-sum of new public key, which Alice can publish to everyone. So secret message s could be for example:\n$s = [1, 0, 1, 0, 1, 0, 1]$\nBob now encrypt this message using Alice’s public key to get encrypted message c:\nc = 1*661 + 0*437 + 1*45 + 0*807 + 1*617 + 0*719 + 1*822 print(c) or simply\nc = vector(s) * vector(N) print(c) both gives:\n2145 2145 is our subset-sum $c$.\nAnd as we already know, it is generally hard to find which numbers from sequence $N$ gives us exactly this sum. So anyone can see value of $c$ along with public key N.\nBut Alice knows her secret $M$. And she also has its $A$ and $B$.\nAlice can first solve subset-sum problem using following by formula:\n$b = A^{-1}c (mod B)$\nb = (inverse_mod(A, B) * c) % B print(b) output is\n391 Here Alice computes b - sum of subset determined by Bob’s secret plaintext message s, BUT over her original superincreasing sequence $M$.\nAnd as we show earlier, this is easy to compute:\nM = [3, 7, 14, 30, 63, 150, 311] # private key - superincreasing sequence choosen by Alice S = [] # recovered subset of M s = [] # recovered message b = 391 # we know this from: b = (inverse_mod(A, B) * c) % B b_temp = b for number in reversed(M): if b_temp \u003e= number: S.append(number) b_temp = b_temp - number for value in M: if value in S: s.append(1) else: s.append(0) print(f\"s = {s}\") and output is exactly Bob’s secret message:\ns = [1, 0, 1, 0, 1, 0, 1] Why this decryption works? $b \\equiv A^{-1}c \\equiv A^{-1}\\displaystyle\\sum_{i=1}^n s_i N_i \\equiv A^{-1}\\displaystyle\\sum_{i=1}^n s_i A M_i. \\equiv \\displaystyle\\sum_{i=1}^n s_i M_i (mod B)$\nSo through this congruence we can transpose secret message c to subset-sum b determined by plain message s over secret superincresing sequence M. And then easily recover message s by finding right values in original superincresing sequence.\nBreaking Merkle–Hellman knapsack cryptosystem by Lattice. Challenge 2 For given public key sequence:\n$N = [661, 437, 45, 807, 617, 719, 822]$ and given encrypted message:\n$c = 2145$\nFind original cleartext message $s$ in form of list of 0 and 1\nRecall solution from previous challenge in 3-dimensional space. We are going to move to 8 dimensional space now. Ready?\nImagine, that that on axis $Z$ there are all members of public key - List $N$. But we need to distinguish between vectors. So each vector is shifted to side in its own dimension and lies on axis $Z$ in all other dimensions.\nSo we have 7 vectors almost lying on axis $Z$, just slightly shifted to another dimension for tracking purposes.\nAnd the last vector represent subset-sum (encrypted message) from our example. It lies directly on axis $Z$ without any shift. Exactly like this Matrix:\nWhy is the last subset-sum vector with negative sign?\nBecause we are going to use LLL method which tries to find the smallest non zero vector in given Lattice. So when we combine all “right” vectors (right values from list $N$) we should get exactly subset-sum. And if we subtract sum of right values and given subset-sum (encrypted message) we should get 0. So final vector after LLL transformation will have 0 in axis Z and smallest possible numbers (only 0 or 1) in all other dimensions.\nLet’s try it in sage:\n# construct Lattice, for given public key N and encrypted message c N = [661, 437, 45, 807, 617, 719, 822] c = 2145 l = len(N) L = matrix(ZZ,(N)).T.augment(diagonal_matrix([1]*l)).stack(vector([-c,0,0,0,0,0,0,0])) print(L) output is exactly, what we wanted:\n[ 661 1 0 0 0 0 0 0] [ 437 0 1 0 0 0 0 0] [ 45 0 0 1 0 0 0 0] [ 807 0 0 0 1 0 0 0] [ 617 0 0 0 0 1 0 0] [ 719 0 0 0 0 0 1 0] [ 822 0 0 0 0 0 0 1] [-2145 0 0 0 0 0 0 0] And now magic LLL algorithm:\nL_lll = L.LLL() print(L_lll) with output:\n[ 1 -1 0 1 0 1 0 0] [ 0 1 0 1 0 1 0 1] [ 0 1 0 -1 0 0 -2 1] [ 1 1 0 1 -1 -1 1 0] [-1 0 1 -1 -2 1 -1 -1] [-2 0 1 2 1 -1 -1 0] [-1 -2 0 -1 -2 1 1 2] [ 1 -1 3 -1 0 0 1 1] and in second row we see vector with 0 as we need and “nice small” vector with zeros and ones. 1 means that corresponding vector contribute to subset-sum, 0 means that this corresponding vector doesn’t contribute to to subset-sum.\nRemaining values [1, 0, 1, 0, 1, 0, 1] are exactly Bob’s plaintext message s.\nConclusion We went through another interesting type of challenge, where Lattices could be used. I tried to explain how to spot Lattice, how to construct and solve it.\nNotes Some things were slightly simplified in order to better readability. Lattices has also its own limitation, LLL can solve matrixes up to small hundreds of dimensions ",
+  "wordCount" : "1558",
   "inLanguage": "en",
   "datePublished": "2025-08-14T12:57:15Z",
   "dateModified": "2025-08-14T12:57:15Z",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "http://localhost:1313/posts/knapsack_and_lattice/"
+    "@id": "https://sbezo.github.io/posts/knapsack_and_lattice/"
   },
   "publisher": {
     "@type": "Organization",
     "name": "sbezo.github.io",
     "logo": {
       "@type": "ImageObject",
-      "url": "http://localhost:1313/favicon.ico"
+      "url": "https://sbezo.github.io/favicon.ico"
     }
   }
 }
@@ -182,7 +180,7 @@ Each cryptosystem is based on some &ldquo;Hard problem&rdquo;. Two of them domin
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="http://localhost:1313/" accesskey="h" title="sbezo.github.io (Alt + H)">sbezo.github.io</a>
+            <a href="https://sbezo.github.io/" accesskey="h" title="sbezo.github.io (Alt + H)">sbezo.github.io</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -208,12 +206,12 @@ Each cryptosystem is based on some &ldquo;Hard problem&rdquo;. Two of them domin
         </div>
         <ul id="menu">
             <li>
-                <a href="http://localhost:1313/posts/" title="Posts">
+                <a href="https://sbezo.github.io/posts/" title="Posts">
                     <span>Blog</span>
                 </a>
             </li>
             <li>
-                <a href="http://localhost:1313/projects/" title="Projects">
+                <a href="https://sbezo.github.io/projects/" title="Projects">
                     <span>Projects</span>
                 </a>
             </li>
@@ -227,44 +225,42 @@ Each cryptosystem is based on some &ldquo;Hard problem&rdquo;. Two of them domin
     
     <h1 class="post-title entry-hint-parent">
       Knapsack and Lattice
-      <span class="entry-hint" title="Draft">
-        <svg xmlns="http://www.w3.org/2000/svg" height="35" viewBox="0 -960 960 960" fill="currentColor">
-          <path
-            d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z" />
-        </svg>
-      </span>
     </h1>
     <div class="post-meta"><span title='2025-08-14 12:57:15 +0000 UTC'>August 14, 2025</span>
 
 </div>
   </header> 
-  <div class="post-content"><p>In this post I&rsquo;m going to tell you about famous breaking of Merkle–Hellman knapsack cryptosystem by Lattice. And as in my previous article I&rsquo;ll try to focus to explaining how to spot and construct lattice in real example.</p>
+  <div class="post-content"><p>In this post I&rsquo;m going to tell you about another example of Lattice usage. It is inspired by famous breaking of Merkle–Hellman knapsack cryptosystem. And as in my previous article I&rsquo;ll try to focus to explaining how to <strong>spot and construct</strong> Lattice in the real challenge.<br>
+I recommend to read <a href="/posts/Lattices_by_example_1">my previous post</a>, which provides good background to next reading.</p>
 <h2 id="history">History<a hidden class="anchor" aria-hidden="true" href="#history">#</a></h2>
-<p>Merkle–Hellman knapsack cryptosystem is based on general knapsack problem: <a href="https://en.wikipedia.org/wiki/Knapsack_problem">wiki</a><br>
-It was published in 1978, year after introduction of RSA. And broken in 1984 by author of RSA:).</p>
+<p>Merkle–Hellman knapsack cryptosystem is based on general <a href="https://en.wikipedia.org/wiki/Knapsack_problem">knapsack problem:</a><br>
+It was published in 1978, year after introduction of RSA. It was promising due to effective decryption and ease of implementation. But it was first broken in 1982 by Adi Shamir, co-author of RSA. And two years later by Lagarias and Odlyzko using newly developed LLL Lattice reduction.</p>
 <h2 id="how-this-cryptosystem-works">How this cryptosystem works?<a hidden class="anchor" aria-hidden="true" href="#how-this-cryptosystem-works">#</a></h2>
-<p>Each cryptosystem is based on some &ldquo;Hard problem&rdquo;. Two of them dominates contemporary crypto world:</p>
+<p>Each cryptosystem is based on some &ldquo;hard problem&rdquo;. Two of them dominate contemporary crypto world:</p>
 <ul>
 <li>Integer factorization</li>
 <li>Discrete Logarithm</li>
 </ul>
-<p>Merkle–Hellman knapsack cryptosystem is based on another &ldquo;Hard problem&rdquo; : <strong>The Subset-Sum Problem</strong></p>
+<p>Merkle–Hellman knapsack cryptosystem is based on another &ldquo;hard problem&rdquo; <strong>The Subset-Sum Problem</strong> :</p>
 <p>There is a list of positive integers, say:<br>
-M = [3, 4, 7, 11, 14, 21, 31, 45, 46]</p>
-<p>And you are given number, say:<br>
-b = 70</p>
-<p>You should find subset of list M, where the sum of subset values gives n.
-It is considered to be &ldquo;Hard problem&rdquo; and it really is if number of values in list S is big enough.</p>
-<p>But as for all cryptosystems there should be some kind of &ldquo;key&rdquo;. And knowledge of this key allows quick solution of generally hard problem. And nobody without this secret cannot solve the problem effectively.</p>
-<p>Merkle and Hellman came with such key in form of <strong>supeincreasing</strong> list of positive integers. This is simply sequence of positive integers, where each next is at least two times bigger then previous.</p>
+$M = [3, 4, 7, 11, 14, 21, 31, 45, 46]$
+chosen
+And you are given number, say:<br>
+$b = 70$</p>
+<p>You should find subset of list $M$, where the sum of subset values gives $b$.
+It is considered to be a hard problem and it really is if number of values in list $M$ is big enough.</p>
+<p>But as for all cryptosystems there should be some kind of magic key. And knowledge of this key allows quick solution of generally hard problem. Nobody without this secret shouldn&rsquo;t solve the problem effectively.</p>
+<p>Merkle and Hellman came with such key in form of <strong>superincreasing</strong> list of positive integers. This is simply sequence of positive integers, where each next is at least two times bigger then previous.</p>
 <p>Mathematically precisely:<br>
-$M = (m_1, m_2, m_3, &hellip; m_n)$<br>
-is a <em>superincreasing</em> sequence of integers if:<br>
-$m_{i+1} &gt;= m_i$  for all members of $M$</p>
-<p>Example could be:</p>
-<p>M = [3, 7, 14, 30, 63, 150, 311]</p>
-<p>And in this case is very easy to find subset for given number b.</p>
-<pre tabindex="0"><code>M = [3, 7, 14, 30, 63, 150, 311]    # random supeincreasing list of positive integers
+$M = (m_1, m_2, m_3, &hellip; m_n)$</p>
+<p>is a <em>superincreasing</em> sequence of integers if:</p>
+<p>$m_{i+1} &gt;= \displaystyle\sum_{j=1}^{i} m_j$  for all members of $M$</p>
+<blockquote>
+<p>Simply each next number should be bigger than sum of all previous numbers.</p></blockquote>
+<p>Example of such <em>superincreasing</em> sequence could be:</p>
+<p>$M = [3, 7, 14, 30, 63, 150, 311]$</p>
+<p>And in this case it is very easy to find subset for given number b by following algorithm.</p>
+<pre tabindex="0"><code>M = [3, 7, 14, 30, 63, 150, 311]    # random superincreasing list of positive integers
 S = []                              # subset of M, where sum of values gives b
 b = 51                              # given b, which is sum of unknown members of subset S
 b_temp = b                          
@@ -275,11 +271,13 @@ for number in reversed(M):          # for all numbers in M starting from end
 print(S)
 </code></pre><p>and output is:</p>
 <pre tabindex="0"><code>[30, 14, 7]
-</code></pre><p>So exactly such superincreasing list of positive integers (M) will be Alice&rsquo;s private key, her secret magic to solve hard problem.<br>
+</code></pre><p>Distances between members assure easy solution. It is analogy to decimal numerical system - you can simple decompose number 11 011 110 to ones, tens, hundreds and so on.</p>
+<p>So exactly such superincreasing list of positive integers (M) will be Alice&rsquo;s private key, her secret magic to solve hard problem.<br>
 But how she can make this task difficult for somebody in the middle?</p>
 <p><strong>Modular congruencies</strong> looks like very promising choice. So Alice choose two secret big numbers A, B such as:</p>
-<p>$ A, B &gt; 2 m_n$  and   $gcd(A, B) = 1$</p>
-<p>where $m_n$ is a last number in superincreasing sequence M.<br>
+<p>$ A, B &gt; 2 m_n$<br>
+$gcd(A, B) = 1$</p>
+<p>where $m_n$ is a last number of superincreasing sequence M.<br>
 And then compute</p>
 <p>$n_i \equiv Am_i  (mod B)$</p>
 <p>for each value of M and create new sequence $N = (n_1, n_2, n_3&hellip; n_n)$</p>
@@ -295,27 +293,28 @@ for value in M:
 print(f&#34;N = {N}&#34;)
 </code></pre><p>and output is:</p>
 <pre tabindex="0"><code>N = [661, 437, 45, 807, 617, 719, 822]
-</code></pre><p>Sequence N is public key.<br>
-And now Bob want to send some secret message to Alice. This message represent subset-sum of new public key, which Alice can publish to everyone. So secret message <em>s</em> could be for example:</p>
-<p>s = [1, 0, 1, 0, 1, 0, 1]</p>
-<p>And now Bob encrypt this message using Alice&rsquo;s public key to get encrypted message <em>c</em>:</p>
+</code></pre><p>Sequence N is public key.</p>
+<p>And now Bob want to send some secret message to Alice. This message represent subset-sum of new public key, which Alice can publish to everyone. So secret message <em>s</em> could be for example:</p>
+<p>$s = [1, 0, 1, 0, 1, 0, 1]$</p>
+<p>Bob now encrypt this message using Alice&rsquo;s public key to get encrypted message <em>c</em>:</p>
 <pre tabindex="0"><code>c = 1*661 + 0*437 + 1*45 + 0*807 + 1*617 + 0*719 + 1*822
 print(c)
 </code></pre><p>or simply</p>
-<pre tabindex="0"><code>c = vector(s) * vector(L)
+<pre tabindex="0"><code>c = vector(s) * vector(N)
 print(c)
 </code></pre><p>both gives:</p>
 <pre tabindex="0"><code>2145
-</code></pre><p>And as we already know, it is generally hard to find which numbers from sequence N gives us exactly this sum.
-So anyone can see value of <em>c</em> along with public key N.</p>
-<p>But Alice knows her secret M.  And she also has A and B.<br>
+</code></pre><p>2145 is our subset-sum $c$.</p>
+<p>And as we already know, it is generally hard to find which numbers from sequence $N$ gives us exactly this sum.
+So anyone can see value of $c$ along with public key N.</p>
+<p>But Alice knows her secret $M$.  And she also has its $A$ and $B$.<br>
 Alice can first solve subset-sum problem using following by formula:</p>
 <p>$b = A^{-1}c  (mod B)$</p>
 <pre tabindex="0"><code>b = (inverse_mod(A, B) * c) % B
 print(b)
 </code></pre><p>output is</p>
 <pre tabindex="0"><code>391
-</code></pre><p>Here Alice computes <em>b</em> - sum of subset determined by Bob&rsquo;s message <em>s</em>, BUT over her original superincreasing sequence M.</p>
+</code></pre><p>Here Alice computes <em>b</em> - sum of subset determined by Bob&rsquo;s secret plaintext message <em>s</em>, BUT over her original superincreasing sequence $M$.</p>
 <p>And as we show earlier, this is easy to compute:</p>
 <pre tabindex="0"><code>M = [3, 7, 14, 30, 63, 150, 311]    # private key - superincreasing sequence choosen by Alice
 S = []                              # recovered subset of M
@@ -339,7 +338,59 @@ print(f&#34;s = {s}&#34;)
 <p>$b \equiv A^{-1}c \equiv  A^{-1}\displaystyle\sum_{i=1}^n s_i N_i  \equiv  A^{-1}\displaystyle\sum_{i=1}^n s_i A M_i. \equiv  \displaystyle\sum_{i=1}^n s_i M_i                 (mod B)$</p>
 <p>So through this congruence we can transpose secret message <em>c</em> to subset-sum <em>b</em> determined by plain message <em>s</em> over secret superincresing sequence <em>M</em>. And then easily recover message <em>s</em> by finding right values in original superincresing sequence.</p></blockquote>
 <h2 id="breaking-merklehellman-knapsack-cryptosystem-by-lattice">Breaking Merkle–Hellman knapsack cryptosystem by Lattice.<a hidden class="anchor" aria-hidden="true" href="#breaking-merklehellman-knapsack-cryptosystem-by-lattice">#</a></h2>
-<p>After pretty long introduction, which was necessary for understanding following break, we can continue with key part of this post.</p>
+<h3 id="challenge-2">Challenge 2<a hidden class="anchor" aria-hidden="true" href="#challenge-2">#</a></h3>
+<hr>
+<p>For given public key sequence:<br>
+$N = [661, 437, 45, 807, 617, 719, 822]$
+and given  encrypted message:<br>
+$c = 2145$</p>
+<p>Find original cleartext message $s$ in form of list of 0 and 1</p>
+<hr>
+<p>Recall solution from previous <a href="/posts/Lattices_by_example_1">challenge</a> in 3-dimensional space. We are going to move to 8 dimensional space now. Ready?<br>
+Imagine, that that on axis $Z$ there are all members of public key - List $N$. But we need to distinguish between vectors. So each vector is shifted to side in its own dimension and lies on axis $Z$ in all other dimensions.<br>
+So we have 7 vectors almost lying on axis $Z$, just slightly shifted to another dimension for tracking purposes.<br>
+And the last vector represent subset-sum (encrypted message) from our example. It lies directly on axis $Z$ without any shift.
+Exactly like this Matrix:</p>
+<p><img loading="lazy" src="/img/knapsack-matrix.png"></p>
+<p>Why is the last subset-sum vector with negative sign?<br>
+Because we are going to use LLL method which tries to find the smallest non zero vector in given Lattice. So when we combine all &ldquo;right&rdquo; vectors (right values from list $N$) we should get exactly subset-sum. And if we subtract sum of right values and given subset-sum (encrypted message) we should get 0.  So final vector after LLL transformation will have 0 in axis Z and smallest possible numbers (only 0 or 1) in all other dimensions.<br>
+Let&rsquo;s try it in sage:</p>
+<pre tabindex="0"><code># construct Lattice, for given public key N and encrypted message c
+N = [661, 437, 45, 807, 617, 719, 822]
+c = 2145
+l = len(N)
+L = matrix(ZZ,(N)).T.augment(diagonal_matrix([1]*l)).stack(vector([-c,0,0,0,0,0,0,0]))
+print(L)
+</code></pre><p>output is exactly, what we wanted:</p>
+<pre tabindex="0"><code>[  661     1     0     0     0     0     0     0]
+[  437     0     1     0     0     0     0     0]
+[   45     0     0     1     0     0     0     0]
+[  807     0     0     0     1     0     0     0]
+[  617     0     0     0     0     1     0     0]
+[  719     0     0     0     0     0     1     0]
+[  822     0     0     0     0     0     0     1]
+[-2145     0     0     0     0     0     0     0]
+</code></pre><p>And now magic LLL algorithm:</p>
+<pre tabindex="0"><code>L_lll = L.LLL()
+print(L_lll)
+</code></pre><p>with output:</p>
+<pre tabindex="0"><code>[ 1 -1  0  1  0  1  0  0]
+[ 0  1  0  1  0  1  0  1]
+[ 0  1  0 -1  0  0 -2  1]
+[ 1  1  0  1 -1 -1  1  0]
+[-1  0  1 -1 -2  1 -1 -1]
+[-2  0  1  2  1 -1 -1  0]
+[-1 -2  0 -1 -2  1  1  2]
+[ 1 -1  3 -1  0  0  1  1]
+</code></pre><p>and in second row we see vector with 0 as we need and &ldquo;nice small&rdquo; vector with zeros and ones. 1 means that corresponding vector contribute to subset-sum, 0 means that this corresponding vector doesn&rsquo;t contribute to to subset-sum.<br>
+Remaining values [1, 0, 1, 0, 1, 0, 1] are exactly Bob&rsquo;s plaintext message s.</p>
+<h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
+<p>We went through another interesting type of challenge, where Lattices could be used. I tried to explain how to spot Lattice, how to construct and solve it.</p>
+<h2 id="notes">Notes<a hidden class="anchor" aria-hidden="true" href="#notes">#</a></h2>
+<ul>
+<li>Some things were slightly simplified in order to better readability.</li>
+<li>Lattices has also its own limitation, LLL can solve matrixes up to small hundreds of dimensions</li>
+</ul>
 
 
   </div>
@@ -351,7 +402,7 @@ print(f&#34;s = {s}&#34;)
 <ul class="share-buttons">
     <li>
         <a target="_blank" rel="noopener noreferrer" aria-label="share Knapsack and Lattice on linkedin"
-            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2flocalhost%3a1313%2fposts%2fknapsack_and_lattice%2f&amp;title=Knapsack%20and%20Lattice&amp;summary=Knapsack%20and%20Lattice&amp;source=http%3a%2f%2flocalhost%3a1313%2fposts%2fknapsack_and_lattice%2f">
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fsbezo.github.io%2fposts%2fknapsack_and_lattice%2f&amp;title=Knapsack%20and%20Lattice&amp;summary=Knapsack%20and%20Lattice&amp;source=https%3a%2f%2fsbezo.github.io%2fposts%2fknapsack_and_lattice%2f">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
@@ -360,7 +411,7 @@ print(f&#34;s = {s}&#34;)
     </li>
     <li>
         <a target="_blank" rel="noopener noreferrer" aria-label="share Knapsack and Lattice on reddit"
-            href="https://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fknapsack_and_lattice%2f&title=Knapsack%20and%20Lattice">
+            href="https://reddit.com/submit?url=https%3a%2f%2fsbezo.github.io%2fposts%2fknapsack_and_lattice%2f&title=Knapsack%20and%20Lattice">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
@@ -374,7 +425,7 @@ print(f&#34;s = {s}&#34;)
     </main>
     
 <footer class="footer">
-        <span>&copy; 2025 <a href="http://localhost:1313/">sbezo.github.io</a></span> · 
+        <span>&copy; 2025 <a href="https://sbezo.github.io/">sbezo.github.io</a></span> · 
 
     <span>
         Powered by

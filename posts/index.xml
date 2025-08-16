@@ -6,8 +6,19 @@
     <description>Recent content in Posts on sbezo.github.io</description>
     <generator>Hugo -- 0.149.0-DEV</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 12 Aug 2025 13:43:28 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 14 Aug 2025 12:57:15 +0000</lastBuildDate>
     <atom:link href="https://sbezo.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Knapsack and Lattice</title>
+      <link>https://sbezo.github.io/posts/knapsack_and_lattice/</link>
+      <pubDate>Thu, 14 Aug 2025 12:57:15 +0000</pubDate>
+      <guid>https://sbezo.github.io/posts/knapsack_and_lattice/</guid>
+      <description>&lt;p&gt;In this post I&amp;rsquo;m going to tell you about another example of Lattice usage. It is inspired by famous breaking of Merkle–Hellman knapsack cryptosystem. And as in my previous article I&amp;rsquo;ll try to focus to explaining how to &lt;strong&gt;spot and construct&lt;/strong&gt; Lattice in the real challenge.&lt;br&gt;
+I recommend to read &lt;a href=&#34;https://sbezo.github.io/posts/Lattices_by_example_1&#34;&gt;my previous post&lt;/a&gt;, which provides good background to next reading.&lt;/p&gt;
+&lt;h2 id=&#34;history&#34;&gt;History&lt;/h2&gt;
+&lt;p&gt;Merkle–Hellman knapsack cryptosystem is based on general &lt;a href=&#34;https://en.wikipedia.org/wiki/Knapsack_problem&#34;&gt;knapsack problem:&lt;/a&gt;&lt;br&gt;
+It was published in 1978, year after introduction of RSA. It was promising due to effective decryption and ease of implementation. But it was first broken in 1982 by Adi Shamir, co-author of RSA. And two years later by Lagarias and Odlyzko using newly developed LLL Lattice reduction.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>NAT for Alien</title>
       <link>https://sbezo.github.io/posts/nat_for_alien/</link>

@@ -1,0 +1,38 @@
+```
+# plaintext message s encoded to list of bits
+s = "Hel"
+bits = [int(b) for c in s.encode("utf-8") for b in f"{c:08b}"]
+l = len(bits)
+
+# generate random public key - list of 128 numbers (0-2^16)
+import random
+N = [random.randrange(2**16) for _ in range(l)]
+
+# encrypt plaintext message with public key
+c = vector(bits) * vector(N)
+print("plaintext message:  ", s)
+print("encrypted message:  ", c)
+
+# construct Lattice
+last_vector = [-c] + [0] * (l)
+L = matrix(ZZ,(N)).T.augment(diagonal_matrix([1]*l)).stack(vector(last_vector))
+
+# Apply LLL and find all vectors with 0 in firs column and filter just those with 0 or 1
+# There could be more possible solutions
+L_lll = L.LLL()
+results = []
+for row in L_lll:
+    if row[0] == 0:
+        if all((x == 0 or x == 1) for x in row):
+            results.append(row[1:])
+
+# Decode bytes from result's bits, by chunking list by eight bits
+for candidate in results:
+    byte_values = []
+    for i in range(0, len(candidate), 8):
+        byte = int("".join(str(b) for b in candidate[i:i+8]), 2)
+        byte_values.append(byte)
+    
+    print("Candidate string:     ", bytes(byte_values).decode("utf-8", errors="ignore"))
+    print("Candidate subset-sum: ", vector(candidate) * vector(N))
+```
