@@ -220,7 +220,7 @@ document.addEventListener("DOMContentLoaded", function() {
 </div>
   </header> 
   <div class="post-content"><p>In this post I&rsquo;m going to tell you about another example of Lattice usage. It is inspired by famous breaking of Merkle–Hellman knapsack cryptosystem. And as in my previous article I&rsquo;ll try to focus to explaining how to <strong>spot and construct</strong> Lattice in the real challenge.<br>
-I recommend to read <a href="/posts/Lattices_by_example_1/">my previous post</a>, which provides good background to next reading.</p>
+I recommend to read <a href="/posts/lattices_by_example_1/">my previous post</a>, which provides good background to next reading.</p>
 <h2 id="history">History<a hidden class="anchor" aria-hidden="true" href="#history">#</a></h2>
 <p>Merkle–Hellman knapsack cryptosystem is based on general <a href="https://en.wikipedia.org/wiki/Knapsack_problem">knapsack problem:</a><br>
 It was published in 1978, year after introduction of RSA. It was promising due to effective decryption and ease of implementation. But it was first broken in 1982 by Adi Shamir, co-author of RSA. And two years later by Lagarias and Odlyzko using newly developed LLL Lattice reduction.</p>
@@ -335,7 +335,7 @@ and given  encrypted message:<br>
 $c = 2145$</p>
 <p>Find original cleartext message $s$ in form of list of 0 and 1</p>
 <hr>
-<p>Recall solution from previous <a href="/posts/Lattices_by_example_1/">challenge</a> in 3-dimensional space. We are going to move to 8 dimensional space now. Ready?<br>
+<p>Recall solution from previous <a href="/posts/lattices_by_example_1/">challenge</a> in 3-dimensional space. We are going to move to 8 dimensional space now. Ready?<br>
 Imagine, that that on axis $Z$ there are all members of public key - List $N$. But we need to distinguish between vectors. So each vector is shifted to side in its own dimension and lies on axis $Z$ in all other dimensions.<br>
 So we have 7 vectors almost lying on axis $Z$, just slightly shifted to another dimension for tracking purposes.<br>
 And the last vector represent subset-sum (encrypted message) from our example. It lies directly on axis $Z$ without any shift.
