@@ -6,8 +6,15 @@
     <description>Recent content in Posts on sbezo.github.io</description>
     <generator>Hugo -- 0.149.0-DEV</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 14 Aug 2025 12:57:15 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 16 Aug 2025 14:35:18 +0000</lastBuildDate>
     <atom:link href="https://sbezo.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Breaking a Noisy LWE System with Lattices</title>
+      <link>https://sbezo.github.io/posts/noisy_system_solved_by_lattice/</link>
+      <pubDate>Sat, 16 Aug 2025 14:35:18 +0000</pubDate>
+      <guid>https://sbezo.github.io/posts/noisy_system_solved_by_lattice/</guid>
+      <description>Lattices - Part 3: How to use Lattice to break LWE system with small errors.</description>
+    </item>
     <item>
       <title>Knapsack and Lattice</title>
       <link>https://sbezo.github.io/posts/knapsack_and_lattice/</link>
