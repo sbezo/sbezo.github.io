@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>Noisy system solved by Lattice | sbezo.github.io</title>
+<title>Breaking a Noisy LWE System with Lattices | sbezo.github.io</title>
 <meta name="keywords" content="">
 <meta name="description" content="Lattices - Part 3: How to use Lattice to break LWE system with small errors.">
 <meta name="author" content="">
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
       </script><meta property="og:url" content="http://localhost:1313/posts/noisy_system_solved_by_lattice/">
   <meta property="og:site_name" content="sbezo.github.io">
-  <meta property="og:title" content="Noisy system solved by Lattice">
+  <meta property="og:title" content="Breaking a Noisy LWE System with Lattices">
   <meta property="og:description" content="Lattices - Part 3: How to use Lattice to break LWE system with small errors.">
   <meta property="og:locale" content="en-us">
   <meta property="og:type" content="article">
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function() {
     <meta property="article:published_time" content="2025-08-16T14:35:18+00:00">
     <meta property="article:modified_time" content="2025-08-16T14:35:18+00:00">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Noisy system solved by Lattice">
+<meta name="twitter:title" content="Breaking a Noisy LWE System with Lattices">
 <meta name="twitter:description" content="Lattices - Part 3: How to use Lattice to break LWE system with small errors.">
 
 
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function() {
     {
       "@type": "ListItem",
       "position":  2 ,
-      "name": "Noisy system solved by Lattice",
+      "name": "Breaking a Noisy LWE System with Lattices",
       "item": "http://localhost:1313/posts/noisy_system_solved_by_lattice/"
     }
   ]
@@ -127,14 +127,14 @@ document.addEventListener("DOMContentLoaded", function() {
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "Noisy system solved by Lattice",
-  "name": "Noisy system solved by Lattice",
+  "headline": "Breaking a Noisy LWE System with Lattices",
+  "name": "Breaking a Noisy LWE System with Lattices",
   "description": "Lattices - Part 3: How to use Lattice to break LWE system with small errors.",
   "keywords": [
     
   ],
-  "articleBody": "🚧 Article is under construction 🚧\nLearning with errors (LWE) is one of the cornerstone problems in modern lattice-based cryptography and algorithms based on LWE are most promising for post-quantum cryptography era.\nI’m going to start this post with explanation of principles of LWE and then as usually in this series I’ll setup a challenge which I try to solve by Lattice and LLL algorithm. And again - I’m going to focus on process of practical creating of Lattice of course;)\nSystem of linear equations. To be on the same page, I’d like to explain how to solve system of linear equations by matrix in Sagemath. Say that we have following system of just 4 equations with 4 unknowns:\n$4a_1 + 5a_2 + 2a_3 + 7a_4 = 48$\n$7a_1 + 6a_2 + 4a_3 + 3a_4 = 43$\n$5a_1 + 2a_2 + 0a_3 + 3a_4 = 21$\n$9a_1 + 6a_2 + 4a_3 + 2a_4 = 41$\nIn sage we can define left side of system as matrix $A$:\nA = matrix(( [4, 5, 2, 7], [7, 6, 4, 3], [5, 2, 0, 3], [9, 6, 4, 2], )) Right side we can define as vector $b$:\nb = vector([48,43,21,41]) Now we can find solution by sage operation:\nA.solve_right(b) And output is:\n(1, 2, 3, 4) Which is solution of given equations system. We can check first equation.\n4*1 + 5*2 + 2*3 + 7*4 48 It is ok and I believe sage in this.\nSwitching to modulo. Next step will be moving our linear system to modulo universe.\nWe need to define matrix over some integer ring. We can choose a simple integer modulo, or Gaussian field over prime. It doesn’t matter in this case, but let stay on safer side and choose modulo as a prime number and Gaussian Field for our next calculations. Choose modulo q = 23 and then matrix will be defined like this:\nq = 23 A_gf = matrix(GF(q), ( [4, 5, 2, 7], [7, 6, 4, 3], [5, 2, 0, 3], [9, 6, 4, 2], )) Multiply it by expected solution:\nA_gf * vector(GF(q), [1, 2, 3, 4]) (2, 20, 21, 18) And we get right side. And congruences (not equations anymore) will looks like:\n$4a_1 + 5a_2 + 2a_3 + 7a_4 \\equiv 2 \\space\\space mod(23)$\n$7a_1 + 6a_2 + 4a_3 + 3a_4 \\equiv 20 \\space\\space mod(23)$\n$5a_1 + 2a_2 + 0a_3 + 3a_4 \\equiv 21 \\space\\space mod(23)$\n$9a_1 + 6a_2 + 4a_3 + 2a_4 \\equiv 18 \\space\\space mod(23)$\nWe can check the first row:\n(4*1 + 5*2 + 2*3 + 7*4) % 23 2 And it is ok.\nLet check also 2. row for those who are more suspicious.\n(7*1 + 7*2 + 4*3 +3*4) % 23 22 And it still holds.\nWe can employ sage’s solver to check complete congruence system:\nb_gf = vector(GF(q), [2, 20, 21, 18]) A_gf.solve_right(b_gf) And output is as expected:\n(1, 2, 3, 4) This was necessary introduction to solving linear equations and linear congruences by sage.\nAnd we are ready to move to LWE now.\nLWE introduction Add 2 more congruences to our system to make it a bit overdetermined.\n$4a_1 + 5a_2 + 2a_3 + 7a_4 \\equiv 2 \\space\\space mod(23)$\n$7a_1 + 6a_2 + 4a_3 + 3a_4 \\equiv 20 \\space\\space mod(23)$\n$5a_1 + 2a_2 + 0a_3 + 3a_4 \\equiv 21 \\space\\space mod(23)$\n$9a_1 + 6a_2 + 4a_3 + 2a_4 \\equiv 18 \\space\\space mod(23)$\n$3a_1 + 5a_2 + 7a_3 + 9a_4 \\equiv 1 \\space\\space mod(23)$\n$0a_1 + 3a_2 + 6a_3 + 9a_4 \\equiv 14 \\space\\space mod(23)$\nA_gf = A_gf.stack(matrix(GF(q),([3, 5, 7, 9], [0, 3, 6, 9]))) A_gf * vector(GF(q), [1, 2, 3, 4]) # gives: (2, 20, 21, 18, 1, 14) b_gf = vector(GF(q), [2, 20, 21, 18, 1, 14]) A_gf.solve_right(b_gf) # gives again: (1, 2, 3, 4) System holds and everything is consistent.\nBut now try to inject small error to right side. Just change $2$ to $3$ in the first row.\nAnd now try to solve by sage’s solver:\nb_gf_err = vector(GF(q), [3, 20, 21, 18, 1, 14]) A_gf.solve_right(b_gf_err) And we get error:\nValueError: matrix equation has no solutions Expected. But the question is, if we are able to solve such intently broken overdetermined congruence system? Indeed, it is a hard problem. Exactly what crypto systems need.\nHow hard depends on scale of errors and number of unknowns in congruence system.\nOk, and as in other crypto systems, we need public key, private key, plaintext message and encrypted message.\nSo what is what in LWE? It is not as clear as in other crypto schemes but following is pretty close for better imagination:\nPublic key is a matrix - integer coefficients on left side of noisy congruence system.\nPrivate secret key is vector of unknowns. $a_1, a_2, a_3, a_4$ in our case. We worked with 1, 2, 3, 4.\nPlaintext secret message is vector of errors, which are injected to integers on right side.\nAnd right side we can consider as cipher message.\nWith knowledge of private key (vector of unknowns of congruences system) is it straightforward to solve the system. Difference between output on right side and provided solution (secret cipher message) is exactly error vector, which is plaintext message.\nWithout knowledge of private key, we have to try to solve noisy congruence system and try to identify injected errors.\nEverything will be more clear in following real example.\nCreating LWE system I’m going to create and solve noisy overdetermined LWE system. Let choose something bigger, but still solvable by Lattice.\nChallenge 3 Create noisy system with encoded message first\nLet generate matrix with 64 columns and 96 rows with random coefficients over field $q = 2^{16} + 1$.\nThis matrix is a Public key.\nLet generate Private key as vector of 64 random numbers.\nLet choose plaintext message “HelloLattice” and encode it as 0 and 1 to error vector.\nCalculate correct right side of system by multiplying matrix with secret vector. Inject error vector to system.\nChallenge task:\nTry to break system and decode plaintext without knowledge of private key.\nFirst part is straightforward. Just follow challenge steps to create noisy system:\nq = 2**16 + 1 m = 96 # rows n = 64 # columns # public key as matrix 96x64 A = Matrix(GF(q), m, n, lambda i, j: randint(0, q)) # private key as vector of 64 numbers: s = vector(Matrix(GF(q), 1, n, lambda i, j: randint(0, q))) # define plaintext message and encode it to error vector e: message = \"HelloLattice\" bits = [int(b) for c in message.encode(\"utf-8\") for b in f\"{c:08b}\"] e = vector(GF(q), bits) # calculate correct right side of system: b_correct = A * s # and finally inject errors by adding correct right side and error vector: b = b_correct + e You can check all variables, but they are quite big, so I do not write outputs here.\nWith knowledge of private key the solution should be easy.\n$e = b - A * s$\nShould give us cleartext message encoded in 0 and 1.\nLet try it:\n# calculate error vector - binary encoded message e_exp = b - A * s # and now try to decode byte_values = [] for i in range(0, len(e_exp), 8): byte = int(\"\".join(str(b) for b in e_exp[i:i+8]), 2) byte_values.append(byte) print(\"Decoded message: \", bytes(byte_values).decode(\"utf-8\", errors=\"ignore\")) And you should get correct plaintext message.\nNow we continue with hardest way. We are going to recover message without knowledge of private key s. And again we will utilize Lattice.\nSolving noisy LWE system by Lattice We know just system of linear equations (more precisely congruences), where right side tampered by errors. We know that error could be 1 or 0, so very small divergence from correct results. Nothing else. This error vector is encoded plaintext message. So we want to find it. In this case error vector is 96 bits long. Even errors are small, it is still $2^{96}$ possibilities, which is completely infeasible by brute force method.\nBut keywords very small divergence from previous evaluation could lead us again to our topic - Lattice.\nIf LLL method can discover smallest non-zero vector in given Lattice, it could find unknown error vector.\nA_zz = matrix(ZZ, A) b_zz = vector(ZZ, b) A_aug = A_zz.augment(b_zz).augment(diagonal_matrix(ZZ, [q] * m)).T A_lll = A_aug.LLL() for row in A_lll: if row != 0 and all(abs(x) \u003c= 1 for x in row): break # solve the system e_exp = vector(Integers(q), row) try: s_v = A.solve_right(b - e_exp) print(f\"*** System solvable: e = {e_exp}\") except: print(\"No solution found with LATTICE method.\") s_v = None byte_values = [] for i in range(0, len(e_exp), 8): byte = int(\"\".join(str(b) for b in e_exp[i:i+8]), 2) byte_values.append(byte) print(\"Decoded message: \", bytes(byte_values).decode(\"utf-8\", errors=\"ignore\")) ",
-  "wordCount" : "1448",
+  "articleBody": "Learning with errors (LWE) is one of the cornerstone problems in modern lattice-based cryptography and algorithms based on LWE are most promising for post-quantum cryptography era.\nI’m going to start this post with explanation of principles of LWE and then as usually in this series I’ll setup a challenge which I try to solve by Lattice and LLL algorithm. And again - I’ll focus on the practical process of creating a lattice. ;)\nSystem of linear equations. To be on the same page, I’d like to explain how to solve system of linear equations by matrix in Sagemath. Say that we have following system of just 4 equations with 4 unknowns:\n$4a_1 + 5a_2 + 2a_3 + 7a_4 = 48$\n$7a_1 + 6a_2 + 4a_3 + 3a_4 = 43$\n$5a_1 + 2a_2 + 0a_3 + 3a_4 = 21$\n$9a_1 + 6a_2 + 4a_3 + 2a_4 = 41$\nIn sage we can define left side of system as matrix $\\bold{A}$:\nA = matrix(( [4, 5, 2, 7], [7, 6, 4, 3], [5, 2, 0, 3], [9, 6, 4, 2], )) Right side we can define as vector $\\overrightarrow{b}$:\nb = vector([48,43,21,41]) Now we can find solution by sage operation:\nA.solve_right(b) And output is:\n(1, 2, 3, 4) Which is solution of given equations system. We can check first equation.\n4*1 + 5*2 + 2*3 + 7*4 # 48 It is ok and I believe sage in this.\nSwitching to modulo. Next step will be moving our linear system to modulo universe.\nWe need to define matrix over some integer ring. We can choose a simple integer modulo, or Gaussian field over prime. It doesn’t matter in this case, but let’s stay on safer side and choose modulo as a prime number and Gaussian Field for our next calculations. Choose modulo q = 23 and then matrix will be defined like this:\nq = 23 A_gf = matrix(GF(q), ( [4, 5, 2, 7], [7, 6, 4, 3], [5, 2, 0, 3], [9, 6, 4, 2], )) Multiply it by expected solution:\nA_gf * vector(GF(q), [1, 2, 3, 4]) # (2, 20, 21, 18) And we get right side. And congruences (not equations anymore) will looks like:\n$4a_1 + 5a_2 + 2a_3 + 7a_4 \\equiv 2 \\space\\space mod(23)$\n$7a_1 + 6a_2 + 4a_3 + 3a_4 \\equiv 20 \\space\\space mod(23)$\n$5a_1 + 2a_2 + 0a_3 + 3a_4 \\equiv 21 \\space\\space mod(23)$\n$9a_1 + 6a_2 + 4a_3 + 2a_4 \\equiv 18 \\space\\space mod(23)$\nWe can check the first row:\n(4*1 + 5*2 + 2*3 + 7*4) % 23 # 2 And it is ok.\nLet’s check also 2. row for those who are more suspicious.\n(7*1 + 6*2 + 4*3 +3*4) % 23 # 20 And it still holds.\nWe can employ sage’s solver to check complete congruence system:\nb_gf = vector(GF(q), [2, 20, 21, 18]) A_gf.solve_right(b_gf) And output is as expected:\n(1, 2, 3, 4) This was necessary introduction to solving linear equations and linear congruences by sage.\nAnd we are ready to move to LWE now.\nLWE introduction Add 2 more congruences to our system to make it a bit overdetermined. I’ll explain why we need overdetermined system later.\n$4a_1 + 5a_2 + 2a_3 + 7a_4 \\equiv 2 \\space\\space mod(23)$\n$7a_1 + 6a_2 + 4a_3 + 3a_4 \\equiv 20 \\space\\space mod(23)$\n$5a_1 + 2a_2 + 0a_3 + 3a_4 \\equiv 21 \\space\\space mod(23)$\n$9a_1 + 6a_2 + 4a_3 + 2a_4 \\equiv 18 \\space\\space mod(23)$\n$3a_1 + 5a_2 + 7a_3 + 9a_4 \\equiv 1 \\space\\space mod(23)$\n$0a_1 + 3a_2 + 6a_3 + 9a_4 \\equiv 14 \\space\\space mod(23)$\nA_gf = A_gf.stack(matrix(GF(q),([3, 5, 7, 9], [0, 3, 6, 9]))) A_gf * vector(GF(q), [1, 2, 3, 4]) # (2, 20, 21, 18, 1, 14) b_gf = vector(GF(q), [2, 20, 21, 18, 1, 14]) A_gf.solve_right(b_gf) # (1, 2, 3, 4) System holds and everything is consistent.\nBut now try to inject small error to right side. Just change $2$ to $3$ in the first row.\nAnd now try to solve by sage’s solver:\nb_gf_err = vector(GF(q), [3, 20, 21, 18, 1, 14]) A_gf.solve_right(b_gf_err) And we get error:\nValueError: matrix equation has no solutions Expected. But the question is, if we are able to solve such intently broken overdetermined congruence system? Indeed, it is a hard problem. Exactly what crypto systems need.\nHow hard depends on scale of errors and number of unknowns in congruence system.\nLet’s formalize, what we just tested:\n$\\bold{A} \\times \\overrightarrow{s} + \\overrightarrow{e} = \\overrightarrow{b}$\nOk, and as in other crypto systems, we usually need public key, private key, plaintext message and encrypted message.\nSo what is what in LWE? This is not exactly how LWE is used in cryptography, but it’s a useful mental model.\nPublic key is a matrix $\\bold{A}$ - integer coefficients on left side of noisy congruence system.\nPrivate secret key is vector of unknowns $\\overrightarrow{s}$. $(a_1, a_2, a_3, a_4)$ in our case. We worked with 1, 2, 3, 4.\nPlaintext secret message is vector of errors $\\overrightarrow{e}$, which are injected to correct solution.\nAnd right side, vector $\\overrightarrow{b}$, we can consider as a cipher message.\nWith knowledge of private key (vector of unknowns of congruences system $\\overrightarrow{s}$) it is straightforward to solve the system.\n$\\overrightarrow{e} = \\overrightarrow{b} - \\bold{A} \\times \\overrightarrow{s}$\nWe know everything what we need.\nWithout knowledge of private key, we have to try to solve noisy congruence system and try to identify injected errors.\nI’ll try it in next section using Lattice method.\nCreating Lattice on toy example I’m going to construct Lattice for smallest possible example and explain it. Let’s start with just one unknown $x$ system.\n$45x \\equiv 51 \\space\\space mod(101)$\nNow I inject error - modify the right side (+1) and I get a LWE congruence:\n$45x \\equiv 52 \\space\\space mod(101)$\nThere should be some $x$ and some $k$ for which the following statement is true:\n$45 \\times x - 52 - k\\times 101$ is very close to 0\nAnd really:\n45*55 - 52 - 101*24 # gives -1 But there is one catch. If we calculate congruence:\n$45x \\equiv 51 \\space\\space mod(101)$ we get result $55$\nBut when we try:\n$45x \\equiv 52 \\space\\space mod(101)$\nwe get another result:\nA = matrix(Integers(101),([45])) b = vector(Integers(101),([51])) A.solve_right(b) # gives result 55 b = vector(Integers(101),([52])) A.solve_right(b) # gives result 64 In other words, there exists another $x$, which would give better result - shorter vector - then original $x$ tampered by a small error. This is exactly the reason why we need overdetermined system, to be able to find injected error.\nAnd therefore another congruences are necessary to improve stability of system.\n$45x \\equiv 51 \\space\\space mod(101)$\n$72x \\equiv 21 \\space\\space mod(101)$\n$12x \\equiv 54 \\space\\space mod(101)$\nCheck it in sage:\n45*55 %101 # gives 51 72*55 %101 # gives 21 12*55 %101 # gives 54 If we inject some small error to any congruence now, we should be able to reveal it, because the same $x$ and result close to 0 should hold across all 3 statements now:\n$45 \\times x - 51 - k\\times 101$ is very close to 0\n$72 \\times x - 21 - k\\times 101$ is very close to 0\n$12 \\times x - 54 - k\\times 101$ is very close to 0\n$k$ could be different in all 3 cases. $(k\\times 101)$ is a “bridge” between modulo and $\\Z$ worlds.\nFinally we are getting to Lattice construction. Let’s say that we inject error just to first congruence. Say that error vector will be (1, 0, 0). How will look like our 3 statements in Lattice then? We can consider these 3 statements as 3 dimensions.\nEach column represents one statement and LLL will try to find as smallest as possible non zero vector. Important thing is it that it is still the same Lattice, but just with another basis, so $x$ should be still the same.\nLLL is trying to find the best orthogonal basis and as a side effect if often finds also one very small small vector, which contains possible values in each dimension. And this vector is often wanted solution.\nLet’s solve it in in sage:\nA = matrix(([45, 72, 12], [-50, -21, -54], [101, 0, 0], [0, 101, 0], [0, 0, 101])) A.LLL() gives:\n[ 0 0 0] [ 0 0 0] [-1 0 0] [ 0 -6 -1] [ 0 -5 16] And in 3nd row we can see our error vector.\nNow we are ready to build a bit bigger system, so let try it in next challenge.\nChallenge 3 Create noisy system with encoded message first\nLet’s generate matrix with 64 columns and 96 rows with random coefficients over field $q = 2^{16} + 1$.\nThis matrix is a Public key.\nLet’s generate Private key as vector of 64 random numbers.\nLet’s choose plaintext message “HelloLattice” and encode it as 0 and 1 to error vector.\nCalculate correct right side of system by multiplying matrix with secret vector. Inject error vector to system - modified vector will be encrypted message.\n$\\overrightarrow{b} = \\bold{A} \\times \\overrightarrow{s} + \\overrightarrow{e}$\nChallenge task:\nTry to decrypt message without knowledge of private key.\nFirst part is straightforward. Just follow challenge steps to create noisy system:\nq = 2**16 + 1 m = 96 # rows n = 64 # columns # public key as matrix 96x64 A = Matrix(GF(q), m, n, lambda i, j: randint(0, q)) # private key as vector of 64 numbers: s = vector(Matrix(GF(q), 1, n, lambda i, j: randint(0, q))) # define plaintext message and encode it to error vector e: message = \"HelloLattice\" bits = [int(b) for c in message.encode(\"utf-8\") for b in f\"{c:08b}\"] e = vector(GF(q), bits) # calculate correct right side of system: b_correct = A * s # and finally inject errors by adding correct right side and error vector: b = b_correct + e You can check all variables, but they are quite big, so I do not write outputs here.\nWith knowledge of private key the solution should be easy.\n$\\overrightarrow{e} = \\overrightarrow{b} - \\bold{A} \\times \\overrightarrow{s}$\nShould give us cleartext message encoded in 0 and 1.\nLet’s try it:\n# calculate error vector - binary encoded message e_exp = b - A * s # and now try to decode byte_values = [] for i in range(0, len(e_exp), 8): byte = int(\"\".join(str(b) for b in e_exp[i:i+8]), 2) byte_values.append(byte) print(\"Decoded message: \", bytes(byte_values).decode(\"utf-8\", errors=\"ignore\")) And you should get correct plaintext message.\nNow we continue with hardest way. We are going to recover message without knowledge of private key $\\overrightarrow{s}$.\nSolving challenge by Lattice We know a system of linear equations (more precisely congruences), where right side is tampered by errors. We know that error could be 1 or 0, so very small divergence from correct results. Nothing else. This error vector is encoded plaintext message. So we want to find it. In this case error vector is 96 bits long. Even errors are small, it is still $2^{96}$ possibilities, which is completely infeasible by brute force method.\nBut keywords very small divergence from previous evaluation could lead us again to Lattice method.\nIn my case system of system of linear equations looks like this for better imagination.\n$59521a_1 + 8581a_2 + 2477a_3 + … +11940a_{64} \\equiv 25227 \\space\\space mod(65537)$\n$47042a_1 + 23493a_2 + 2751a_3 + … + 60385a_{64} \\equiv 23711 \\space\\space mod(65537)$\n…\n$21360a_1 + 18668a_2 + 62645a_3 + … + 57158a_{64} \\equiv 21053 \\space\\space mod(65537)$\nNumber of rows is 96. As coefficients are random, they can vary each time of course. We know that:\n$\\bold{A} \\times \\overrightarrow{s} + \\overrightarrow{e} = \\overrightarrow{b}$\nin my case:\n$ \\begin{pmatrix} 59521 \u0026 8581 \u0026 … \u0026 11940 \\\\ 47042 \u0026 23493 \u0026 … \u0026 60385 \\\\ … \\\\ 21360 \u0026 18668 \u0026 … \u0026 57158 \\\\ \\end{pmatrix} \\times \\overrightarrow{s} + \\overrightarrow{e} = (25227, 23711, …, 21053)$\nLLL method can discover smallest non-zero vector in given Lattice, as in previous toy example. Note, that I’m building a Lattice from left to right:\n$\\bold A + \\overrightarrow{b} + DiagonalMatrix$\nAnd then transform matrix (rows \u003c-\u003e columns)\nAnd other important note - I should switch matrix to $\\Z$ ring.\nNext steps are selfexplanating:\nfinding row with small values testing solution by solving equations (note switching to modulo) decoding error vector to message A_zz = matrix(ZZ, A) b_zz = vector(ZZ, b) A_aug = A_zz.augment(b_zz).augment(diagonal_matrix(ZZ, [q] * m)).T A_lll = A_aug.LLL() for row in A_lll: if row != 0 and all(abs(x) \u003c= 1 for x in row): break # solve the system e_exp = vector(Integers(q), row) try: s_v = A.solve_right(b - e_exp) print(f\"*** System solvable: e = {e_exp}\") except: print(\"No solution found with LATTICE method.\") s_v = None byte_values = [] for i in range(0, len(e_exp), 8): byte = int(\"\".join(str(b) for b in e_exp[i:i+8]), 2) byte_values.append(byte) print(\"Decoded message: \", bytes(byte_values).decode(\"utf-8\", errors=\"ignore\")) Conclusion We looked at another beautiful usecase for Lattice LLL.\nAs it looks like some magic, but Lattices have also their limits.\nTake challenge from this example and try to test bigger values in error vector, make system less overdetermined, or try to extend $\\bold A$ matrix and you’ll find them quickly;).\nReal LWE cryptosystems use carefully chosen parameters (large dimensions, Gaussian error) that make this lattice attack infeasible. But on toy systems, LLL works beautifully and demonstrates the principle.\n",
+  "wordCount" : "2205",
   "inLanguage": "en",
   "datePublished": "2025-08-16T14:35:18Z",
   "dateModified": "2025-08-16T14:35:18Z",
@@ -213,7 +213,7 @@ document.addEventListener("DOMContentLoaded", function() {
   <header class="post-header">
     
     <h1 class="post-title entry-hint-parent">
-      Noisy system solved by Lattice
+      Breaking a Noisy LWE System with Lattices
       <span class="entry-hint" title="Draft">
         <svg xmlns="http://www.w3.org/2000/svg" height="35" viewBox="0 -960 960 960" fill="currentColor">
           <path
@@ -225,9 +225,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 </div>
   </header> 
-  <div class="post-content"><p>🚧 Article is under construction 🚧</p>
-<p>Learning with errors (LWE) is one of the cornerstone problems in modern lattice-based cryptography and algorithms based on LWE are most promising for post-quantum cryptography era.<br>
-I&rsquo;m going to start this post with explanation of principles of LWE and then as usually in this series I&rsquo;ll setup a challenge which I try to solve by Lattice and LLL algorithm. And again - I&rsquo;m going to focus on process of practical creating of Lattice of course;)</p>
+  <div class="post-content"><p>Learning with errors (LWE) is one of the cornerstone problems in modern lattice-based cryptography and algorithms based on LWE are most promising for post-quantum cryptography era.<br>
+I&rsquo;m going to start this post with explanation of principles of LWE and then as usually in this series I&rsquo;ll setup a challenge which I try to solve by Lattice and LLL algorithm. And again - I’ll focus on the practical process of creating a lattice. ;)</p>
 <h2 id="system-of-linear-equations">System of linear equations.<a hidden class="anchor" aria-hidden="true" href="#system-of-linear-equations">#</a></h2>
 <p>To be on the same page, I&rsquo;d like to explain how to solve system of linear equations by matrix in Sagemath.
 Say that we have following system of just 4 equations with 4 unknowns:</p>
@@ -235,14 +234,14 @@ Say that we have following system of just 4 equations with 4 unknowns:</p>
 $7a_1 + 6a_2 + 4a_3 + 3a_4 = 43$<br>
 $5a_1 + 2a_2 + 0a_3 + 3a_4 = 21$<br>
 $9a_1 + 6a_2 + 4a_3 + 2a_4 = 41$</p>
-<p>In sage we can define left side of system as matrix $A$:</p>
+<p>In sage we can define left side of system as matrix $\bold{A}$:</p>
 <pre tabindex="0"><code>A = matrix((
     [4, 5, 2, 7],
     [7, 6, 4, 3],
     [5, 2, 0, 3],
     [9, 6, 4, 2],
 ))
-</code></pre><p>Right side we can define as vector $b$:</p>
+</code></pre><p>Right side we can define as vector $\overrightarrow{b}$:</p>
 <pre tabindex="0"><code>b = vector([48,43,21,41])
 </code></pre><p>Now we can find solution by sage operation:</p>
 <pre tabindex="0"><code>A.solve_right(b)
@@ -250,11 +249,11 @@ $9a_1 + 6a_2 + 4a_3 + 2a_4 = 41$</p>
 <pre tabindex="0"><code>(1, 2, 3, 4)
 </code></pre><p>Which is solution of given equations system. We can check first equation.</p>
 <pre tabindex="0"><code>4*1 + 5*2 + 2*3 + 7*4
-48
+# 48
 </code></pre><p>It is ok and I believe sage in this.</p>
 <h2 id="switching-to-modulo">Switching to modulo.<a hidden class="anchor" aria-hidden="true" href="#switching-to-modulo">#</a></h2>
 <p>Next step will be moving our linear system to modulo universe.<br>
-We need to define matrix over some integer ring. We can choose a simple integer modulo, or Gaussian field over prime. It doesn&rsquo;t matter in this case, but let stay on safer side and choose modulo as a prime number and Gaussian Field for our next calculations. Choose modulo q = 23 and then matrix will be defined like this:</p>
+We need to define matrix over some integer ring. We can choose a simple integer modulo, or Gaussian field over prime. It doesn&rsquo;t matter in this case, but let&rsquo;s stay on safer side and choose modulo as a prime number and Gaussian Field for our next calculations. Choose modulo q = 23 and then matrix will be defined like this:</p>
 <pre tabindex="0"><code>q = 23
 A_gf = matrix(GF(q), (
     [4, 5, 2, 7],
@@ -264,7 +263,7 @@ A_gf = matrix(GF(q), (
 ))
 </code></pre><p>Multiply it by expected solution:</p>
 <pre tabindex="0"><code>A_gf * vector(GF(q), [1, 2, 3, 4])
-(2, 20, 21, 18)
+# (2, 20, 21, 18)
 </code></pre><p>And we get right side. And congruences (not equations anymore) will looks like:</p>
 <p>$4a_1 + 5a_2 + 2a_3 + 7a_4 \equiv 2  \space\space mod(23)$<br>
 $7a_1 + 6a_2 + 4a_3 + 3a_4 \equiv 20  \space\space mod(23)$<br>
@@ -272,11 +271,11 @@ $5a_1 + 2a_2 + 0a_3 + 3a_4 \equiv 21  \space\space mod(23)$<br>
 $9a_1 + 6a_2 + 4a_3 + 2a_4 \equiv 18  \space\space mod(23)$</p>
 <p>We can check the first row:</p>
 <pre tabindex="0"><code>(4*1 + 5*2 + 2*3 + 7*4) % 23
-2
+# 2
 </code></pre><p>And it is ok.<br>
-Let check also 2. row for those who are more suspicious.</p>
-<pre tabindex="0"><code>(7*1 + 7*2 + 4*3 +3*4) % 23
-22
+Let&rsquo;s check also 2. row for those who are more suspicious.</p>
+<pre tabindex="0"><code>(7*1 + 6*2 + 4*3 +3*4) % 23
+# 20
 </code></pre><p>And it still holds.<br>
 We can employ sage&rsquo;s solver to check complete congruence system:</p>
 <pre tabindex="0"><code>b_gf = vector(GF(q), [2, 20, 21, 18])
@@ -286,7 +285,7 @@ A_gf.solve_right(b_gf)
 </code></pre><p>This was necessary introduction to solving linear equations and linear congruences by sage.<br>
 And we are ready to move to LWE now.</p>
 <h2 id="lwe-introduction">LWE introduction<a hidden class="anchor" aria-hidden="true" href="#lwe-introduction">#</a></h2>
-<p>Add 2 more congruences to our system to make it a bit overdetermined.</p>
+<p>Add 2 more congruences to our system to make it a bit overdetermined. I&rsquo;ll explain why we need overdetermined system later.</p>
 <p>$4a_1 + 5a_2 + 2a_3 + 7a_4 \equiv 2  \space\space mod(23)$<br>
 $7a_1 + 6a_2 + 4a_3 + 3a_4 \equiv 20  \space\space mod(23)$<br>
 $5a_1 + 2a_2 + 0a_3 + 3a_4 \equiv 21  \space\space mod(23)$<br>
@@ -295,10 +294,10 @@ $3a_1 + 5a_2 + 7a_3 + 9a_4 \equiv 1  \space\space mod(23)$<br>
 $0a_1 + 3a_2 + 6a_3 + 9a_4 \equiv 14  \space\space mod(23)$</p>
 <pre tabindex="0"><code>A_gf = A_gf.stack(matrix(GF(q),([3, 5, 7, 9], [0, 3, 6, 9])))
 A_gf * vector(GF(q), [1, 2, 3, 4])
-# gives: (2, 20, 21, 18, 1, 14)
+# (2, 20, 21, 18, 1, 14)
 b_gf = vector(GF(q), [2, 20, 21, 18, 1, 14])
 A_gf.solve_right(b_gf)
-# gives again: (1, 2, 3, 4)
+# (1, 2, 3, 4)
 </code></pre><p>System holds and everything is consistent.<br>
 <strong>But now try to inject small error to right side</strong>. Just change $2$ to $3$ in the first row.<br>
 And now try to solve by sage&rsquo;s solver:</p>
@@ -306,31 +305,95 @@ And now try to solve by sage&rsquo;s solver:</p>
 A_gf.solve_right(b_gf_err)
 </code></pre><p>And we get error:</p>
 <pre tabindex="0"><code>ValueError: matrix equation has no solutions
-</code></pre><p>Expected. But the question is, if we are able to solve such intently broken overdetermined congruence system?
+</code></pre><p>Expected. But the question is, if we are able to solve such <strong>intently broken</strong> overdetermined congruence system?
 Indeed, it is a hard problem. Exactly what crypto systems need.<br>
 How hard depends on scale of errors and number of unknowns in congruence system.</p>
-<p>Ok, and as in other crypto systems, we need public key, private key, plaintext message and encrypted message.<br>
-So what is what in LWE?   It is not as clear as in other crypto schemes but following is pretty close for better imagination:</p>
-<p>Public key is a matrix - integer coefficients on left side of noisy congruence system.<br>
-Private secret key is vector of unknowns. $a_1, a_2, a_3, a_4$ in our case. We worked with 1, 2, 3, 4.<br>
-Plaintext secret message is vector of errors, which are injected to integers on right side.<br>
-And right side we can consider as cipher message.</p>
-<p>With knowledge of private key (vector of unknowns of congruences system) is it straightforward to solve the system. Difference between output on right side and provided solution (secret cipher message) is exactly error vector, which is plaintext message.</p>
-<p>Without knowledge of private key, we have to try to solve noisy congruence system and try to identify injected errors.</p>
-<p>Everything will be more clear in following real example.</p>
-<h2 id="creating-lwe-system">Creating LWE system<a hidden class="anchor" aria-hidden="true" href="#creating-lwe-system">#</a></h2>
-<p>I&rsquo;m going to create and solve noisy overdetermined LWE system. Let choose something bigger, but still solvable by Lattice.</p>
-<h3 id="challenge-3">Challenge 3<a hidden class="anchor" aria-hidden="true" href="#challenge-3">#</a></h3>
+<p>Let&rsquo;s formalize, what we just tested:</p>
+<p>$\bold{A} \times \overrightarrow{s} + \overrightarrow{e} = \overrightarrow{b}$</p>
+<p>Ok, and as in other crypto systems, we usually need public key, private key, plaintext message and encrypted message.<br>
+So what is what in LWE?
+This is not exactly how LWE is used in cryptography, but it’s a useful mental model.</p>
+<p>Public key is a matrix $\bold{A}$ - integer coefficients on left side of noisy congruence system.<br>
+Private secret key is vector of unknowns $\overrightarrow{s}$. $(a_1, a_2, a_3, a_4)$ in our case. We worked with 1, 2, 3, 4.<br>
+Plaintext secret message is vector of errors $\overrightarrow{e}$, which are injected to correct solution.<br>
+And right side, vector $\overrightarrow{b}$, we can consider as a cipher message.</p>
+<p><strong>With</strong> knowledge of private key (vector of unknowns of congruences system $\overrightarrow{s}$) it is straightforward to solve the system.</p>
+<p>$\overrightarrow{e} = \overrightarrow{b} - \bold{A} \times \overrightarrow{s}$</p>
+<p>We know everything what we need.</p>
+<p><strong>Without</strong> knowledge of private key, we have to try to solve noisy congruence system and try to identify injected errors.<br>
+I&rsquo;ll try it in next section using Lattice method.</p>
+<h2 id="creating-lattice-on-toy-example">Creating Lattice on toy example<a hidden class="anchor" aria-hidden="true" href="#creating-lattice-on-toy-example">#</a></h2>
+<p>I&rsquo;m going to construct Lattice for smallest possible example and explain it.
+Let&rsquo;s start with just one unknown $x$ system.</p>
+<p>$45x \equiv 51 \space\space mod(101)$</p>
+<p>Now I inject error - modify the right side (+1) and I get a LWE congruence:</p>
+<p>$45x \equiv 52 \space\space mod(101)$</p>
+<p>There should be some $x$ and some $k$ for which the following statement is true:</p>
+<p>$45 \times x - 52 - k\times 101$ is very close to 0</p>
+<p>And really:</p>
+<pre tabindex="0"><code>45*55 - 52 - 101*24
+# gives -1
+</code></pre><p>But there is one catch. If we calculate congruence:</p>
+<p>$45x \equiv 51 \space\space mod(101)$ we get result $55$</p>
+<p>But when we try:</p>
+<p>$45x \equiv 52 \space\space mod(101)$</p>
+<p>we get another result:</p>
+<pre tabindex="0"><code>A = matrix(Integers(101),([45]))
+b = vector(Integers(101),([51]))
+A.solve_right(b)
+# gives result 55
+b = vector(Integers(101),([52]))
+A.solve_right(b)
+# gives result 64
+</code></pre><p>In other words, there exists another $x$, which would give better result - shorter vector - then original $x$ tampered by a small error.
+This is exactly the reason why we need <strong>overdetermined</strong> system, to be able to find injected error.</p>
+<p>And therefore another congruences are necessary to improve stability of system.</p>
+<p>$45x \equiv 51 \space\space mod(101)$<br>
+$72x \equiv 21 \space\space mod(101)$<br>
+$12x \equiv 54 \space\space mod(101)$</p>
+<p>Check it in sage:</p>
+<pre tabindex="0"><code>45*55 %101  # gives 51
+72*55 %101  # gives 21
+12*55 %101  # gives 54
+</code></pre><p>If we inject some small error to any congruence now, we should be able to reveal it,
+because the same $x$ and result close to 0 should hold across all 3 statements now:</p>
+<p>$45 \times x - 51 - k\times 101$ is very close to 0<br>
+$72 \times x - 21 - k\times 101$ is very close to 0<br>
+$12 \times x - 54 - k\times 101$ is very close to 0</p>
+<blockquote>
+<p>$k$ could be different in all 3 cases. $(k\times 101)$ is a &ldquo;bridge&rdquo; between modulo and $\Z$ worlds.</p></blockquote>
+<p>Finally we are getting to Lattice construction. Let&rsquo;s say that we inject error just to first congruence. Say that error vector will be (1, 0, 0).
+How will look like our 3 statements in Lattice then?
+<img loading="lazy" src="/img/lwe_3.png"></p>
+<p>We can consider these 3 statements as 3 dimensions.<br>
+Each column represents one statement and LLL will try to find as smallest as possible non zero vector.
+Important thing is it that it is still the same Lattice, but just with another basis, so $x$ should be still the same.</p>
+<blockquote>
+<p>LLL is trying to find the best orthogonal basis and as a side effect if often finds also one very small small vector,
+which contains possible values in each dimension. And this vector is often wanted solution.</p></blockquote>
+<p>Let&rsquo;s solve it in in sage:</p>
+<pre tabindex="0"><code>A = matrix(([45, 72, 12], [-50, -21, -54], [101, 0, 0], [0, 101, 0], [0, 0, 101]))
+A.LLL()
+</code></pre><p>gives:</p>
+<pre tabindex="0"><code>[ 0  0  0]
+[ 0  0  0]
+[-1  0  0]
+[ 0 -6 -1]
+[ 0 -5 16]
+</code></pre><p>And in 3nd row we can see our error vector.</p>
+<p>Now we are ready to build a bit bigger system, so let try it in next challenge.</p>
+<h2 id="challenge-3">Challenge 3<a hidden class="anchor" aria-hidden="true" href="#challenge-3">#</a></h2>
 <hr>
 <p><strong>Create noisy system with encoded message first</strong><br>
-Let generate matrix with 64 columns and 96 rows with random coefficients over field $q = 2^{16} + 1$.<br>
+Let&rsquo;s generate matrix with 64 columns and 96 rows with random coefficients over field $q = 2^{16} + 1$.<br>
 This matrix is a Public key.<br>
-Let generate Private key as vector of 64 random numbers.<br>
-Let choose plaintext message &ldquo;HelloLattice&rdquo; and encode it as 0 and 1 to error vector.<br>
+Let&rsquo;s generate Private key as vector of 64 random numbers.<br>
+Let&rsquo;s choose plaintext message &ldquo;HelloLattice&rdquo; and encode it as 0 and 1 to error vector.<br>
 Calculate correct right side of system by multiplying matrix with secret vector. <br>
-Inject error vector to system.</p>
+Inject error vector to system - modified vector will be encrypted message.</p>
+<p>$\overrightarrow{b} = \bold{A} \times \overrightarrow{s} + \overrightarrow{e}$</p>
 <p><strong>Challenge task:</strong><br>
-Try to break system and decode plaintext without knowledge of private key.</p>
+Try to decrypt message without knowledge of private key.</p>
 <hr>
 <p>First part is straightforward. Just follow challenge steps to create noisy system:</p>
 <pre tabindex="0"><code>q = 2**16 + 1
@@ -354,10 +417,10 @@ b_correct = A * s
 # and finally inject errors by adding correct right side and error vector:
 b = b_correct + e
 </code></pre><p>You can check all variables, but they are quite big, so I do not write outputs here.<br>
-With knowledge of private key the solution should be easy.<br>
-$e = b - A * s$<br>
-Should give us cleartext message encoded in 0 and 1.<br>
-Let try it:</p>
+With knowledge of private key the solution should be easy.</p>
+<p>$\overrightarrow{e} = \overrightarrow{b} - \bold{A} \times \overrightarrow{s}$</p>
+<p>Should give us cleartext message encoded in 0 and 1.<br>
+Let&rsquo;s try it:</p>
 <pre tabindex="0"><code># calculate error vector - binary encoded message
 e_exp = b - A * s
 
@@ -368,11 +431,35 @@ for i in range(0, len(e_exp), 8):
     byte_values.append(byte)
 print(&#34;Decoded message: &#34;, bytes(byte_values).decode(&#34;utf-8&#34;, errors=&#34;ignore&#34;))
 </code></pre><p>And you should get correct plaintext message.<br>
-Now we continue with hardest way. We are going to recover message without knowledge of private key s. And again we will utilize Lattice.</p>
-<h2 id="solving-noisy-lwe-system-by-lattice">Solving noisy LWE system by Lattice<a hidden class="anchor" aria-hidden="true" href="#solving-noisy-lwe-system-by-lattice">#</a></h2>
-<p>We know just system of linear equations (more precisely congruences), where right side tampered by errors. We know that error could be 1 or 0, so very small divergence from correct results. Nothing else. This error vector is encoded plaintext message. So we want to find it. In this case error vector is 96 bits long. Even errors are small, it is still $2^{96}$ possibilities, which is completely infeasible by brute force method.<br>
-But keywords <strong>very small divergence</strong> from previous evaluation could lead us again to our topic - Lattice.</p>
-<p>If LLL method can discover smallest non-zero vector in given Lattice, it could find unknown error vector.</p>
+Now we continue with hardest way. We are going to recover message without knowledge of private key $\overrightarrow{s}$.</p>
+<h2 id="solving-challenge-by-lattice">Solving challenge by Lattice<a hidden class="anchor" aria-hidden="true" href="#solving-challenge-by-lattice">#</a></h2>
+<p>We know a system of linear equations (more precisely congruences), where right side is tampered by errors. We know that error could be 1 or 0, so very small divergence from correct results. Nothing else. This error vector is encoded plaintext message. So we want to find it. In this case error vector is 96 bits long. Even errors are small, it is still $2^{96}$ possibilities, which is completely infeasible by brute force method.<br>
+But keywords <strong>very small divergence</strong> from previous evaluation could lead us again to Lattice method.</p>
+<p>In my case system of system of linear equations looks like this for better imagination.</p>
+<p>$59521a_1 + 8581a_2 + 2477a_3 + &hellip; +11940a_{64} \equiv 25227  \space\space mod(65537)$<br>
+$47042a_1 + 23493a_2 + 2751a_3 + &hellip; + 60385a_{64} \equiv 23711  \space\space mod(65537)$<br>
+&hellip;<br>
+$21360a_1 + 18668a_2 + 62645a_3 + &hellip; + 57158a_{64} \equiv 21053  \space\space mod(65537)$</p>
+<p>Number of rows is 96. As coefficients are random, they can vary each time of course.  We know that:</p>
+<p>$\bold{A} \times \overrightarrow{s} + \overrightarrow{e} = \overrightarrow{b}$</p>
+<p>in my case:</p>
+<p>$
+\begin{pmatrix}
+59521 &amp; 8581 &amp;  &hellip; &amp; 11940 \\
+47042 &amp; 23493 &amp; &hellip; &amp; 60385 \\
+&hellip; \\
+21360 &amp; 18668 &amp; &hellip; &amp; 57158 \\
+\end{pmatrix} \times \overrightarrow{s} + \overrightarrow{e} = (25227, 23711, &hellip;, 21053)$</p>
+<p>LLL method can discover smallest non-zero vector in given Lattice, as in previous toy example. Note, that I&rsquo;m building a Lattice from left to right:</p>
+<p>$\bold A +  \overrightarrow{b} + DiagonalMatrix$</p>
+<p>And then transform matrix (rows &lt;-&gt; columns)</p>
+<p>And other important note - I should switch matrix to $\Z$ ring.<br>
+Next steps are selfexplanating:</p>
+<ul>
+<li>finding row with small values</li>
+<li>testing solution by solving equations (note switching to modulo)</li>
+<li>decoding error vector to message</li>
+</ul>
 <pre tabindex="0"><code>A_zz = matrix(ZZ, A)
 b_zz = vector(ZZ, b)
  
@@ -397,7 +484,12 @@ for i in range(0, len(e_exp), 8):
     byte = int(&#34;&#34;.join(str(b) for b in e_exp[i:i+8]), 2)
     byte_values.append(byte)
 print(&#34;Decoded message: &#34;, bytes(byte_values).decode(&#34;utf-8&#34;, errors=&#34;ignore&#34;))
-</code></pre>
+</code></pre><h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
+<p>We looked at another beautiful usecase for Lattice LLL.<br>
+As it looks like some magic, but Lattices have also their limits.<br>
+Take challenge from this example and try to test bigger values in error vector, make system less overdetermined, or try to extend $\bold A$ matrix and you&rsquo;ll find them quickly;).<br>
+Real LWE cryptosystems use carefully chosen parameters (large dimensions, Gaussian error) that make this lattice attack infeasible. But on toy systems, LLL works beautifully and demonstrates the principle.</p>
+
 
   </div>
 
@@ -415,8 +507,8 @@ print(&#34;Decoded message: &#34;, bytes(byte_values).decode(&#34;utf-8&#34;, er
 
 <ul class="share-buttons">
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Noisy system solved by Lattice on linkedin"
-            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2flocalhost%3a1313%2fposts%2fnoisy_system_solved_by_lattice%2f&amp;title=Noisy%20system%20solved%20by%20Lattice&amp;summary=Noisy%20system%20solved%20by%20Lattice&amp;source=http%3a%2f%2flocalhost%3a1313%2fposts%2fnoisy_system_solved_by_lattice%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Breaking a Noisy LWE System with Lattices on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2flocalhost%3a1313%2fposts%2fnoisy_system_solved_by_lattice%2f&amp;title=Breaking%20a%20Noisy%20LWE%20System%20with%20Lattices&amp;summary=Breaking%20a%20Noisy%20LWE%20System%20with%20Lattices&amp;source=http%3a%2f%2flocalhost%3a1313%2fposts%2fnoisy_system_solved_by_lattice%2f">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
@@ -424,8 +516,8 @@ print(&#34;Decoded message: &#34;, bytes(byte_values).decode(&#34;utf-8&#34;, er
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Noisy system solved by Lattice on reddit"
-            href="https://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fnoisy_system_solved_by_lattice%2f&title=Noisy%20system%20solved%20by%20Lattice">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Breaking a Noisy LWE System with Lattices on reddit"
+            href="https://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fnoisy_system_solved_by_lattice%2f&title=Breaking%20a%20Noisy%20LWE%20System%20with%20Lattices">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
