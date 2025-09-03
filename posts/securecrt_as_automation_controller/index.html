@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>SecureCRT as an automation controller | sbezo.github.io</title>
+<meta name="keywords" content="">
+<meta name="description" content="How to start Virtual Machines by clicking to one button">
+<meta name="author" content="">
+<link rel="canonical" href="https://sbezo.github.io/posts/securecrt_as_automation_controller/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.8fe10233a706bc87f2e08b3cf97b8bd4c0a80f10675a143675d59212121037c0.css" integrity="sha256-j&#43;ECM6cGvIfy4Is8&#43;XuL1MCoDxBnWhQ2ddWSEhIQN8A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://sbezo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://sbezo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://sbezo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://sbezo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://sbezo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://sbezo.github.io/posts/securecrt_as_automation_controller/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css" integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js" integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+        ]
+    });
+});
+</script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-X37ESW6JQL"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-X37ESW6JQL');
+        }
+      </script><meta property="og:url" content="https://sbezo.github.io/posts/securecrt_as_automation_controller/">
+  <meta property="og:site_name" content="sbezo.github.io">
+  <meta property="og:title" content="SecureCRT as an automation controller">
+  <meta property="og:description" content="How to start Virtual Machines by clicking to one button">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-09-03T05:18:09+00:00">
+    <meta property="article:modified_time" content="2025-09-03T05:18:09+00:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SecureCRT as an automation controller">
+<meta name="twitter:description" content="How to start Virtual Machines by clicking to one button">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://sbezo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "SecureCRT as an automation controller",
+      "item": "https://sbezo.github.io/posts/securecrt_as_automation_controller/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "SecureCRT as an automation controller",
+  "name": "SecureCRT as an automation controller",
+  "description": "How to start Virtual Machines by clicking to one button",
+  "keywords": [
+    
+  ],
+  "articleBody": "If you’ve ever written a small script to make your life easier, you probably know the next part well…\nThe script works perfectly from the CLI or even inside VSCode.\nI’m talking about lightweight and personal script, so no CI/CD pipelines or other complicated solutions this time..\nThe problem? Every time you want to run it, you have to hunt down the repository, find the script, and launch it manually.\nI don’t know about you, but I prefer to reduce the number of clicks in my daily routine as much as possible.\nI know, that there can be a lot of solution of this problem. Shortcuts, Widgets, another apps…\nBut now I want to tell you about my idea:)\nSecureCRT One of my “always open” apps on my MacBook is SecureCRT—right there with Firefox, VSCode, OneNote, and ChatGPT.\nSecureCRT is a commercial SSH client (think of it as a polished cousin of PuTTY) and, for me as a network engineer, it’s a must-have tool.\nAnd here’s the trick: at the bottom of the SecureCRT window, there’s a button bar. Its visibility can be set by “View - Button Bar” setup.\nI can add any number of buttons of any color with any label. Buttons can be organized to groups if needed. And I can assign some action to each button.\nJump to my real example for better understanding.\nStarting VMs through vCenter This is an example of my small, personal automation script. My use-case is to start or stop any of my virtual machines running in vSphere infrastructure.\nWith limited resources, I don’t want to run all my virtual machines all the time. When I need, I start some VM. When I do not need it anymore, I just stop it.\nThis is my almost daily routine.\nThe usual way would be to open the vCenter page in a browser, log in, find the folder with my VMs, and start or stop a particular VM. For me, that’s a ‘no way’.\nSo I’ve created python script which connects to vCenter, list all my VMs and ask me, which of them I want to start or stop.\nSome people might find the script itself interesting, so I’ll spend a bit of time on it. If you don’t care about the details, feel free to skip ahead to the integration part.\nPython script for starting VMs There will be described just script for starting VMs. But script for stopping VMs is very similar.\nWhen it comes to small personal projects, I usually prefer a simple Python venv rather than setting up Docker. So I created new folder for all my SecureCRT automation scripts and created python virtual environment for this repository. And import some important modules for this project.\nmkdir SCRT_2025 cd SCRT_2025 python3 -m venv .venv source .venv/bin/activate pip3 install pyvim pip3 install pyVmomi pip3 install python-dotenv Then I need to create a file with credentials for vCenter.\nIf you use Source Control, do not forget to exclude this credential file in .gitignore\necho \"username=password\" \u003e\u003e .env echo \".env\" \u003e\u003e .gitignore And finally my awesome python VMs_On_run.py script. It is customized to my vSphere environment, but everything should be clear and self-explaining.\n#! /usr/bin/env python from pyvim import connect import os from pyVmomi import vim from dotenv import load_dotenv load_dotenv(\"/Users/stefanbezo/Documents/Dev/SCRT_2025/.env\") token = os.getenv(\"sbezo_vsphere_local\") # All my VMs are organized in folder with name \"SB\" my_folder = 'SB' connection = connect.Connect(\"vc.demo.corp\", 443, \"sbezo@vsphere.local\", token, disableSslCertValidation=True) content = connection.RetrieveContent() container = content.viewManager.CreateContainerView(content.rootFolder, [vim.Folder], True) count = 1 My_Dict = {} for folder in container.view: if folder.name == my_folder: vms = folder.childEntity # List of VM objects in the my_folder for vm in vms: print(f\"{count:\u003c6} {vm.name:\u003c30} {vm.runtime.powerState}\") My_Dict[str(count)] = vm count += 1 vstup = input('\\nNapis ktore chces nastartovat, cisla oddel ciarkami... ') MyList = vstup.split(\",\") print(MyList) for item in MyList: print(\"idem nastartovat \", My_Dict[item].name) vstup = input(\"potvrd \") if vstup == \"Yes\": for item in MyList: print(\"Startujem \", My_Dict[item].name) My_Dict[item].PowerOn() print(\"Startujem... \", My_Dict[item].name) else: print(\"Nezadal si Y - rusim startovanie\") container.Destroy() connect.Disconnect(connection) Now I have ready to use script which I want to run by clicking to button in SecureCRT.\nButton controller I can assign any of following actions to my new button:\nAnd I select “Run Script” this time.\nThere is a small, but important catch - I cannot run directly my new VMs_On_run.py script, because SecureCRT run default python interpreter and I need to run my script under its venv environment. So I need some kind of midleware - simple button controller, which is able to run under default system python and activate my automation script.\nI named my button controller script as VMs_On_controller.py and it looks like:\nimport subprocess cmd = \"/Users/stefanbezo/Documents/Dev/SCRT_2025/.venv/bin/python /Users/stefanbezo/Documents/Dev/SCRT_2025/VMs_On_run.py\" osascript_command = f''' tell application \"Terminal\" activate do script \"{cmd}\" end tell ''' subprocess.Popen([\"osascript\", \"-e\", osascript_command]) It only does a few things:\nopen Mac terminal bring it front run VMs_On_run.py script inside its virtual environment So now I can assign this button controller script to new button\nFinal result Now it’s time to test my new workflow:\nSecureCRT Button —\u003e button controller (system python) —\u003e automation script (specific venv)\nAfter click on button I see exactly something like this:\nConclusion This post doesn’t claim to show the best possible way to handle personal automation scripts.\nI know it’s pretty closely tied to my own environment and tools, but it works great for me and I hope, that could inspire also somebody else.\nSecureCRT provides much more scripting functionalities of course, but diving deep was not my goal. I just wanted to run something independent by simple click on button;)\n",
+  "wordCount" : "933",
+  "inLanguage": "en",
+  "datePublished": "2025-09-03T05:18:09Z",
+  "dateModified": "2025-09-03T05:18:09Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://sbezo.github.io/posts/securecrt_as_automation_controller/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "sbezo.github.io",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://sbezo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://sbezo.github.io/" accesskey="h" title="sbezo.github.io (Alt + H)">sbezo.github.io</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://sbezo.github.io/posts/" title="Posts">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://sbezo.github.io/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      SecureCRT as an automation controller
+    </h1>
+    <div class="post-meta"><span title='2025-09-03 05:18:09 +0000 UTC'>September 3, 2025</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>If you’ve ever written a small script to make your life easier, you probably know the next part well&hellip;</p>
+<p>The script works perfectly from the CLI or even inside VSCode.</p>
+<blockquote>
+<p>I&rsquo;m talking about lightweight and personal script, so no CI/CD pipelines or other complicated solutions this time..</p></blockquote>
+<p><strong>The problem?</strong> Every time you want to run it, you have to hunt down the repository, find the script, and launch it manually.</p>
+<p>I don’t know about you, but I <strong>prefer to reduce the number of clicks in my daily routine as much as possible</strong>.</p>
+<p>I know, that there can be a lot of solution of this problem. Shortcuts, Widgets, another apps&hellip;<br>
+But now I want to tell you about my idea:)</p>
+<h2 id="securecrt">SecureCRT<a hidden class="anchor" aria-hidden="true" href="#securecrt">#</a></h2>
+<p>One of my “always open” apps on my MacBook is SecureCRT—right there with Firefox, VSCode, OneNote, and ChatGPT.<br>
+SecureCRT is a commercial SSH client (think of it as a polished cousin of PuTTY) and, for me as a network engineer, it’s a must-have tool.</p>
+<p>And here’s the trick: at the bottom of the SecureCRT window, there’s a button bar.
+<img loading="lazy" src="/img/scrt_1.png"><br>
+Its visibility can be set by &ldquo;View - Button Bar&rdquo; setup.</p>
+<p>I can add any number of buttons of any color with any label.
+Buttons can be organized to groups if needed.
+And I can assign some <strong>action</strong> to each button.</p>
+<p>Jump to my real example for better understanding.</p>
+<h2 id="starting-vms-through-vcenter">Starting VMs through vCenter<a hidden class="anchor" aria-hidden="true" href="#starting-vms-through-vcenter">#</a></h2>
+<p>This is an example of my small, personal automation script. My use-case is to start or stop any of my virtual machines running in vSphere infrastructure.</p>
+<p>With limited resources, I don’t want to run all my virtual machines all the time. When I need, I start some VM. When I do not need it anymore, I just stop it.<br>
+This is my almost daily routine.</p>
+<p>The usual way would be to open the vCenter page in a browser, log in, find the folder with my VMs, and start or stop a particular VM. For me, that’s a ‘no way’.<br>
+So I&rsquo;ve created python script which connects to vCenter, list all my VMs and ask me, which of them I want to start or stop.</p>
+<p>Some people might find the script itself interesting, so I’ll spend a bit of time on it. If you don’t care about the details, feel free to skip ahead to the integration part.</p>
+<h2 id="python-script-for-starting-vms">Python script for starting VMs<a hidden class="anchor" aria-hidden="true" href="#python-script-for-starting-vms">#</a></h2>
+<p>There will be described just script for starting VMs. But script for stopping VMs is very similar.</p>
+<p>When it comes to small personal projects, I usually prefer a simple Python venv rather than setting up Docker. So I created new folder for all my SecureCRT automation scripts and created python virtual environment for this repository. And import some important modules for this project.</p>
+<pre tabindex="0"><code>mkdir SCRT_2025
+cd SCRT_2025
+python3 -m venv .venv
+source .venv/bin/activate
+pip3 install pyvim
+pip3 install pyVmomi
+pip3 install python-dotenv
+</code></pre><p>Then I need to create a file with credentials for vCenter.<br>
+If you use Source Control, do not forget to exclude this credential file in .gitignore</p>
+<pre tabindex="0"><code>echo &#34;username=password&#34; &gt;&gt; .env
+echo &#34;.env&#34; &gt;&gt; .gitignore
+</code></pre><p>And finally my awesome python <code>VMs_On_run.py</code> script. It is customized to my vSphere environment, but everything should be clear and self-explaining.</p>
+<pre tabindex="0"><code>#! /usr/bin/env python
+
+from pyvim import connect
+import os
+from pyVmomi import vim
+from dotenv import load_dotenv
+
+load_dotenv(&#34;/Users/stefanbezo/Documents/Dev/SCRT_2025/.env&#34;)
+token = os.getenv(&#34;sbezo_vsphere_local&#34;)
+
+# All my VMs are organized in folder with name &#34;SB&#34; 
+my_folder = &#39;SB&#39;
+connection = connect.Connect(&#34;vc.demo.corp&#34;, 443, &#34;sbezo@vsphere.local&#34;, token, disableSslCertValidation=True)
+content = connection.RetrieveContent()
+
+container = content.viewManager.CreateContainerView(content.rootFolder, [vim.Folder], True)
+count = 1
+My_Dict = {}
+for folder in container.view:
+    if folder.name == my_folder:
+        vms = folder.childEntity  # List of VM objects in the my_folder
+        for vm in vms:
+            print(f&#34;{count:&lt;6} {vm.name:&lt;30} {vm.runtime.powerState}&#34;)
+            My_Dict[str(count)] = vm
+            count += 1
+
+vstup = input(&#39;\nNapis ktore chces nastartovat, cisla oddel ciarkami... &#39;)
+MyList = vstup.split(&#34;,&#34;)
+print(MyList)
+
+for item in MyList:
+    print(&#34;idem nastartovat &#34;, My_Dict[item].name)
+vstup = input(&#34;potvrd &lt;Yes&gt;  &#34;)
+if vstup == &#34;Yes&#34;:
+        for item in MyList:
+            print(&#34;Startujem &#34;, My_Dict[item].name)
+            My_Dict[item].PowerOn() 
+        print(&#34;Startujem... &#34;, My_Dict[item].name)
+else:
+    print(&#34;Nezadal si Y - rusim startovanie&#34;)
+
+container.Destroy()
+connect.Disconnect(connection)
+</code></pre><p>Now I have ready to use script which I want to run by clicking to button in SecureCRT.</p>
+<h2 id="button-controller">Button controller<a hidden class="anchor" aria-hidden="true" href="#button-controller">#</a></h2>
+<p>I can assign any of following actions to my new button:<br>
+<img loading="lazy" src="/img/scrt_2.png"></p>
+<p>And I select &ldquo;Run Script&rdquo; this time.</p>
+<p>There is a small, but important catch - I cannot run directly my new <code>VMs_On_run.py</code> script, because SecureCRT run default python interpreter and I need to run my script under its venv environment. <br>
+So I need some kind of midleware - simple button controller, which is able to run under default system python and activate my automation script.<br>
+I named my button controller script as <code>VMs_On_controller.py</code> and it looks like:</p>
+<pre tabindex="0"><code>import subprocess
+
+cmd = &#34;/Users/stefanbezo/Documents/Dev/SCRT_2025/.venv/bin/python /Users/stefanbezo/Documents/Dev/SCRT_2025/VMs_On_run.py&#34;
+
+osascript_command = f&#39;&#39;&#39;
+tell application &#34;Terminal&#34;
+    activate
+    do script &#34;{cmd}&#34;
+end tell
+&#39;&#39;&#39;
+
+subprocess.Popen([&#34;osascript&#34;, &#34;-e&#34;, osascript_command])
+</code></pre><p>It only does a few things:</p>
+<ul>
+<li>open Mac terminal</li>
+<li>bring it front</li>
+<li>run <code>VMs_On_run.py</code> script inside its virtual environment</li>
+</ul>
+<p>So now I can assign this button controller script to new button</p>
+<p><img loading="lazy" src="/img/scrt_4.png"></p>
+<h2 id="final-result">Final result<a hidden class="anchor" aria-hidden="true" href="#final-result">#</a></h2>
+<p>Now it&rsquo;s time to test my new workflow:</p>
+<p>SecureCRT Button &mdash;&gt; button controller (system python) &mdash;&gt; automation script (specific venv)</p>
+<p>After click on button I see exactly something like this:</p>
+<p><img loading="lazy" src="/img/scrt_5.png"></p>
+<h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
+<p>This post doesn’t claim to show the best possible way to handle personal automation scripts.<br>
+I know it’s pretty closely tied to my own environment and tools, but it works great for me and I hope, that could inspire also somebody else.<br>
+SecureCRT provides much more scripting functionalities of course, but diving deep was not my goal. I just wanted to run something independent by simple click on button;)</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share SecureCRT as an automation controller on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fsbezo.github.io%2fposts%2fsecurecrt_as_automation_controller%2f&amp;title=SecureCRT%20as%20an%20automation%20controller&amp;summary=SecureCRT%20as%20an%20automation%20controller&amp;source=https%3a%2f%2fsbezo.github.io%2fposts%2fsecurecrt_as_automation_controller%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share SecureCRT as an automation controller on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fsbezo.github.io%2fposts%2fsecurecrt_as_automation_controller%2f&title=SecureCRT%20as%20an%20automation%20controller">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="https://sbezo.github.io/">sbezo.github.io</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
