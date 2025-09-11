@@ -6,8 +6,15 @@
     <description>Recent content on sbezo.github.io</description>
     <generator>Hugo -- 0.149.0-DEV</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 03 Sep 2025 05:18:09 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 07 Sep 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://sbezo.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Simplest CA ever</title>
+      <link>https://sbezo.github.io/posts/simplest_ca_ever/</link>
+      <pubDate>Sun, 07 Sep 2025 00:00:00 +0000</pubDate>
+      <guid>https://sbezo.github.io/posts/simplest_ca_ever/</guid>
+      <description>How to quickly get a few certificates for lab use</description>
+    </item>
     <item>
       <title>SecureCRT as an automation controller</title>
       <link>https://sbezo.github.io/posts/securecrt_as_automation_controller/</link>
