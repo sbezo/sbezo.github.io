@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function() {
   "keywords": [
     
   ],
-  "articleBody": "Do you know following problem?\n“I need some certificates for my lab devices to test something”.\nBut as always, old lab CA is broken and I have no time to hassle with a new full-blown CA. Just need a few (not self-signed) certificates, and quickly, of course ;).\nSo here is my the shortest known recipe:\n1. Open Alpine in Docker Run this from the folder where you want your new certificates will land:\ndocker run --rm -it -v \"$PWD\":/root alpine It will run a small Linux container, open a shell, map the current folder to the container’s /root, and clean up after exiting.\n2. Generate CA certificate # install openssl apk update \u0026\u0026 apk add openssl cd /root # CA private key openssl genrsa -out ca.key 2048 # CA certificate (self-signed) openssl req -x509 -new -nodes -key ca.key -sha256 -days 3650 \\ -subj \"/C=SK/O=LabCA/CN=LabRootCA\" \\ -out ca.cert It installs openssl package It creates file ca.key containing CA’s private key. It creates file ca.cert containing CA certificate. 3. Generate identity certificate for router in my case\n# router private key openssl genrsa -out router.key 2048 # router CSR openssl req -new -key router.key \\ -subj \"/C=SK/O=LabCA/CN=router.lab\" \\ -out router.csr # Sign CSR with CA openssl x509 -req -in router.csr -CA ca.cert -CAkey ca.key \\ -CAcreateserial -out router.cert -days 365 -sha256 It creates file router.key with private key for identity certificate of your host. It creates file router.csr with CSR for router. It signs CSR and creates file router.cert You can adjust any parameters as you need.\nYou can change ‘router’ to any name and create another certificates if you wish.\nConclusion And that is all. You can find certificates and keys in your working folder now. If nobody else cares, at least this short post serves as a good memo for me ;)\n",
+  "articleBody": "Do you know following problem?\n“I need some certificates for my lab devices to test something”.\nBut as always, old lab CA is broken and I have no time to hassle with a new full-blown CA. Just need a few (not self-signed) certificates, and quickly, of course ;).\nSo here is my the shortest known recipe:\n1. Open Alpine in Docker Run this from the folder where you want your new certificates will land:\ndocker run --rm -it -v \"$PWD\":/root alpine It will run a small Linux container, open a shell, map the current folder to the container’s /root, and clean up after exiting.\n2. Generate CA certificate # install openssl apk update \u0026\u0026 apk add openssl cd /root # CA private key openssl genrsa -out ca.key 2048 # CA certificate (self-signed) openssl req -x509 -new -nodes -key ca.key -sha256 -days 3650 \\ -subj \"/C=SK/O=LabCA/CN=LabRootCA\" \\ -out ca.crt It installs openssl package It creates file ca.key containing CA’s private key. It creates file ca.crt containing CA certificate. 3. Generate identity certificate for router in my case\n# router private key openssl genrsa -out router.key 2048 # router CSR openssl req -new -key router.key \\ -subj \"/C=SK/O=LabCA/CN=router.lab\" \\ -out router.csr # Sign CSR with CA openssl x509 -req -in router.csr -CA ca.crt -CAkey ca.key \\ -CAcreateserial -out router.crt -days 365 -sha256 It creates file router.key with private key for identity certificate of your host. It creates file router.csr with CSR for router. It signs CSR and creates file router.crt You can adjust any parameters as you need.\nYou can change ‘router’ to any name and create another certificates if you wish.\nConclusion And that is all. You can find certificates and keys in your working folder now. If nobody else cares, at least this short post serves as a good memo for me ;)\n",
   "wordCount" : "303",
   "inLanguage": "en",
   "datePublished": "2025-09-07T00:00:00Z",
@@ -238,11 +238,11 @@ openssl genrsa -out ca.key 2048
 # CA certificate (self-signed)
 openssl req -x509 -new -nodes -key ca.key -sha256 -days 3650 \
   -subj &#34;/C=SK/O=LabCA/CN=LabRootCA&#34; \
-  -out ca.cert
+  -out ca.crt
 </code></pre><ul>
 <li>It installs openssl package</li>
 <li>It creates file <code>ca.key</code> containing CA&rsquo;s private key.</li>
-<li>It creates file <code>ca.cert</code> containing CA certificate.</li>
+<li>It creates file <code>ca.crt</code> containing CA certificate.</li>
 </ul>
 <h3 id="3-generate-identity-certificate">3. Generate identity certificate<a hidden class="anchor" aria-hidden="true" href="#3-generate-identity-certificate">#</a></h3>
 <blockquote>
@@ -256,12 +256,12 @@ openssl req -new -key router.key \
   -out router.csr
 
 # Sign CSR with CA
-openssl x509 -req -in router.csr -CA ca.cert -CAkey ca.key \
-  -CAcreateserial -out router.cert -days 365 -sha256
+openssl x509 -req -in router.csr -CA ca.crt -CAkey ca.key \
+  -CAcreateserial -out router.crt -days 365 -sha256
 </code></pre><ul>
 <li>It creates file <code>router.key</code> with private key for identity certificate of your host.</li>
 <li>It creates file <code>router.csr</code> with CSR for router.</li>
-<li>It signs CSR and creates file <code>router.cert</code></li>
+<li>It signs CSR and creates file <code>router.crt</code></li>
 </ul>
 <blockquote>
 <p>You can adjust any parameters as you need.<br>
