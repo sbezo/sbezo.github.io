@@ -5,11 +5,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>Posts | sbezo.github.io</title>
+<title>AD password reset on Mac | sbezo.github.io</title>
 <meta name="keywords" content="">
-<meta name="description" content="Posts - sbezo.github.io">
+<meta name="description" content="How to quickly change expired MS AD password without a Windows machine">
 <meta name="author" content="">
-<link rel="canonical" href="https://sbezo.github.io/posts/">
+<link rel="canonical" href="https://sbezo.github.io/posts/ad_password_change/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.8fe10233a706bc87f2e08b3cf97b8bd4c0a80f10675a143675d59212121037c0.css" integrity="sha256-j&#43;ECM6cGvIfy4Is8&#43;XuL1MCoDxBnWhQ2ddWSEhIQN8A=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://sbezo.github.io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://sbezo.github.io/favicon-16x16.png">
@@ -18,8 +18,7 @@
 <link rel="mask-icon" href="https://sbezo.github.io/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" type="application/rss+xml" href="https://sbezo.github.io/posts/index.xml">
-<link rel="alternate" hreflang="en" href="https://sbezo.github.io/posts/">
+<link rel="alternate" hreflang="en" href="https://sbezo.github.io/posts/ad_password_change/">
 <noscript>
     <style>
         #theme-toggle,
@@ -90,14 +89,18 @@ document.addEventListener("DOMContentLoaded", function() {
           gtag('js', new Date());
           gtag('config', 'G-X37ESW6JQL');
         }
-      </script><meta property="og:url" content="https://sbezo.github.io/posts/">
+      </script><meta property="og:url" content="https://sbezo.github.io/posts/ad_password_change/">
   <meta property="og:site_name" content="sbezo.github.io">
-  <meta property="og:title" content="Posts">
+  <meta property="og:title" content="AD password reset on Mac">
+  <meta property="og:description" content="How to quickly change expired MS AD password without a Windows machine">
   <meta property="og:locale" content="en-us">
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-09-16T16:30:02+00:00">
+    <meta property="article:modified_time" content="2025-09-16T16:30:02+00:00">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Posts">
-<meta name="twitter:description" content="">
+<meta name="twitter:title" content="AD password reset on Mac">
+<meta name="twitter:description" content="How to quickly change expired MS AD password without a Windows machine">
 
 
 <script type="application/ld+json">
@@ -110,13 +113,48 @@ document.addEventListener("DOMContentLoaded", function() {
       "position":  1 ,
       "name": "Posts",
       "item": "https://sbezo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "AD password reset on Mac",
+      "item": "https://sbezo.github.io/posts/ad_password_change/"
     }
   ]
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "AD password reset on Mac",
+  "name": "AD password reset on Mac",
+  "description": "How to quickly change expired MS AD password without a Windows machine",
+  "keywords": [
+    
+  ],
+  "articleBody": "May be you know it - You have a MAC or Linux and your company or customers have Microsoft Active Directory.\nProbably you need some AD account and soon or later you need to change password.\nMost people I know use terminal servers, or their own Windows virtual machines. Nothing against it.\nBut I prefer this quick command line solution:\ndocker is prerequisite\ndocker run -it alpine apk update apk add samba smbpasswd -r -U If you do not know domain-controller-ip, you can find it on MAC by:\nscutil --dns ",
+  "wordCount" : "92",
+  "inLanguage": "en",
+  "datePublished": "2025-09-16T16:30:02Z",
+  "dateModified": "2025-09-16T16:30:02Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://sbezo.github.io/posts/ad_password_change/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "sbezo.github.io",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://sbezo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
 </head>
 
-<body class="list" id="top">
+<body class="" id="top">
 <script>
     if (localStorage.getItem("pref-theme") === "dark") {
         document.body.classList.add('dark');
@@ -158,7 +196,7 @@ document.addEventListener("DOMContentLoaded", function() {
         <ul id="menu">
             <li>
                 <a href="https://sbezo.github.io/posts/" title="Posts">
-                    <span class="active">Blog</span>
+                    <span>Blog</span>
                 </a>
             </li>
             <li>
@@ -169,131 +207,60 @@ document.addEventListener("DOMContentLoaded", function() {
         </ul>
     </nav>
 </header>
-<main class="main"> 
-<header class="page-header">
-  <h1>
-    Posts
-  </h1>
-</header>
+<main class="main">
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">AD password reset on Mac
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>How to quickly change expired MS AD password without a Windows machine</p>
-  </div>
-  <footer class="entry-footer"><span title='2025-09-16 16:30:02 +0000 UTC'>September 16, 2025</span></footer>
-  <a class="entry-link" aria-label="post link to AD password reset on Mac" href="https://sbezo.github.io/posts/ad_password_change/"></a>
-</article>
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      AD password reset on Mac
+    </h1>
+    <div class="post-meta"><span title='2025-09-16 16:30:02 +0000 UTC'>September 16, 2025</span>
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">From FMCv10 to FMC2700
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Notes from migration of Cisco FMC management</p>
-  </div>
-  <footer class="entry-footer"><span title='2025-09-13 17:36:28 +0000 UTC'>September 13, 2025</span></footer>
-  <a class="entry-link" aria-label="post link to From FMCv10 to FMC2700" href="https://sbezo.github.io/posts/cisco_fmc10v_to_fmc2700_migration/"></a>
-</article>
+</div>
+  </header> 
+  <div class="post-content"><p>May be you know it - You have a MAC or Linux and your company or customers have Microsoft Active Directory.<br>
+Probably you need some AD account and soon or later you need to change password.</p>
+<p>Most people I know use terminal servers, or their own Windows virtual machines. Nothing against it.<br>
+But I prefer this quick command line solution:</p>
+<blockquote>
+<p>docker is prerequisite</p></blockquote>
+<pre tabindex="0"><code>docker run -it alpine
+apk update
+apk add samba
+smbpasswd -r &lt;domain-controller-ip&gt; -U &lt;username&gt;
+</code></pre><p>If you do not know <code>domain-controller-ip</code>, you can find it on MAC by:</p>
+<pre tabindex="0"><code>scutil --dns
+</code></pre>
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Simplest CA ever
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>How to quickly get a few certificates for lab use</p>
   </div>
-  <footer class="entry-footer"><span title='2025-09-07 00:00:00 +0000 UTC'>September 7, 2025</span></footer>
-  <a class="entry-link" aria-label="post link to Simplest CA ever" href="https://sbezo.github.io/posts/simplest_ca_ever/"></a>
-</article>
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">SecureCRT as an automation controller
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>How to start Virtual Machines by clicking to one button</p>
-  </div>
-  <footer class="entry-footer"><span title='2025-09-03 05:18:09 +0000 UTC'>September 3, 2025</span></footer>
-  <a class="entry-link" aria-label="post link to SecureCRT as an automation controller" href="https://sbezo.github.io/posts/securecrt_as_automation_controller/"></a>
-</article>
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Breaking a Noisy LWE System with Lattices
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Lattices - Part 3: How to use Lattice to break LWE system with small errors.</p>
-  </div>
-  <footer class="entry-footer"><span title='2025-08-16 14:35:18 +0000 UTC'>August 16, 2025</span></footer>
-  <a class="entry-link" aria-label="post link to Breaking a Noisy LWE System with Lattices" href="https://sbezo.github.io/posts/noisy_system_solved_by_lattice/"></a>
-</article>
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share AD password reset on Mac on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fsbezo.github.io%2fposts%2fad_password_change%2f&amp;title=AD%20password%20reset%20on%20Mac&amp;summary=AD%20password%20reset%20on%20Mac&amp;source=https%3a%2f%2fsbezo.github.io%2fposts%2fad_password_change%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share AD password reset on Mac on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fsbezo.github.io%2fposts%2fad_password_change%2f&title=AD%20password%20reset%20on%20Mac">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+</ul>
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Knapsack and Lattice
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Lattices - Part 2: How to break Merkle–Hellman knapsack cryptosystem with Lattice</p>
-  </div>
-  <footer class="entry-footer"><span title='2025-08-14 12:57:15 +0000 UTC'>August 14, 2025</span></footer>
-  <a class="entry-link" aria-label="post link to Knapsack and Lattice" href="https://sbezo.github.io/posts/knapsack_and_lattice/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">NAT for Alien
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>How to handle Alien device in your network with NAT trick</p>
-  </div>
-  <footer class="entry-footer"><span title='2025-08-12 13:43:28 +0000 UTC'>August 12, 2025</span></footer>
-  <a class="entry-link" aria-label="post link to NAT for Alien" href="https://sbezo.github.io/posts/nat_for_alien/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Lattices by example
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Lattices - Part 1: Solving an equation with irrational numbers with Lattice</p>
-  </div>
-  <footer class="entry-footer"><span title='2025-08-08 11:38:28 +0000 UTC'>August 8, 2025</span></footer>
-  <a class="entry-link" aria-label="post link to Lattices by example" href="https://sbezo.github.io/posts/lattices_by_example_1/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Hugo to github.io
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Hugo - Part 2: Continue with publishing of personal web site</p>
-  </div>
-  <footer class="entry-footer"><span title='2025-08-07 10:09:54 +0000 UTC'>August 7, 2025</span></footer>
-  <a class="entry-link" aria-label="post link to Hugo to github.io" href="https://sbezo.github.io/posts/hugo-2/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Hugo from Docker
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Hugo - Part 1: Very Quick Start with the PaperMod theme</p>
-  </div>
-  <footer class="entry-footer"><span title='2025-08-06 18:11:33 +0000 UTC'>August 6, 2025</span></footer>
-  <a class="entry-link" aria-label="post link to Hugo from Docker" href="https://sbezo.github.io/posts/hugo-1/"></a>
+  </footer>
 </article>
     </main>
     
@@ -365,6 +332,53 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     })
 
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
 </script>
 </body>
 

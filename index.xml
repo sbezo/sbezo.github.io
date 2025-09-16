@@ -6,8 +6,22 @@
     <description>Recent content on sbezo.github.io</description>
     <generator>Hugo -- 0.149.0-DEV</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 07 Sep 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 16 Sep 2025 16:30:02 +0000</lastBuildDate>
     <atom:link href="https://sbezo.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AD password reset on Mac</title>
+      <link>https://sbezo.github.io/posts/ad_password_change/</link>
+      <pubDate>Tue, 16 Sep 2025 16:30:02 +0000</pubDate>
+      <guid>https://sbezo.github.io/posts/ad_password_change/</guid>
+      <description>How to quickly change expired MS AD password without a Windows machine</description>
+    </item>
+    <item>
+      <title>From FMCv10 to FMC2700</title>
+      <link>https://sbezo.github.io/posts/cisco_fmc10v_to_fmc2700_migration/</link>
+      <pubDate>Sat, 13 Sep 2025 17:36:28 +0000</pubDate>
+      <guid>https://sbezo.github.io/posts/cisco_fmc10v_to_fmc2700_migration/</guid>
+      <description>Notes from migration of Cisco FMC management</description>
+    </item>
     <item>
       <title>Simplest CA ever</title>
       <link>https://sbezo.github.io/posts/simplest_ca_ever/</link>
