@@ -5,9 +5,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>Full-blown IPSec on OpenSource | sbezo.github.io</title>
+<title>Full-blown IPSec on Linux with LibreSwan, VTI, RSA, and BGP | sbezo.github.io</title>
 <meta name="keywords" content="">
-<meta name="description" content="Notes to IPSec with VTI, IKEv2, RSA, BGP build on LibreSwan and VRR">
+<meta name="description" content="LAB notes">
 <meta name="author" content="">
 <link rel="canonical" href="http://localhost:1313/posts/ipsec_on_linux/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.8fe10233a706bc87f2e08b3cf97b8bd4c0a80f10675a143675d59212121037c0.css" integrity="sha256-j&#43;ECM6cGvIfy4Is8&#43;XuL1MCoDxBnWhQ2ddWSEhIQN8A=" rel="preload stylesheet" as="style">
@@ -91,16 +91,16 @@ document.addEventListener("DOMContentLoaded", function() {
         }
       </script><meta property="og:url" content="http://localhost:1313/posts/ipsec_on_linux/">
   <meta property="og:site_name" content="sbezo.github.io">
-  <meta property="og:title" content="Full-blown IPSec on OpenSource">
-  <meta property="og:description" content="Notes to IPSec with VTI, IKEv2, RSA, BGP build on LibreSwan and VRR">
+  <meta property="og:title" content="Full-blown IPSec on Linux with LibreSwan, VTI, RSA, and BGP">
+  <meta property="og:description" content="LAB notes">
   <meta property="og:locale" content="en-us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2025-09-15T17:00:08+00:00">
-    <meta property="article:modified_time" content="2025-09-15T17:00:08+00:00">
+    <meta property="article:published_time" content="2025-09-02T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-09-02T00:00:00+00:00">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Full-blown IPSec on OpenSource">
-<meta name="twitter:description" content="Notes to IPSec with VTI, IKEv2, RSA, BGP build on LibreSwan and VRR">
+<meta name="twitter:title" content="Full-blown IPSec on Linux with LibreSwan, VTI, RSA, and BGP">
+<meta name="twitter:description" content="LAB notes">
 
 
 <script type="application/ld+json">
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function() {
     {
       "@type": "ListItem",
       "position":  2 ,
-      "name": "Full-blown IPSec on OpenSource",
+      "name": "Full-blown IPSec on Linux with LibreSwan, VTI, RSA, and BGP",
       "item": "http://localhost:1313/posts/ipsec_on_linux/"
     }
   ]
@@ -127,17 +127,17 @@ document.addEventListener("DOMContentLoaded", function() {
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "Full-blown IPSec on OpenSource",
-  "name": "Full-blown IPSec on OpenSource",
-  "description": "Notes to IPSec with VTI, IKEv2, RSA, BGP build on LibreSwan and VRR",
+  "headline": "Full-blown IPSec on Linux with LibreSwan, VTI, RSA, and BGP",
+  "name": "Full-blown IPSec on Linux with LibreSwan, VTI, RSA, and BGP",
+  "description": "LAB notes",
   "keywords": [
     
   ],
-  "articleBody": "This post includes important comments to the following LAB:\nhttps://github.com/sbezo/linux-network-lab-2025.git\nGitHub repository provides complete fully functional networking LAB, which is very easy to reproduce and play with.\nTopology Motivation It is interesting fact, that it is quite difficult to find such complete configuration for IPSec on Linux. I have found just partial configurations, or just ipsec with secret authentication, or mostly broken configurations. So I decided to build this complete LAB with demonstrable end-to-end connectivity.\nAnd It is also very good start point for further investigation.\nTechnology stack There are more frameworks for IPSec and networking handling in Linux. This time I choose:\nLibreSwan for IPSec VRR for Linux routing Regarding IPSec I chose:\nmodern ‘route based’ VPN with VTI - Virtual Tunnel Interface Authentication based on RSA Certificates BGP over IPSec is used to control routing between sites IKEv2 as control protocol for IPSec Certificates Certificates part was quite surprisingly most tricky for me.\n",
-  "wordCount" : "155",
+  "articleBody": "This post includes important comments to the following LAB:\nhttps://github.com/sbezo/linux-network-lab-2025.git\nGitHub repository provides complete fully functional self-provisioning networking LAB, which is very easy to reproduce and play with.\nTopology Motivation It is more common to build IPSec on commercial products of known vendors. It is very well documented and almost no surprises here. And You have support of course;).\nBut OpenSource is something different, and I wanted to test it…\nIt is interesting fact, that it is quite difficult to find such complete configuration for IPSec on Linux. I have found just partial configurations, or just IPSec with secret authentication, or mostly broken configurations. So I decided to build this complete LAB with demonstrable end-to-end connectivity.\nI’d like to provide something ‘independent’ so no specific lab frameworks. The only prerequisite is docker.\nI hope this is also very good start point for further investigation.\nTechnology stack There are more frameworks for IPSec and networking handling in Linux of course. This time I choose:\nLibreSwan for IPSec FRR for Linux routing Regarding IPSec I chose:\nmodern ‘route based’ VPN with VTI - Virtual Tunnel Interface Authentication based on RSA Certificates BGP over IPSec is used to control routing between sites IKEv2 as control protocol for IPSec Wrapping it to Docker The most sexy part for me is a possibility to spin up whole LAB by simple docker compose up. It is still like a magic for me - who built labs for decades with physical HW and then hypervisors and different simulators looks like miracle. But speed and lightness of docker is absolutely amazing.\nThere are only 4 important steps in whole LAB:\nSpin up docker containers Create certificates (only once needed) Push whole configuration (linux + FRR) by one script Connect to devices and test end-to-end connectivity via IPSec Now it is possible to play with configuration files of LibreSwan. After any change ipsec restart is needed. Or with FRR configuration. And magic comes when you want to return to beginning for any reason. You can just run docker compose down and start from scratch with new LAB. Within few second you have fresh new LAB ready.\nCertificates Certificates part was quite surprisingly most tricky for me.\n1. LibreSwan RSA implementation requires using of SAN (subject Alternative Name) in identity certificates. It didn’t want to work without SAN for me.\nBecause openssl doesn’t support signing CSR with SAN by default, I had to add some magic parameters during certificate creation.\n2. NSS (Network Security Services) library is mandatory for using with LibreSwan. Although there was keyword ‘optional’ in documentation, I couldn’t make it work without it. So I had to install, initialize NSS first and then add certificates to NSS database.\nSo apt-get install libnss3-tools in Dockerfile and\nipsec initnss pk12util -i /etc/ipsec.d/certs/l2.p12 -d sql:/var/lib/ipsec/nss -K \"\" -W \"\" certutil -M -n \"l2.lab\" -t \"CT,C,C\" -d sql:/var/lib/ipsec/nss certutil -A -n \"LabRootCA\" -t \"CT,C,C\" -d sql:/var/lib/ipsec/nss -i /etc/ipsec.d/cacerts/ca.crt in ipsec configuration file linux_rsa.cfg\nThen you can set and check IKE ID identities in LibreSwan configuration file:\nleftid=\"@192.168.0.10\" rightid=\"@192.168.0.11\" Not sure about other possibilities, like checking SN of certificate, or parameters from FQDN. Documentation is not so clear. I’will certainly test it later.\n3. Certificate files are mapped within docker-compose.yml file\nFRR I played with Bird before, but I wanted to touch also FRR. It is pretty straightforward. Looks like Cisco CLI. A had even better feeling as with Bird.\nInteresting is, that FRR itself doesn’t create interfaces (like vti01 in my case). You have to create them in Linux and FRR adopt them. You can easily switch between linux bash and FRR by vtysh and exit inside docker. Or go directly to it from outside: docker exec -it l2 vtysh.\nBGP BGP part was also very intuitive.\nrouter bgp 65501 neighbor 10.0.10.2 remote-as 65502 neighbor 10.0.10.2 ebgp-multihop 255 neighbor 10.0.10.2 update-source lo neighbor 10.0.10.2 timers 5 20 ! address-family ipv4 unicast network 10.0.1.0/24 redistribute connected neighbor 10.0.10.2 soft-reconfiguration inbound neighbor 10.0.10.2 route-map RM-IN in neighbor 10.0.10.2 route-map RM-OUT out The only small catch was, that it doesn’t want to propagate routes without route-maps.\nConclusion There are probably a lot of things to explain or discuss regarding current setup. This lab is not meant as a full tutorial but as a working foundation. It should give you a ready-to-use base for experimenting and extending IPSec with LibreSwan and BGP on Linux.\nMy goal is not to explain everything in detail, but provide working solution as a base for further individual exploration. And as this is my personal blog, I comment what I found to be interesting for me;).\n",
+  "wordCount" : "766",
   "inLanguage": "en",
-  "datePublished": "2025-09-15T17:00:08Z",
-  "dateModified": "2025-09-15T17:00:08Z",
+  "datePublished": "2025-09-02T00:00:00Z",
+  "dateModified": "2025-09-02T00:00:00Z",
   "mainEntityOfPage": {
     "@type": "WebPage",
     "@id": "http://localhost:1313/posts/ipsec_on_linux/"
@@ -213,7 +213,7 @@ document.addEventListener("DOMContentLoaded", function() {
   <header class="post-header">
     
     <h1 class="post-title entry-hint-parent">
-      Full-blown IPSec on OpenSource
+      Full-blown IPSec on Linux with LibreSwan, VTI, RSA, and BGP
       <span class="entry-hint" title="Draft">
         <svg xmlns="http://www.w3.org/2000/svg" height="35" viewBox="0 -960 960 960" fill="currentColor">
           <path
@@ -221,23 +221,26 @@ document.addEventListener("DOMContentLoaded", function() {
         </svg>
       </span>
     </h1>
-    <div class="post-meta"><span title='2025-09-15 17:00:08 +0000 UTC'>September 15, 2025</span>
+    <div class="post-meta"><span title='2025-09-02 00:00:00 +0000 UTC'>September 2, 2025</span>
 
 </div>
   </header> 
-  <div class="post-content"><p>This post includes important comments to the following LAB:<br>
-<a href="https://github.com/sbezo/linux-network-lab-2025.git">https://github.com/sbezo/linux-network-lab-2025.git</a></p>
-<p>GitHub repository provides complete fully functional networking LAB, which is very easy to reproduce and play with.</p>
+  <div class="post-content"><p>This post includes important comments to the following LAB:</p>
+<p><a href="https://github.com/sbezo/linux-network-lab-2025.git">https://github.com/sbezo/linux-network-lab-2025.git</a></p>
+<p>GitHub repository provides complete fully functional self-provisioning networking LAB, which is very easy to reproduce and play with.</p>
 <h2 id="topology">Topology<a hidden class="anchor" aria-hidden="true" href="#topology">#</a></h2>
 <p><img loading="lazy" src="/img/linux_ipsec_1.png"></p>
 <h2 id="motivation">Motivation<a hidden class="anchor" aria-hidden="true" href="#motivation">#</a></h2>
-<p>It is interesting fact, that it is quite difficult to find such complete configuration for IPSec on Linux. I have found just partial configurations, or just ipsec with secret authentication, or mostly broken configurations. So I decided to build this complete LAB with demonstrable end-to-end connectivity.<br>
-And It is also very good start point for further investigation.</p>
+<p>It is more common to build IPSec on commercial products of known vendors. It is very well documented and almost no surprises here. And You have support of course;).</p>
+<p>But OpenSource is something different, and I wanted to test it&hellip;</p>
+<p>It is interesting fact, that it is quite difficult to find such complete configuration for IPSec on Linux. I have found just partial configurations, or just IPSec with secret authentication, or mostly broken configurations. So I decided to build this complete LAB with <strong>demonstrable</strong> end-to-end connectivity.<br>
+I&rsquo;d like to provide something &lsquo;independent&rsquo; so no specific lab frameworks. The only prerequisite is docker.</p>
+<p>I hope this is also very good start point for further investigation.</p>
 <h2 id="technology-stack">Technology stack<a hidden class="anchor" aria-hidden="true" href="#technology-stack">#</a></h2>
-<p>There are more frameworks for IPSec and networking handling in Linux. This time I choose:</p>
+<p>There are more frameworks for IPSec and networking handling in Linux of course. This time I choose:</p>
 <ul>
 <li>LibreSwan for IPSec</li>
-<li>VRR for Linux routing</li>
+<li>FRR for Linux routing</li>
 </ul>
 <p>Regarding IPSec I chose:</p>
 <ul>
@@ -246,8 +249,58 @@ And It is also very good start point for further investigation.</p>
 <li>BGP over IPSec is used to control routing between sites</li>
 <li>IKEv2 as control protocol for IPSec</li>
 </ul>
+<h2 id="wrapping-it-to-docker">Wrapping it to Docker<a hidden class="anchor" aria-hidden="true" href="#wrapping-it-to-docker">#</a></h2>
+<p>The most sexy part for me is a possibility to spin up whole LAB by simple <code>docker compose up</code>. It is still like a magic for me - who built labs for decades with physical HW and then hypervisors and different simulators looks like miracle. But speed and lightness of docker is absolutely amazing.</p>
+<p>There are only 4 important steps in whole LAB:</p>
+<ol>
+<li>Spin up docker containers</li>
+<li>Create certificates (only once needed)</li>
+<li>Push whole configuration (linux + FRR) by one script</li>
+<li>Connect to devices and test end-to-end connectivity via IPSec</li>
+</ol>
+<p>Now it is possible to play with configuration files of LibreSwan. After any change <code>ipsec restart</code> is needed. Or with FRR configuration.
+And magic comes when you want to return to beginning for any reason. You can just run <code>docker compose down</code> and start from scratch with new LAB. Within few second you have fresh new LAB ready.</p>
 <h2 id="certificates">Certificates<a hidden class="anchor" aria-hidden="true" href="#certificates">#</a></h2>
 <p>Certificates part was quite surprisingly most tricky for me.</p>
+<p><strong>1.</strong> LibreSwan RSA implementation requires using of SAN (subject Alternative Name) in identity certificates. It didn&rsquo;t want to work without SAN for me.<br>
+Because openssl doesn&rsquo;t support signing CSR with SAN by default, I had to add some magic parameters during certificate creation.</p>
+<p><img loading="lazy" src="/img/linux_ipsec_2.png"></p>
+<p><strong>2.</strong> NSS (Network Security Services) library is mandatory for using with LibreSwan. Although there was keyword &lsquo;optional&rsquo; in documentation, I couldn&rsquo;t make it work without it.
+So I had to install, initialize NSS first and then add certificates to NSS database.</p>
+<p>So <code> apt-get install libnss3-tools</code> in Dockerfile and</p>
+<pre tabindex="0"><code>ipsec initnss
+pk12util -i /etc/ipsec.d/certs/l2.p12 -d sql:/var/lib/ipsec/nss -K &#34;&#34; -W &#34;&#34;
+certutil -M -n &#34;l2.lab&#34; -t &#34;CT,C,C&#34; -d sql:/var/lib/ipsec/nss
+certutil -A -n &#34;LabRootCA&#34; -t &#34;CT,C,C&#34; -d sql:/var/lib/ipsec/nss -i /etc/ipsec.d/cacerts/ca.crt
+</code></pre><p>in ipsec configuration file <code>linux_rsa.cfg</code></p>
+<p>Then you can set and check IKE ID identities in LibreSwan configuration file:</p>
+<pre tabindex="0"><code>leftid=&#34;@192.168.0.10&#34;
+rightid=&#34;@192.168.0.11&#34; 
+</code></pre><p>Not sure about other possibilities, like checking SN of certificate, or parameters from FQDN. Documentation is not so clear. I&rsquo;will certainly test it later.</p>
+<p><strong>3.</strong> Certificate files are mapped within <code>docker-compose.yml</code> file</p>
+<h2 id="frr">FRR<a hidden class="anchor" aria-hidden="true" href="#frr">#</a></h2>
+<p>I played with Bird before, but I wanted to touch also FRR. It is pretty straightforward. Looks like Cisco CLI. A had even better feeling as with Bird.<br>
+Interesting is, that FRR itself doesn&rsquo;t create interfaces (like vti01 in my case). You have to create them in Linux and FRR adopt them.
+You can easily switch between linux bash and FRR by <code>vtysh</code> and <code>exit</code> inside docker. Or go directly to it from outside: <code>docker exec -it l2 vtysh</code>.</p>
+<h2 id="bgp">BGP<a hidden class="anchor" aria-hidden="true" href="#bgp">#</a></h2>
+<p>BGP part was also very intuitive.</p>
+<pre tabindex="0"><code>router bgp 65501
+ neighbor 10.0.10.2 remote-as 65502
+ neighbor 10.0.10.2 ebgp-multihop 255
+ neighbor 10.0.10.2 update-source lo
+ neighbor 10.0.10.2 timers 5 20
+ !
+ address-family ipv4 unicast
+  network 10.0.1.0/24
+  redistribute connected
+  neighbor 10.0.10.2 soft-reconfiguration inbound
+  neighbor 10.0.10.2 route-map RM-IN in
+  neighbor 10.0.10.2 route-map RM-OUT out
+</code></pre><p>The only small catch was, that it doesn&rsquo;t want to propagate routes without route-maps.</p>
+<h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
+<p>There are probably a lot of things to explain or discuss regarding current setup.
+This lab is not meant as a full tutorial but as a working foundation. It should give you a ready-to-use base for experimenting and extending IPSec with LibreSwan and BGP on Linux.</p>
+<p>My goal is not to explain everything in detail, but provide working solution as a base for further individual exploration. And as this is my personal blog, I comment what I found to be interesting for me;).</p>
 
 
   </div>
@@ -258,8 +311,8 @@ And It is also very good start point for further investigation.</p>
 
 <ul class="share-buttons">
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Full-blown IPSec on OpenSource on linkedin"
-            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2flocalhost%3a1313%2fposts%2fipsec_on_linux%2f&amp;title=Full-blown%20IPSec%20on%20OpenSource&amp;summary=Full-blown%20IPSec%20on%20OpenSource&amp;source=http%3a%2f%2flocalhost%3a1313%2fposts%2fipsec_on_linux%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Full-blown IPSec on Linux with LibreSwan, VTI, RSA, and BGP on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2flocalhost%3a1313%2fposts%2fipsec_on_linux%2f&amp;title=Full-blown%20IPSec%20on%20Linux%20with%20LibreSwan%2c%20VTI%2c%20RSA%2c%20and%20BGP&amp;summary=Full-blown%20IPSec%20on%20Linux%20with%20LibreSwan%2c%20VTI%2c%20RSA%2c%20and%20BGP&amp;source=http%3a%2f%2flocalhost%3a1313%2fposts%2fipsec_on_linux%2f">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
@@ -267,8 +320,8 @@ And It is also very good start point for further investigation.</p>
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Full-blown IPSec on OpenSource on reddit"
-            href="https://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fipsec_on_linux%2f&title=Full-blown%20IPSec%20on%20OpenSource">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Full-blown IPSec on Linux with LibreSwan, VTI, RSA, and BGP on reddit"
+            href="https://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fipsec_on_linux%2f&title=Full-blown%20IPSec%20on%20Linux%20with%20LibreSwan%2c%20VTI%2c%20RSA%2c%20and%20BGP">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
