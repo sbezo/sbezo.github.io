@@ -133,8 +133,8 @@ document.addEventListener("DOMContentLoaded", function() {
   "keywords": [
     
   ],
-  "articleBody": "May be you know it - You have a MAC or Linux and your company or customers have Microsoft Active Directory.\nProbably you need some AD account and soon or later you need to change password.\nMost people I know use terminal servers, or their own Windows virtual machines. Nothing against it.\nBut I prefer this quick command line solution:\ndocker is prerequisite\ndocker run -it alpine apk update apk add samba smbpasswd -r -U If you do not know domain-controller-ip, you can find it on MAC by:\nscutil --dns ",
-  "wordCount" : "92",
+  "articleBody": "May be you know it - You have a MAC or Linux and your company or customers have Microsoft Active Directory.\nProbably you need some AD account and soon or later you need to change password.\nMost people I know use MS terminal servers, or their Windows virtual machines. Nothing against it.\nBut I prefer this quick command line solution:\ndocker is prerequisite\ndocker run --rm -it alpine apk update apk add samba smbpasswd -r -U If you do not know domain-controller-ip, you can find it on MAC by:\nscutil --dns ",
+  "wordCount" : "93",
   "inLanguage": "en",
   "datePublished": "2025-09-16T16:30:02Z",
   "dateModified": "2025-09-16T16:30:02Z",
@@ -221,11 +221,11 @@ document.addEventListener("DOMContentLoaded", function() {
   </header> 
   <div class="post-content"><p>May be you know it - You have a MAC or Linux and your company or customers have Microsoft Active Directory.<br>
 Probably you need some AD account and soon or later you need to change password.</p>
-<p>Most people I know use terminal servers, or their own Windows virtual machines. Nothing against it.<br>
+<p>Most people I know use MS terminal servers, or their Windows virtual machines. Nothing against it.<br>
 But I prefer this quick command line solution:</p>
 <blockquote>
 <p>docker is prerequisite</p></blockquote>
-<pre tabindex="0"><code>docker run -it alpine
+<pre tabindex="0"><code>docker run --rm -it alpine
 apk update
 apk add samba
 smbpasswd -r &lt;domain-controller-ip&gt; -U &lt;username&gt;
