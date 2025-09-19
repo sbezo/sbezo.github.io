@@ -6,8 +6,15 @@
     <description>Recent content in Posts on sbezo.github.io</description>
     <generator>Hugo -- 0.149.0-DEV</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 16 Sep 2025 16:30:02 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 19 Sep 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://sbezo.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Full-blown IPSec on Linux with LibreSwan, VTI, RSA, and BGP</title>
+      <link>https://sbezo.github.io/posts/ipsec_on_linux/</link>
+      <pubDate>Fri, 19 Sep 2025 00:00:00 +0000</pubDate>
+      <guid>https://sbezo.github.io/posts/ipsec_on_linux/</guid>
+      <description>LAB notes</description>
+    </item>
     <item>
       <title>AD password reset on Mac</title>
       <link>https://sbezo.github.io/posts/ad_password_change/</link>
