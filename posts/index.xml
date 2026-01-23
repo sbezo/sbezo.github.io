@@ -2,87 +2,94 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Posts on sbezo.github.io</title>
-    <link>https://sbezo.github.io/posts/</link>
+    <link>http://localhost:1313/posts/</link>
     <description>Recent content in Posts on sbezo.github.io</description>
     <generator>Hugo -- 0.149.0-DEV</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 19 Sep 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://sbezo.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 23 Jan 2026 07:24:41 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Creating VM with PowerCLI</title>
+      <link>http://localhost:1313/posts/creating_vm_with_powercli/</link>
+      <pubDate>Fri, 23 Jan 2026 07:24:41 +0000</pubDate>
+      <guid>http://localhost:1313/posts/creating_vm_with_powercli/</guid>
+      <description>How to spin up new VM in vSphere from ISO image without hassling with vCenter GUI</description>
+    </item>
     <item>
       <title>Full-blown IPSec on Linux with LibreSwan, VTI, RSA, and BGP</title>
-      <link>https://sbezo.github.io/posts/ipsec_on_linux/</link>
+      <link>http://localhost:1313/posts/ipsec_on_linux/</link>
       <pubDate>Fri, 19 Sep 2025 00:00:00 +0000</pubDate>
-      <guid>https://sbezo.github.io/posts/ipsec_on_linux/</guid>
+      <guid>http://localhost:1313/posts/ipsec_on_linux/</guid>
       <description>LAB notes</description>
     </item>
     <item>
       <title>AD password reset on Mac</title>
-      <link>https://sbezo.github.io/posts/ad_password_change/</link>
+      <link>http://localhost:1313/posts/ad_password_change/</link>
       <pubDate>Tue, 16 Sep 2025 16:30:02 +0000</pubDate>
-      <guid>https://sbezo.github.io/posts/ad_password_change/</guid>
+      <guid>http://localhost:1313/posts/ad_password_change/</guid>
       <description>How to quickly change expired MS AD password without a Windows machine</description>
     </item>
     <item>
       <title>From FMCv10 to FMC2700</title>
-      <link>https://sbezo.github.io/posts/cisco_fmc10v_to_fmc2700_migration/</link>
+      <link>http://localhost:1313/posts/cisco_fmc10v_to_fmc2700_migration/</link>
       <pubDate>Sat, 13 Sep 2025 17:36:28 +0000</pubDate>
-      <guid>https://sbezo.github.io/posts/cisco_fmc10v_to_fmc2700_migration/</guid>
+      <guid>http://localhost:1313/posts/cisco_fmc10v_to_fmc2700_migration/</guid>
       <description>Notes from migration of Cisco FMC management</description>
     </item>
     <item>
       <title>Simplest CA ever</title>
-      <link>https://sbezo.github.io/posts/simplest_ca_ever/</link>
+      <link>http://localhost:1313/posts/simplest_ca_ever/</link>
       <pubDate>Sun, 07 Sep 2025 00:00:00 +0000</pubDate>
-      <guid>https://sbezo.github.io/posts/simplest_ca_ever/</guid>
+      <guid>http://localhost:1313/posts/simplest_ca_ever/</guid>
       <description>How to quickly get a few certificates for lab use</description>
     </item>
     <item>
       <title>SecureCRT as a personal automation controller</title>
-      <link>https://sbezo.github.io/posts/securecrt_as_automation_controller/</link>
+      <link>http://localhost:1313/posts/securecrt_as_automation_controller/</link>
       <pubDate>Wed, 03 Sep 2025 05:18:09 +0000</pubDate>
-      <guid>https://sbezo.github.io/posts/securecrt_as_automation_controller/</guid>
+      <guid>http://localhost:1313/posts/securecrt_as_automation_controller/</guid>
       <description>How to start Virtual Machines by clicking to one button</description>
     </item>
     <item>
       <title>Breaking a Noisy LWE System with Lattices</title>
-      <link>https://sbezo.github.io/posts/noisy_system_solved_by_lattice/</link>
+      <link>http://localhost:1313/posts/noisy_system_solved_by_lattice/</link>
       <pubDate>Sat, 16 Aug 2025 14:35:18 +0000</pubDate>
-      <guid>https://sbezo.github.io/posts/noisy_system_solved_by_lattice/</guid>
+      <guid>http://localhost:1313/posts/noisy_system_solved_by_lattice/</guid>
       <description>Lattices - Part 3: How to use Lattice to break LWE system with small errors.</description>
     </item>
     <item>
       <title>Knapsack and Lattice</title>
-      <link>https://sbezo.github.io/posts/knapsack_and_lattice/</link>
+      <link>http://localhost:1313/posts/knapsack_and_lattice/</link>
       <pubDate>Thu, 14 Aug 2025 12:57:15 +0000</pubDate>
-      <guid>https://sbezo.github.io/posts/knapsack_and_lattice/</guid>
+      <guid>http://localhost:1313/posts/knapsack_and_lattice/</guid>
       <description>Lattices - Part 2: How to break Merkle–Hellman knapsack cryptosystem with Lattice</description>
     </item>
     <item>
       <title>NAT for Alien</title>
-      <link>https://sbezo.github.io/posts/nat_for_alien/</link>
+      <link>http://localhost:1313/posts/nat_for_alien/</link>
       <pubDate>Tue, 12 Aug 2025 13:43:28 +0000</pubDate>
-      <guid>https://sbezo.github.io/posts/nat_for_alien/</guid>
+      <guid>http://localhost:1313/posts/nat_for_alien/</guid>
       <description>How to handle Alien device in your network with NAT trick</description>
     </item>
     <item>
       <title>Lattices by example</title>
-      <link>https://sbezo.github.io/posts/lattices_by_example_1/</link>
+      <link>http://localhost:1313/posts/lattices_by_example_1/</link>
       <pubDate>Fri, 08 Aug 2025 11:38:28 +0000</pubDate>
-      <guid>https://sbezo.github.io/posts/lattices_by_example_1/</guid>
+      <guid>http://localhost:1313/posts/lattices_by_example_1/</guid>
       <description>Lattices - Part 1: Solving an equation with irrational numbers with Lattice</description>
     </item>
     <item>
       <title>Hugo to github.io</title>
-      <link>https://sbezo.github.io/posts/hugo-2/</link>
+      <link>http://localhost:1313/posts/hugo-2/</link>
       <pubDate>Thu, 07 Aug 2025 10:09:54 +0000</pubDate>
-      <guid>https://sbezo.github.io/posts/hugo-2/</guid>
+      <guid>http://localhost:1313/posts/hugo-2/</guid>
       <description>Hugo - Part 2: Continue with publishing of personal web site</description>
     </item>
     <item>
       <title>Hugo from Docker</title>
-      <link>https://sbezo.github.io/posts/hugo-1/</link>
+      <link>http://localhost:1313/posts/hugo-1/</link>
       <pubDate>Wed, 06 Aug 2025 18:11:33 +0000</pubDate>
-      <guid>https://sbezo.github.io/posts/hugo-1/</guid>
+      <guid>http://localhost:1313/posts/hugo-1/</guid>
       <description>Hugo - Part 1: Very Quick Start with the PaperMod theme</description>
     </item>
   </channel>
