@@ -6,8 +6,15 @@
     <description>Recent content in Posts on sbezo.github.io</description>
     <generator>Hugo -- 0.149.0-DEV</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 23 Jan 2026 07:24:41 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 29 Jan 2026 14:44:23 +0000</lastBuildDate>
     <atom:link href="https://sbezo.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Playing with Linux interfaces</title>
+      <link>https://sbezo.github.io/posts/playing_with_linux_interfaces/</link>
+      <pubDate>Thu, 29 Jan 2026 14:44:23 +0000</pubDate>
+      <guid>https://sbezo.github.io/posts/playing_with_linux_interfaces/</guid>
+      <description>Cheatsheet for the most common network configurations on my 4 favourite distros: Alpine, Ubuntu, Debian, Rocky</description>
+    </item>
     <item>
       <title>Creating VM with PowerCLI</title>
       <link>https://sbezo.github.io/posts/creating_vm_with_powercli/</link>

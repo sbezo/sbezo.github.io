@@ -2,13 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://sbezo.github.io/posts/creating_vm_with_powercli/</loc>
-    <lastmod>2026-01-23T07:24:41+00:00</lastmod>
+    <loc>https://sbezo.github.io/posts/playing_with_linux_interfaces/</loc>
+    <lastmod>2026-01-29T14:44:23+00:00</lastmod>
   </url><url>
     <loc>https://sbezo.github.io/posts/</loc>
-    <lastmod>2026-01-23T07:24:41+00:00</lastmod>
+    <lastmod>2026-01-29T14:44:23+00:00</lastmod>
   </url><url>
     <loc>https://sbezo.github.io/</loc>
+    <lastmod>2026-01-29T14:44:23+00:00</lastmod>
+  </url><url>
+    <loc>https://sbezo.github.io/posts/creating_vm_with_powercli/</loc>
     <lastmod>2026-01-23T07:24:41+00:00</lastmod>
   </url><url>
     <loc>https://sbezo.github.io/posts/ipsec_on_linux/</loc>

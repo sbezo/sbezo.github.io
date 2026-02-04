@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Playing with Linux interfaces | sbezo.github.io</title>
+<meta name="keywords" content="">
+<meta name="description" content="Cheatsheet for the most common network configurations on my 4 favourite distros: Alpine, Ubuntu, Debian, Rocky">
+<meta name="author" content="">
+<link rel="canonical" href="https://sbezo.github.io/posts/playing_with_linux_interfaces/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.8fe10233a706bc87f2e08b3cf97b8bd4c0a80f10675a143675d59212121037c0.css" integrity="sha256-j&#43;ECM6cGvIfy4Is8&#43;XuL1MCoDxBnWhQ2ddWSEhIQN8A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://sbezo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://sbezo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://sbezo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://sbezo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://sbezo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://sbezo.github.io/posts/playing_with_linux_interfaces/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css" integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js" integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+        ]
+    });
+});
+</script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-X37ESW6JQL"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-X37ESW6JQL');
+        }
+      </script><meta property="og:url" content="https://sbezo.github.io/posts/playing_with_linux_interfaces/">
+  <meta property="og:site_name" content="sbezo.github.io">
+  <meta property="og:title" content="Playing with Linux interfaces">
+  <meta property="og:description" content="Cheatsheet for the most common network configurations on my 4 favourite distros: Alpine, Ubuntu, Debian, Rocky">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-01-29T14:44:23+00:00">
+    <meta property="article:modified_time" content="2026-01-29T14:44:23+00:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Playing with Linux interfaces">
+<meta name="twitter:description" content="Cheatsheet for the most common network configurations on my 4 favourite distros: Alpine, Ubuntu, Debian, Rocky">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://sbezo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Playing with Linux interfaces",
+      "item": "https://sbezo.github.io/posts/playing_with_linux_interfaces/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Playing with Linux interfaces",
+  "name": "Playing with Linux interfaces",
+  "description": "Cheatsheet for the most common network configurations on my 4 favourite distros: Alpine, Ubuntu, Debian, Rocky",
+  "keywords": [
+    
+  ],
+  "articleBody": "Intro This post is something like my personal cheatsheet for Linux networking. But maybe usefull also for somebody else… It is intentionally practical and command-focused, written mainly for people who already understand networking concepts (IP, routing, VLANs, VRFs) and want a quick Linux reference.\nAlthough the main topic is networking, I start with package management…\nFor almost all commands we will need root rights\nSystem upgrade Distro command Alpine apk update \u0026\u0026 apk upgrade Ubuntu apt update \u0026\u0026 apt full-upgrade Debian apt update \u0026\u0026 apt full-upgrade Rocky dnf upgrade --refresh Install useful networking packages Distro command Alpine apk add iproute2 net-tools Ubuntu apt install net-tools Debian apt install net-tools Rocky dnf install net-tools net-tools (ifconfig, arp, netstat) is deprecated but still useful\nBasic networking Check curent IP addresses on all interfaces Distro command All ip a Check routing table Distro command All ip route Check arp table Distro command All arp Set temporrary IP address Let’s continue with basic setup.\nIt is important, that setup will does not survive system reboot .\nIf given interface already has an IP, new one will be added as secondary.\nDistro command All ip addr add 10.208.116.181/24 dev eth0 Command is the same for all distros, just Name of interfaces will change:\nDistro interface Alpine eth0 Ubuntu ens192 Debian ens192 Rocky ens33 This will apply for all next commands - I’ll use eth0, Do not forget to use correct interface name\nAdd temporrary IP route Distro command All ip route add 10.200.200.0/24 via 10.208.116.10 dev eth0 Delete IP route Will not survive system reboot.\nDistro command All ip route del 10.200.200.0/24 via 10.208.116.10 dev eth0 Delete all IP addresses on given interface and request new IP over DHCP Distro command Alpine ip addr flush dev eth0 \u0026\u0026 udhcpc -i eth0 Ubuntu ip addr flush dev ens192 \u0026\u0026 dhcpcd ens192 Debian ip addr flush dev ens192 \u0026\u0026 /sbin/dhcpcd ens192 Rocky ip addr flush dev ens33 \u0026\u0026 nmcli device reapply ens33 Shut interface down Distro command All ip link set down dev eth0 Bring interface up Distro command All ip link set up dev eth0 And now more complicated part - permanent IP setup, which will survive system reboot. Configuration should be writen in specific configuration file. Change can be also enforced instead of reboot after change.\nSet permanent IP address and route Distro config file enforcement command Alpine /etc/network/interfaces service networking restart Ubuntu /etc/netplan/01-my_net_config.yaml netplan apply Debian /etc/network/interfaces systemctl restart networking Rocky /etc/NetworkManager/system-connections/ens33.nmconnection nmcli connection reload \u0026\u0026 nmcli connection up ens33 And examples for each distro, Each example contains two interfaces - first for native interface without tagging, second with 802.1q tagging.\nAlpine:\n# /etc/network/interfaces auto eth0 iface eth0 inet static address 10.208.116.181/24 gateway 10.208.116.1 dns-nameservers 8.8.8.8 8.8.4.4 post-up ip route add 10.200.200.0/24 via 10.208.116.10 dev eth0 auto eth1.116 iface eth1.116 inet static address 192.168.2.181/24 Ubuntu:\n# /etc/netplan/01-my_net_config.yaml network: ethernets: ens192: dhcp4: false addresses: [10.208.116.182/24] routes: - to: default via: 10.208.116.1 - to: 10.200.200.0/24 via: 10.208.116.10 nameservers: addresses: [8.8.8.8,8.8.4.4] ens224: dhcp4: false vlans: ens224.116: id: 116 link: ens224 addresses: [192.168.2.182/24] Debian:\n# /etc/network/interfaces auto ens192 iface ens192 inet static address 10.208.116.183/24 gateway 10.208.116.1 post-up ip route add 10.200.200.0/24 via 10.208.116.10 dev ens192 auto ens224.116 iface ens224.116 inet static address 192.168.2.183/24 # /etc/resolv.conf nameserver 8.8.8.8 nameserver 8.8.4.4 Rocky: In “Rocky world” it is recommended to use nmcli for creating persistent network config files.\nWe can delete and recreate native primary interface ens33 with:\nnmcli connection delete ens33 \u0026\u0026 nmcli connection add \\ type ethernet \\ con-name ens33 \\ ifname ens33 \\ ipv4.method manual \\ ipv4.addresses 10.208.116.184/24 \\ ipv4.gateway 10.208.116.1 \\ ipv4.dns \"8.8.8.8 8.8.4.4\" \\ ipv4.routes \"10.200.200.0/24 10.208.116.10\" Or delete/create new subinterface:\nnmcli connection delete ens34.116 \u0026\u0026 nmcli con add type vlan con-name ens34.116 dev ens34 id 116 ip4 192.168.2.184/24 It will efectivelly create new config files:\n/etc/NetworkManager/system-connections/ens33.nmconnection /etc/NetworkManager/system-connections/ens34.116.nmconnection\nNamespaces Network namespaces provide full isolation of network stacks:\ninterfaces IP addresses routing tables ARP / neighbor tables firewall rules Conceptually, a network namespace is very similar to a VRF, but implemented entirely in software.\nCreating new namespace is the same for all distros:\nip netns add namespace-1 ip link set lo up Or delete, if you want to play with it:\nip netns del namespace-1 Interesting thing is, that namespaces cannot be managed through interface’s config files. They should be configured by scripts at boot time.\nPlease note, that IP addressing in namespace-1 overlaps with addressing of primary native interfaces - and it is ok ;)\nCreating new subinterfaces: Distro command Alpine ip link add link eth1 name eth1.100 type vlan id 100 Ubuntu ip link add link ens224 name ens224.100 type vlan id 100 Debian ip link add link ens224 name ens224.100 type vlan id 100 Rocky ip link add link ens34 name ens34.100 type vlan id 100 Assign new subinterface to the “VRF”: Distro command Alpine ip link set eth1.100 netns namespace-1 Ubuntu ip link set ens224.100 netns namespace-1 Debian ip link set ens224.100 netns namespace-1 Rocky ip link set ens34.100 netns namespace-1 Bring new subinterfaces up in the “VRF”: Distro command Alpine ip netns exec namespace-1 ip link set eth1.100 up Ubuntu ip netns exec namespace-1 ip link set ens224.100 up Debian ip netns exec namespace-1 ip link set ens224.100 up Rocky ip netns exec namespace-1 ip link set ens34.100 up Assign IP in the “VRF”: Distro command Alpine ip netns exec namespace-1 ip addr add 10.208.116.201/24 dev eth1.100 Ubuntu ip netns exec namespace-1 ip addr add 10.208.116.202/24 dev ens224.100 Debian ip netns exec namespace-1 ip addr add 10.208.116.203/24 dev ens224.100 Rocky ip netns exec namespace-1 ip addr add 10.208.116.204/24 dev ens34.100 Create default route in the “VRF”: Distro command Alpine ip netns exec namespace-1 ip route add default via 10.208.116.1 Ubuntu ip netns exec namespace-1 ip route add default via 10.208.116.1 Debian ip netns exec namespace-1 ip route add default via 10.208.116.1 Rocky ip netns exec namespace-1 ip route add default via 10.208.116.1 And test it:\nip netns exec namespace-1 ping 10.208.116.204 If you are using vSphere and VMs like me it is essential have primary network adapter configured as “VLAN type” and second interface (with 802.1q trunking\") as “VLAN trunking”\n",
+  "wordCount" : "1018",
+  "inLanguage": "en",
+  "datePublished": "2026-01-29T14:44:23Z",
+  "dateModified": "2026-01-29T14:44:23Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://sbezo.github.io/posts/playing_with_linux_interfaces/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "sbezo.github.io",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://sbezo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://sbezo.github.io/" accesskey="h" title="sbezo.github.io (Alt + H)">sbezo.github.io</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://sbezo.github.io/posts/" title="Posts">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://sbezo.github.io/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Playing with Linux interfaces
+    </h1>
+    <div class="post-meta"><span title='2026-01-29 14:44:23 +0000 UTC'>January 29, 2026</span>
+
+</div>
+  </header> 
+  <div class="post-content"><h2 id="intro">Intro<a hidden class="anchor" aria-hidden="true" href="#intro">#</a></h2>
+<p>This post is something like my personal cheatsheet for Linux networking. But maybe usefull also for somebody else&hellip;  <br>
+It is intentionally practical and command-focused, written mainly for people who already understand networking concepts (IP, routing, VLANs, VRFs) and want a quick Linux reference.</p>
+<p>Although the main topic is networking, I start with package management&hellip;</p>
+<blockquote>
+<p>For almost all commands we will need root rights</p></blockquote>
+<h3 id="system-upgrade">System upgrade<a hidden class="anchor" aria-hidden="true" href="#system-upgrade">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Distro</th>
+          <th><code>command</code></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Alpine</td>
+          <td><code>apk update &amp;&amp; apk upgrade</code></td>
+      </tr>
+      <tr>
+          <td>Ubuntu</td>
+          <td><code>apt update &amp;&amp; apt full-upgrade</code></td>
+      </tr>
+      <tr>
+          <td>Debian</td>
+          <td><code>apt update &amp;&amp; apt full-upgrade</code></td>
+      </tr>
+      <tr>
+          <td>Rocky</td>
+          <td><code>dnf upgrade --refresh</code></td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h3 id="install-useful-networking-packages">Install useful networking packages<a hidden class="anchor" aria-hidden="true" href="#install-useful-networking-packages">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Distro</th>
+          <th><code>command</code></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Alpine</td>
+          <td><code>apk add iproute2 net-tools</code></td>
+      </tr>
+      <tr>
+          <td>Ubuntu</td>
+          <td><code>apt install net-tools</code></td>
+      </tr>
+      <tr>
+          <td>Debian</td>
+          <td><code>apt install net-tools</code></td>
+      </tr>
+      <tr>
+          <td>Rocky</td>
+          <td><code>dnf install net-tools</code></td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p>net-tools (ifconfig, arp, netstat) is deprecated but still useful</p></blockquote>
+<hr>
+<h2 id="basic-networking">Basic networking<a hidden class="anchor" aria-hidden="true" href="#basic-networking">#</a></h2>
+<h3 id="check-curent-ip-addresses-on-all-interfaces">Check curent IP addresses on all interfaces<a hidden class="anchor" aria-hidden="true" href="#check-curent-ip-addresses-on-all-interfaces">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Distro</th>
+          <th><code>command</code></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>All</td>
+          <td><code>ip a</code></td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h3 id="check-routing-table">Check routing table<a hidden class="anchor" aria-hidden="true" href="#check-routing-table">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Distro</th>
+          <th><code>command</code></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>All</td>
+          <td><code>ip route</code></td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h3 id="check-arp-table">Check arp table<a hidden class="anchor" aria-hidden="true" href="#check-arp-table">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Distro</th>
+          <th><code>command</code></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>All</td>
+          <td><code>arp</code></td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h3 id="set-temporrary-ip-address">Set temporrary IP address<a hidden class="anchor" aria-hidden="true" href="#set-temporrary-ip-address">#</a></h3>
+<p>Let&rsquo;s continue with basic setup.</p>
+<blockquote>
+<p>It is important, that setup will <strong>does not survive system reboot</strong> .<br>
+If given interface already has an IP, new one will be added as secondary.</p></blockquote>
+<table>
+  <thead>
+      <tr>
+          <th>Distro</th>
+          <th><code>command</code></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>All</td>
+          <td><code>ip addr add 10.208.116.181/24 dev eth0</code></td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p>Command is the same for all distros, just <strong>Name</strong> of interfaces will change:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Distro</th>
+          <th><code>interface</code></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Alpine</td>
+          <td><code>eth0</code></td>
+      </tr>
+      <tr>
+          <td>Ubuntu</td>
+          <td><code>ens192</code></td>
+      </tr>
+      <tr>
+          <td>Debian</td>
+          <td><code>ens192</code></td>
+      </tr>
+      <tr>
+          <td>Rocky</td>
+          <td><code>ens33</code></td>
+      </tr>
+  </tbody>
+</table>
+<p>This will apply for all next commands - I&rsquo;ll use eth0, Do not forget to use correct interface name</p></blockquote>
+<hr>
+<h3 id="add-temporrary-ip-route">Add temporrary IP route<a hidden class="anchor" aria-hidden="true" href="#add-temporrary-ip-route">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Distro</th>
+          <th><code>command</code></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>All</td>
+          <td><code>ip route add 10.200.200.0/24 via 10.208.116.10 dev eth0</code></td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h3 id="delete-ip-route">Delete IP route<a hidden class="anchor" aria-hidden="true" href="#delete-ip-route">#</a></h3>
+<p>Will not survive system reboot.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Distro</th>
+          <th><code>command</code></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>All</td>
+          <td><code>ip route del 10.200.200.0/24 via 10.208.116.10 dev eth0</code></td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h3 id="delete-all-ip-addresses-on-given-interface-and-request-new-ip-over-dhcp">Delete all IP addresses on given interface and request new IP over DHCP<a hidden class="anchor" aria-hidden="true" href="#delete-all-ip-addresses-on-given-interface-and-request-new-ip-over-dhcp">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Distro</th>
+          <th><code>command</code></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Alpine</td>
+          <td><code>ip addr flush dev eth0 &amp;&amp; udhcpc -i eth0</code></td>
+      </tr>
+      <tr>
+          <td>Ubuntu</td>
+          <td><code>ip addr flush dev ens192 &amp;&amp; dhcpcd ens192</code></td>
+      </tr>
+      <tr>
+          <td>Debian</td>
+          <td><code>ip addr flush dev ens192 &amp;&amp; /sbin/dhcpcd ens192</code></td>
+      </tr>
+      <tr>
+          <td>Rocky</td>
+          <td><code>ip addr flush dev ens33 &amp;&amp; nmcli device reapply ens33</code></td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h3 id="shut-interface-down">Shut interface down<a hidden class="anchor" aria-hidden="true" href="#shut-interface-down">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Distro</th>
+          <th><code>command</code></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>All</td>
+          <td><code>ip link set down dev eth0</code></td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h3 id="bring-interface-up">Bring interface up<a hidden class="anchor" aria-hidden="true" href="#bring-interface-up">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Distro</th>
+          <th><code>command</code></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>All</td>
+          <td><code>ip link set up dev eth0</code></td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<p>And now more complicated part - permanent IP setup, which will survive system reboot.
+Configuration should be writen in specific configuration file.
+Change can be also enforced instead of reboot after change.</p>
+<h3 id="set-permanent-ip-address-and-route">Set permanent IP address and route<a hidden class="anchor" aria-hidden="true" href="#set-permanent-ip-address-and-route">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Distro</th>
+          <th><code>config file</code></th>
+          <th><code>enforcement command</code></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Alpine</td>
+          <td><code>/etc/network/interfaces</code></td>
+          <td><code>service networking restart</code></td>
+      </tr>
+      <tr>
+          <td>Ubuntu</td>
+          <td><code>/etc/netplan/01-my_net_config.yaml</code></td>
+          <td><code>netplan apply</code></td>
+      </tr>
+      <tr>
+          <td>Debian</td>
+          <td><code>/etc/network/interfaces</code></td>
+          <td><code>systemctl restart networking</code></td>
+      </tr>
+      <tr>
+          <td>Rocky</td>
+          <td><code>/etc/NetworkManager/system-connections/ens33.nmconnection</code></td>
+          <td><code>nmcli connection reload &amp;&amp; nmcli connection up ens33 </code></td>
+      </tr>
+  </tbody>
+</table>
+<p>And examples for each distro,
+Each example contains two interfaces - first for native interface without tagging, second with 802.1q tagging.</p>
+<p><strong>Alpine:</strong></p>
+<pre tabindex="0"><code># /etc/network/interfaces
+
+auto eth0
+iface eth0 inet static
+ address 10.208.116.181/24
+ gateway 10.208.116.1
+ dns-nameservers 8.8.8.8 8.8.4.4
+ post-up ip route add 10.200.200.0/24 via 10.208.116.10 dev eth0
+
+auto eth1.116
+iface eth1.116 inet static
+ address 192.168.2.181/24
+</code></pre><p><strong>Ubuntu:</strong></p>
+<pre tabindex="0"><code># /etc/netplan/01-my_net_config.yaml
+network:
+    ethernets:
+        ens192:
+            dhcp4: false
+            addresses: [10.208.116.182/24]
+            routes:
+            - to: default
+              via: 10.208.116.1
+            - to: 10.200.200.0/24
+              via: 10.208.116.10
+            nameservers:
+                addresses: [8.8.8.8,8.8.4.4]
+        ens224:
+            dhcp4: false
+
+    vlans:
+        ens224.116:
+            id: 116
+            link: ens224
+            addresses: [192.168.2.182/24]
+</code></pre><p><strong>Debian:</strong></p>
+<pre tabindex="0"><code># /etc/network/interfaces
+auto ens192
+iface ens192 inet static
+ address 10.208.116.183/24
+ gateway 10.208.116.1
+ post-up ip route add 10.200.200.0/24 via 10.208.116.10 dev ens192
+
+auto ens224.116
+iface ens224.116 inet static
+ address 192.168.2.183/24
+
+# /etc/resolv.conf
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+</code></pre><p><strong>Rocky:</strong> <br>
+In &ldquo;Rocky world&rdquo; it is recommended to use <code>nmcli</code> for creating persistent network config files.</p>
+<p>We can delete and recreate native primary interface ens33 with:</p>
+<pre tabindex="0"><code>nmcli connection delete ens33 &amp;&amp; nmcli connection add \
+  type ethernet \
+  con-name ens33 \
+  ifname ens33 \
+  ipv4.method manual \
+  ipv4.addresses 10.208.116.184/24 \
+  ipv4.gateway 10.208.116.1 \
+  ipv4.dns &#34;8.8.8.8 8.8.4.4&#34; \
+  ipv4.routes &#34;10.200.200.0/24 10.208.116.10&#34;
+</code></pre><p>Or delete/create new subinterface:</p>
+<pre tabindex="0"><code>nmcli connection delete ens34.116 &amp;&amp; nmcli con add type vlan con-name ens34.116 dev ens34 id 116 ip4 192.168.2.184/24
+</code></pre><p>It will efectivelly create new config files:</p>
+<p><code>/etc/NetworkManager/system-connections/ens33.nmconnection</code>
+<code>/etc/NetworkManager/system-connections/ens34.116.nmconnection</code></p>
+<hr>
+<h2 id="namespaces">Namespaces<a hidden class="anchor" aria-hidden="true" href="#namespaces">#</a></h2>
+<p>Network namespaces provide <strong>full isolation of network stacks</strong>:</p>
+<ul>
+<li>interfaces</li>
+<li>IP addresses</li>
+<li>routing tables</li>
+<li>ARP / neighbor tables</li>
+<li>firewall rules</li>
+</ul>
+<p>Conceptually, a network namespace is very similar to a <strong>VRF</strong>, but implemented entirely in software.</p>
+<p>Creating new namespace is the same for all distros:</p>
+<pre tabindex="0"><code>ip netns add namespace-1 ip link set lo up
+</code></pre><p>Or delete, if you want to play with it:</p>
+<pre tabindex="0"><code>ip netns del namespace-1
+</code></pre><hr>
+<blockquote>
+<p>Interesting thing is, that namespaces cannot be managed through interface&rsquo;s config files.
+They should be configured by scripts at boot time.</p></blockquote>
+<blockquote>
+<p>Please note, that IP addressing in <code>namespace-1</code> overlaps with addressing of primary native interfaces - and it is ok ;)</p></blockquote>
+<h3 id="creating-new-subinterfaces">Creating new subinterfaces:<a hidden class="anchor" aria-hidden="true" href="#creating-new-subinterfaces">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Distro</th>
+          <th><code>command</code></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Alpine</td>
+          <td><code>ip link add link eth1 name eth1.100 type vlan id 100</code></td>
+      </tr>
+      <tr>
+          <td>Ubuntu</td>
+          <td><code>ip link add link ens224 name ens224.100 type vlan id 100</code></td>
+      </tr>
+      <tr>
+          <td>Debian</td>
+          <td><code>ip link add link ens224 name ens224.100 type vlan id 100</code></td>
+      </tr>
+      <tr>
+          <td>Rocky</td>
+          <td><code>ip link add link ens34 name ens34.100 type vlan id 100</code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="assign-new-subinterface-to-the-vrf">Assign new subinterface to the &ldquo;VRF&rdquo;:<a hidden class="anchor" aria-hidden="true" href="#assign-new-subinterface-to-the-vrf">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Distro</th>
+          <th><code>command</code></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Alpine</td>
+          <td><code>ip link set eth1.100 netns namespace-1</code></td>
+      </tr>
+      <tr>
+          <td>Ubuntu</td>
+          <td><code>ip link set ens224.100 netns namespace-1</code></td>
+      </tr>
+      <tr>
+          <td>Debian</td>
+          <td><code>ip link set ens224.100 netns namespace-1</code></td>
+      </tr>
+      <tr>
+          <td>Rocky</td>
+          <td><code>ip link set ens34.100 netns namespace-1</code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="bring-new-subinterfaces-up-in-the-vrf">Bring new subinterfaces up in the &ldquo;VRF&rdquo;:<a hidden class="anchor" aria-hidden="true" href="#bring-new-subinterfaces-up-in-the-vrf">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Distro</th>
+          <th><code>command</code></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Alpine</td>
+          <td><code>ip netns exec namespace-1 ip link set eth1.100 up</code></td>
+      </tr>
+      <tr>
+          <td>Ubuntu</td>
+          <td><code>ip netns exec namespace-1 ip link set ens224.100 up</code></td>
+      </tr>
+      <tr>
+          <td>Debian</td>
+          <td><code>ip netns exec namespace-1 ip link set ens224.100 up</code></td>
+      </tr>
+      <tr>
+          <td>Rocky</td>
+          <td><code>ip netns exec namespace-1 ip link set ens34.100 up</code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="assign-ip-in-the-vrf">Assign IP in the &ldquo;VRF&rdquo;:<a hidden class="anchor" aria-hidden="true" href="#assign-ip-in-the-vrf">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Distro</th>
+          <th><code>command</code></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Alpine</td>
+          <td><code>ip netns exec namespace-1 ip addr add 10.208.116.201/24 dev eth1.100</code></td>
+      </tr>
+      <tr>
+          <td>Ubuntu</td>
+          <td><code>ip netns exec namespace-1 ip addr add 10.208.116.202/24 dev ens224.100</code></td>
+      </tr>
+      <tr>
+          <td>Debian</td>
+          <td><code>ip netns exec namespace-1 ip addr add 10.208.116.203/24 dev ens224.100</code></td>
+      </tr>
+      <tr>
+          <td>Rocky</td>
+          <td><code>ip netns exec namespace-1 ip addr add 10.208.116.204/24 dev ens34.100</code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="create-default-route-in-the-vrf">Create default route in the &ldquo;VRF&rdquo;:<a hidden class="anchor" aria-hidden="true" href="#create-default-route-in-the-vrf">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Distro</th>
+          <th><code>command</code></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Alpine</td>
+          <td><code>ip netns exec namespace-1 ip route add default via 10.208.116.1</code></td>
+      </tr>
+      <tr>
+          <td>Ubuntu</td>
+          <td><code>ip netns exec namespace-1 ip route add default via 10.208.116.1</code></td>
+      </tr>
+      <tr>
+          <td>Debian</td>
+          <td><code>ip netns exec namespace-1 ip route add default via 10.208.116.1</code></td>
+      </tr>
+      <tr>
+          <td>Rocky</td>
+          <td><code>ip netns exec namespace-1 ip route add default via 10.208.116.1</code></td>
+      </tr>
+  </tbody>
+</table>
+<p>And test it:</p>
+<pre tabindex="0"><code>ip netns exec namespace-1 ping 10.208.116.204
+</code></pre><blockquote>
+<p>If you are using vSphere and VMs like me it is essential have primary network adapter configured as <strong>&ldquo;VLAN type&rdquo;</strong> and second interface (with 802.1q trunking&quot;) as <strong>&ldquo;VLAN trunking&rdquo;</strong></p></blockquote>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Playing with Linux interfaces on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fsbezo.github.io%2fposts%2fplaying_with_linux_interfaces%2f&amp;title=Playing%20with%20Linux%20interfaces&amp;summary=Playing%20with%20Linux%20interfaces&amp;source=https%3a%2f%2fsbezo.github.io%2fposts%2fplaying_with_linux_interfaces%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Playing with Linux interfaces on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fsbezo.github.io%2fposts%2fplaying_with_linux_interfaces%2f&title=Playing%20with%20Linux%20interfaces">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://sbezo.github.io/">sbezo.github.io</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
