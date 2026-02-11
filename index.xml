@@ -6,8 +6,15 @@
     <description>Recent content on sbezo.github.io</description>
     <generator>Hugo -- 0.149.0-DEV</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 29 Jan 2026 14:44:23 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 09 Feb 2026 12:12:10 +0000</lastBuildDate>
     <atom:link href="https://sbezo.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GitHub Pages and Multi-Branch Deployment</title>
+      <link>https://sbezo.github.io/posts/github_pages_multi-branch_deployment/</link>
+      <pubDate>Mon, 09 Feb 2026 12:12:10 +0000</pubDate>
+      <guid>https://sbezo.github.io/posts/github_pages_multi-branch_deployment/</guid>
+      <description>How to publish multiple branches inside one repository using GitHub Pages</description>
+    </item>
     <item>
       <title>Playing with Linux interfaces</title>
       <link>https://sbezo.github.io/posts/playing_with_linux_interfaces/</link>
