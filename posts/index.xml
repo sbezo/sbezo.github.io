@@ -6,8 +6,15 @@
     <description>Recent content in Posts on sbezo.github.io</description>
     <generator>Hugo -- 0.149.0-DEV</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 09 Feb 2026 12:12:10 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 12 Feb 2026 14:35:45 +0000</lastBuildDate>
     <atom:link href="https://sbezo.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>From Zero to Shell: Spin up an AWS VM in One Click</title>
+      <link>https://sbezo.github.io/posts/vm_with_public_ip_on_one_click/</link>
+      <pubDate>Thu, 12 Feb 2026 14:35:45 +0000</pubDate>
+      <guid>https://sbezo.github.io/posts/vm_with_public_ip_on_one_click/</guid>
+      <description>How to automate a fresh new AWS server using Terraform and Python, triggered directly from SecureCRT</description>
+    </item>
     <item>
       <title>GitHub Pages and Multi-Branch Deployment</title>
       <link>https://sbezo.github.io/posts/github_pages_multi-branch_deployment/</link>
