@@ -6,8 +6,15 @@
     <description>Recent content on sbezo.github.io</description>
     <generator>Hugo -- 0.149.0-DEV</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 23 Apr 2026 13:32:26 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 12 Jun 2026 19:20:15 +0000</lastBuildDate>
     <atom:link href="https://sbezo.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Getting started with local LLMs</title>
+      <link>https://sbezo.github.io/posts/getting_started_with_local_llm/</link>
+      <pubDate>Fri, 12 Jun 2026 19:20:15 +0000</pubDate>
+      <guid>https://sbezo.github.io/posts/getting_started_with_local_llm/</guid>
+      <description>Step-by-step setup of a local LLM with a simple example</description>
+    </item>
     <item>
       <title>Temporary DHCP server</title>
       <link>https://sbezo.github.io/posts/temp_dhcp/</link>
