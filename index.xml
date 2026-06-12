@@ -6,8 +6,15 @@
     <description>Recent content on sbezo.github.io</description>
     <generator>Hugo -- 0.149.0-DEV</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 27 Mar 2026 13:33:22 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 23 Apr 2026 13:32:26 +0000</lastBuildDate>
     <atom:link href="https://sbezo.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Temporary DHCP server</title>
+      <link>https://sbezo.github.io/posts/temp_dhcp/</link>
+      <pubDate>Thu, 23 Apr 2026 13:32:26 +0000</pubDate>
+      <guid>https://sbezo.github.io/posts/temp_dhcp/</guid>
+      <description>How to quickly spin up a short-lived DHCP server in a container</description>
+    </item>
     <item>
       <title>Running Cisco IOS XRd in Containerlab</title>
       <link>https://sbezo.github.io/posts/containerlab_cisco_iosxrd/</link>

@@ -3,12 +3,15 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://sbezo.github.io/posts/</loc>
-    <lastmod>2026-03-27T13:33:22+00:00</lastmod>
-  </url><url>
-    <loc>https://sbezo.github.io/posts/containerlab_cisco_iosxrd/</loc>
-    <lastmod>2026-03-27T13:33:22+00:00</lastmod>
+    <lastmod>2026-04-23T13:32:26+00:00</lastmod>
   </url><url>
     <loc>https://sbezo.github.io/</loc>
+    <lastmod>2026-04-23T13:32:26+00:00</lastmod>
+  </url><url>
+    <loc>https://sbezo.github.io/posts/temp_dhcp/</loc>
+    <lastmod>2026-04-23T13:32:26+00:00</lastmod>
+  </url><url>
+    <loc>https://sbezo.github.io/posts/containerlab_cisco_iosxrd/</loc>
     <lastmod>2026-03-27T13:33:22+00:00</lastmod>
   </url><url>
     <loc>https://sbezo.github.io/posts/vm_with_public_ip_on_one_click/</loc>

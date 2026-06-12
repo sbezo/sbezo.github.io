@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Temporary DHCP server | sbezo.github.io</title>
+<meta name="keywords" content="">
+<meta name="description" content="How to quickly spin up a short-lived DHCP server in a container">
+<meta name="author" content="">
+<link rel="canonical" href="https://sbezo.github.io/posts/temp_dhcp/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.8fe10233a706bc87f2e08b3cf97b8bd4c0a80f10675a143675d59212121037c0.css" integrity="sha256-j&#43;ECM6cGvIfy4Is8&#43;XuL1MCoDxBnWhQ2ddWSEhIQN8A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://sbezo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://sbezo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://sbezo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://sbezo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://sbezo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://sbezo.github.io/posts/temp_dhcp/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css" integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js" integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+        ]
+    });
+});
+</script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-X37ESW6JQL"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-X37ESW6JQL');
+        }
+      </script><meta property="og:url" content="https://sbezo.github.io/posts/temp_dhcp/">
+  <meta property="og:site_name" content="sbezo.github.io">
+  <meta property="og:title" content="Temporary DHCP server">
+  <meta property="og:description" content="How to quickly spin up a short-lived DHCP server in a container">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-04-23T13:32:26+00:00">
+    <meta property="article:modified_time" content="2026-04-23T13:32:26+00:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Temporary DHCP server">
+<meta name="twitter:description" content="How to quickly spin up a short-lived DHCP server in a container">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://sbezo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Temporary DHCP server",
+      "item": "https://sbezo.github.io/posts/temp_dhcp/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Temporary DHCP server",
+  "name": "Temporary DHCP server",
+  "description": "How to quickly spin up a short-lived DHCP server in a container",
+  "keywords": [
+    
+  ],
+  "articleBody": "Running a Temporary DHCP Server in Docker Sometimes you need a DHCP server for only a short lab window. dnsmasq in Docker is a simple option because the container is disposable and the configuration is easy to inspect.\nThese examples assume Docker on Linux, because the container needs direct access to the target Layer 2 segment. Replace ens192 with your real interface name.\nImportant: run this only on a Layer 2 segment where this should be the active DHCP server. If another DHCP server is already active on the same segment, clients can receive leases from the wrong server.\nThere are two useful modes:\nIsolated DHCP only - the safer option. The lab segment uses a separate subnet, the host gets a secondary IP on the target interface, and DHCP does not advertise a default gateway or DNS server. DHCP with gateway and DNS - clients receive normal network parameters and can reach other networks through the advertised router. 1. Find the Target Interface The following commands require the iproute2 package.\nIf you want to use the interface with the current default route:\nip route show default To list all interfaces:\nip link show 2. Create the Dockerfile Create Dockerfile:\nFROM alpine:3.23.3 RUN apk add --no-cache dnsmasq EXPOSE 67/udp 53/udp ENTRYPOINT [\"dnsmasq\", \"-k\", \"--log-facility=-\"] This keeps dnsmasq in the foreground and sends logs to stdout, so docker compose logs works as expected.\n3. Create the Compose File Create docker-compose.yml:\nservices: dnsmasq: build: . container_name: temp-dhcp restart: unless-stopped network_mode: host cap_add: - NET_ADMIN - NET_RAW volumes: - ./dnsmasq.conf:/etc/dnsmasq.conf:ro network_mode: host is the important part. DHCP uses broadcast traffic, so host networking makes the container behave like a local DHCP service on the target interface.\nOption 1: Isolated DHCP Only Use this when the connected devices should not interact with the current network. The host only gets a temporary secondary IP so you can manage or test devices in the isolated subnet.\nAdd a temporary IP address to the host:\nsudo ip addr add 10.255.255.1/24 dev ens192 Create dnsmasq.conf:\ninterface=ens192 bind-interfaces log-dhcp dhcp-authoritative port=0 dhcp-range=10.255.255.10,10.255.255.254,255.255.255.0,1h dhcp-option=option:router dhcp-option=option:dns-server What matters here:\ninterface=ens192 binds DHCP to the target interface. port=0 disables the DNS service in dnsmasq. dhcp-range=... defines the lease pool and lease time. dhcp-option=option:router suppresses the default router option. dhcp-option=option:dns-server suppresses the default DNS server option. Clients will receive only an address and mask from 10.255.255.0/24. They can talk to the host address 10.255.255.1 and to each other on that isolated segment, but they will not receive a default gateway or DNS server.\nOption 2: DHCP with Gateway and DNS Use this when clients should receive full connectivity settings. This must be the only DHCP server on the Layer 2 segment, or clients can receive leases from the wrong server.\nExample where an existing router provides connectivity:\ninterface=ens192 bind-interfaces log-dhcp dhcp-authoritative port=0 dhcp-range=192.168.50.100,192.168.50.150,255.255.255.0,1h dhcp-option=option:router,192.168.50.1 dhcp-option=option:dns-server,8.8.8.8 In this mode, dnsmasq still does not run DNS itself. It only tells clients which DNS servers to use.\nIf the Docker host should act as the router for an isolated subnet, advertise the host IP as the gateway and enable IP forwarding and NAT on the host. Example:\nsudo ip addr add 10.255.255.1/24 dev ens192 sudo sysctl -w net.ipv4.ip_forward=1 sudo iptables -t nat -A POSTROUTING -s 10.255.255.0/24 -o eth0 -j MASQUERADE Then use this DHCP configuration:\ninterface=ens192 bind-interfaces log-dhcp dhcp-authoritative port=0 dhcp-range=10.255.255.10,10.255.255.254,255.255.255.0,1h dhcp-option=option:router,10.255.255.1 dhcp-option=option:dns-server,1.1.1.1,8.8.8.8 Replace eth0 in the NAT command with the host interface that has upstream connectivity.\n4. Start the DHCP Server Run:\ndocker compose up -d --build docker compose logs -f dnsmasq For Option 1 and the NAT variant of Option 2, the lease range is:\n10.255.255.10 - 10.255.255.254 For the existing-router variant of Option 2, adjust the range, router, and DNS servers to match that network.\n5. Stop and Clean Up When the temporary DHCP window is over:\ndocker compose down If you added the secondary IP manually, remove it:\nsudo ip addr del 10.255.255.1/24 dev ens192 If you added the NAT rule, remove it too:\nsudo iptables -t nat -D POSTROUTING -s 10.255.255.0/24 -o eth0 -j MASQUERADE Notes Make sure no other DHCP server is active on the same Layer 2 segment. Replace ens192 and eth0 with your real interface names. Adjust the subnet, range, lease time, router, and DNS servers to fit your environment. If you enabled IP forwarding only for this test, disable it again after the test if the host should not route traffic. ",
+  "wordCount" : "734",
+  "inLanguage": "en",
+  "datePublished": "2026-04-23T13:32:26Z",
+  "dateModified": "2026-04-23T13:32:26Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://sbezo.github.io/posts/temp_dhcp/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "sbezo.github.io",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://sbezo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://sbezo.github.io/" accesskey="h" title="sbezo.github.io (Alt + H)">sbezo.github.io</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://sbezo.github.io/posts/" title="Posts">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://sbezo.github.io/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Temporary DHCP server
+    </h1>
+    <div class="post-meta"><span title='2026-04-23 13:32:26 +0000 UTC'>April 23, 2026</span>
+
+</div>
+  </header> 
+  <div class="post-content"><h2 id="running-a-temporary-dhcp-server-in-docker">Running a Temporary DHCP Server in Docker<a hidden class="anchor" aria-hidden="true" href="#running-a-temporary-dhcp-server-in-docker">#</a></h2>
+<p>Sometimes you need a DHCP server for only a short lab window.
+<code>dnsmasq</code> in Docker is a simple option because the container is disposable and the configuration is easy to inspect.</p>
+<p>These examples assume Docker on Linux, because the container needs direct access to the target Layer 2 segment. Replace <code>ens192</code> with your real interface name.</p>
+<p>Important: run this only on a Layer 2 segment where this should be the active DHCP server. If another DHCP server is already active on the same segment, clients can receive leases from the wrong server.</p>
+<p>There are two useful modes:</p>
+<ol>
+<li><strong>Isolated DHCP only</strong> - the safer option. The lab segment uses a separate subnet, the host gets a secondary IP on the target interface, and DHCP does not advertise a default gateway or DNS server.</li>
+<li><strong>DHCP with gateway and DNS</strong> - clients receive normal network parameters and can reach other networks through the advertised router.</li>
+</ol>
+<h3 id="1-find-the-target-interface">1. Find the Target Interface<a hidden class="anchor" aria-hidden="true" href="#1-find-the-target-interface">#</a></h3>
+<p>The following commands require the <code>iproute2</code> package.</p>
+<p>If you want to use the interface with the current default route:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ip route show default
+</span></span></code></pre></div><p>To list all interfaces:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ip link show
+</span></span></code></pre></div><h3 id="2-create-the-dockerfile">2. Create the Dockerfile<a hidden class="anchor" aria-hidden="true" href="#2-create-the-dockerfile">#</a></h3>
+<p>Create <code>Dockerfile</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> alpine:3.23.3</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> apk add --no-cache dnsmasq<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">EXPOSE</span><span style="color:#e6db74"> 67/udp 53/udp</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ENTRYPOINT</span> [<span style="color:#e6db74">&#34;dnsmasq&#34;</span>, <span style="color:#e6db74">&#34;-k&#34;</span>, <span style="color:#e6db74">&#34;--log-facility=-&#34;</span>]<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><p>This keeps <code>dnsmasq</code> in the foreground and sends logs to stdout, so <code>docker compose logs</code> works as expected.</p>
+<h3 id="3-create-the-compose-file">3. Create the Compose File<a hidden class="anchor" aria-hidden="true" href="#3-create-the-compose-file">#</a></h3>
+<p>Create <code>docker-compose.yml</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">services</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">dnsmasq</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">build</span>: <span style="color:#ae81ff">.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">container_name</span>: <span style="color:#ae81ff">temp-dhcp</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">restart</span>: <span style="color:#ae81ff">unless-stopped</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">network_mode</span>: <span style="color:#ae81ff">host</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">cap_add</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">NET_ADMIN</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">NET_RAW</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">./dnsmasq.conf:/etc/dnsmasq.conf:ro</span>
+</span></span></code></pre></div><p><code>network_mode: host</code> is the important part. DHCP uses broadcast traffic, so host networking makes the container behave like a local DHCP service on the target interface.</p>
+<h3 id="option-1-isolated-dhcp-only">Option 1: Isolated DHCP Only<a hidden class="anchor" aria-hidden="true" href="#option-1-isolated-dhcp-only">#</a></h3>
+<p>Use this when the connected devices should not interact with the current network. The host only gets a temporary secondary IP so you can manage or test devices in the isolated subnet.</p>
+<p>Add a temporary IP address to the host:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo ip addr add 10.255.255.1/24 dev ens192
+</span></span></code></pre></div><p>Create <code>dnsmasq.conf</code>:</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">interface=ens192
+bind-interfaces
+
+log-dhcp
+dhcp-authoritative
+port=0
+
+dhcp-range=10.255.255.10,10.255.255.254,255.255.255.0,1h
+dhcp-option=option:router
+dhcp-option=option:dns-server
+</code></pre><p>What matters here:</p>
+<ul>
+<li><code>interface=ens192</code> binds DHCP to the target interface.</li>
+<li><code>port=0</code> disables the DNS service in <code>dnsmasq</code>.</li>
+<li><code>dhcp-range=...</code> defines the lease pool and lease time.</li>
+<li><code>dhcp-option=option:router</code> suppresses the default router option.</li>
+<li><code>dhcp-option=option:dns-server</code> suppresses the default DNS server option.</li>
+</ul>
+<p>Clients will receive only an address and mask from <code>10.255.255.0/24</code>. They can talk to the host address <code>10.255.255.1</code> and to each other on that isolated segment, but they will not receive a default gateway or DNS server.</p>
+<h3 id="option-2-dhcp-with-gateway-and-dns">Option 2: DHCP with Gateway and DNS<a hidden class="anchor" aria-hidden="true" href="#option-2-dhcp-with-gateway-and-dns">#</a></h3>
+<p>Use this when clients should receive full connectivity settings. This must be the only DHCP server on the Layer 2 segment, or clients can receive leases from the wrong server.</p>
+<p>Example where an existing router provides connectivity:</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">interface=ens192
+bind-interfaces
+
+log-dhcp
+dhcp-authoritative
+port=0
+
+dhcp-range=192.168.50.100,192.168.50.150,255.255.255.0,1h
+dhcp-option=option:router,192.168.50.1
+dhcp-option=option:dns-server,8.8.8.8
+</code></pre><p>In this mode, <code>dnsmasq</code> still does not run DNS itself. It only tells clients which DNS servers to use.</p>
+<p>If the Docker host should act as the router for an isolated subnet, advertise the host IP as the gateway and enable IP forwarding and NAT on the host. Example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo ip addr add 10.255.255.1/24 dev ens192
+</span></span><span style="display:flex;"><span>sudo sysctl -w net.ipv4.ip_forward<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>sudo iptables -t nat -A POSTROUTING -s 10.255.255.0/24 -o eth0 -j MASQUERADE
+</span></span></code></pre></div><p>Then use this DHCP configuration:</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">interface=ens192
+bind-interfaces
+
+log-dhcp
+dhcp-authoritative
+port=0
+
+dhcp-range=10.255.255.10,10.255.255.254,255.255.255.0,1h
+dhcp-option=option:router,10.255.255.1
+dhcp-option=option:dns-server,1.1.1.1,8.8.8.8
+</code></pre><p>Replace <code>eth0</code> in the NAT command with the host interface that has upstream connectivity.</p>
+<h3 id="4-start-the-dhcp-server">4. Start the DHCP Server<a hidden class="anchor" aria-hidden="true" href="#4-start-the-dhcp-server">#</a></h3>
+<p>Run:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker compose up -d --build
+</span></span><span style="display:flex;"><span>docker compose logs -f dnsmasq
+</span></span></code></pre></div><p>For Option 1 and the NAT variant of Option 2, the lease range is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>10.255.255.10 - 10.255.255.254
+</span></span></code></pre></div><p>For the existing-router variant of Option 2, adjust the range, router, and DNS servers to match that network.</p>
+<h3 id="5-stop-and-clean-up">5. Stop and Clean Up<a hidden class="anchor" aria-hidden="true" href="#5-stop-and-clean-up">#</a></h3>
+<p>When the temporary DHCP window is over:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker compose down
+</span></span></code></pre></div><p>If you added the secondary IP manually, remove it:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo ip addr del 10.255.255.1/24 dev ens192
+</span></span></code></pre></div><p>If you added the NAT rule, remove it too:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo iptables -t nat -D POSTROUTING -s 10.255.255.0/24 -o eth0 -j MASQUERADE
+</span></span></code></pre></div><h3 id="notes">Notes<a hidden class="anchor" aria-hidden="true" href="#notes">#</a></h3>
+<ul>
+<li>Make sure no other DHCP server is active on the same Layer 2 segment.</li>
+<li>Replace <code>ens192</code> and <code>eth0</code> with your real interface names.</li>
+<li>Adjust the subnet, range, lease time, router, and DNS servers to fit your environment.</li>
+<li>If you enabled IP forwarding only for this test, disable it again after the test if the host should not route traffic.</li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Temporary DHCP server on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fsbezo.github.io%2fposts%2ftemp_dhcp%2f&amp;title=Temporary%20DHCP%20server&amp;summary=Temporary%20DHCP%20server&amp;source=https%3a%2f%2fsbezo.github.io%2fposts%2ftemp_dhcp%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Temporary DHCP server on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fsbezo.github.io%2fposts%2ftemp_dhcp%2f&title=Temporary%20DHCP%20server">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://sbezo.github.io/">sbezo.github.io</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
