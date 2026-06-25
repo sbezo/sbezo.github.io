@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Simple MCP Server | sbezo.github.io</title>
+<meta name="keywords" content="">
+<meta name="description" content="How to build Cisco CLI based MCP server from scratch with local model">
+<meta name="author" content="">
+<link rel="canonical" href="https://sbezo.github.io/posts/simple_mcp_server/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.8fe10233a706bc87f2e08b3cf97b8bd4c0a80f10675a143675d59212121037c0.css" integrity="sha256-j&#43;ECM6cGvIfy4Is8&#43;XuL1MCoDxBnWhQ2ddWSEhIQN8A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://sbezo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://sbezo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://sbezo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://sbezo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://sbezo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://sbezo.github.io/posts/simple_mcp_server/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css" integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js" integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+        ]
+    });
+});
+</script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-X37ESW6JQL"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-X37ESW6JQL');
+        }
+      </script><meta property="og:url" content="https://sbezo.github.io/posts/simple_mcp_server/">
+  <meta property="og:site_name" content="sbezo.github.io">
+  <meta property="og:title" content="Simple MCP Server">
+  <meta property="og:description" content="How to build Cisco CLI based MCP server from scratch with local model">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-06-25T08:33:16+00:00">
+    <meta property="article:modified_time" content="2026-06-25T08:33:16+00:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Simple MCP Server">
+<meta name="twitter:description" content="How to build Cisco CLI based MCP server from scratch with local model">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://sbezo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Simple MCP Server",
+      "item": "https://sbezo.github.io/posts/simple_mcp_server/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Simple MCP Server",
+  "name": "Simple MCP Server",
+  "description": "How to build Cisco CLI based MCP server from scratch with local model",
+  "keywords": [
+    
+  ],
+  "articleBody": "This is a beginner-friendly walkthrough of building a tiny python-based MCP server built from scratch that lets an AI tool run one safe Cisco CLI command over SSH.\nI use a local qwen3:4b model on Apple Mac - more details\nThe goal is not to build a full network automation platform. The goal is to understand each moving part.\nWhat We Are Building OpenWebUI does not SSH into the router directly. Instead, it connects to our MCP server. The MCP server exposes tools. One of those tools runs the Cisco command.\nPrerequisites running cisco lab device (CSR1000V in my case) LLM model (I use local qwen3:4b - for concept it is enough) docker (I use docker host on Apple silicon) First, a little theory…\nWhat Is MCP? MCP means Model Context Protocol.\nFor this project, the simple explanation is:\nMCP lets an AI application discover and call external tools.\nAn MCP server is just a program that says:\nHere are the tools I provide. Here is how to call them. Here is the result. In our case, the MCP server provides only one tool:\ncisco_show_version\nProject Files The small project uses these 3 files to keep it simple:\n├── 📄 .env ├── 📄 docker-compose.yml └── 📄 server.py .env The .env file contains secrets for connecting to the lab router and minimum information for the OpenWebUI client to run from Docker.\nHere is an example with placeholder values. If you follow along, create the .env file in your repository and enter the correct values.\nCISCO_HOST=10.20.16.111 CISCO_PORT=22 CISCO_USERNAME=admin CISCO_PASSWORD=jAYPs3eaGubaPtsChRPV CISCO_ENABLE=udbf9tJh7xs898eaWMVw WEBUI_SECRET_KEY=1032edc6c329a93e08b3e97fb8cc39a61e316d78f1ac1dcf9c6c7a0d6e560cc4 OLLAMA_BASE_URL=http://host.docker.internal:11434 docker-compose.yml This is for running OpenWebUI which will connect to LLM on the one side and to the MCP server on the other side. My exact file looks like this:\n--- networks: pa_mcp_network: driver: bridge volumes: open-webui: driver: local services: openwebui: image: ghcr.io/open-webui/open-webui:main container_name: openwebui restart: unless-stopped ports: - \"8080:8080\" networks: - pa_mcp_network environment: - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY} - OLLAMA_BASE_URL=${OLLAMA_BASE_URL} volumes: - open-webui:/app/backend/data This is not main topic here. I’m just reusing working client from my another project to make life easier. [pa_mcp_2026]\nserver.py This is the core file that contains the MCP server logic. We are going to build it step by step.\nDependencies We will need some Python libraries, so I recommend using a Python virtual environment.\npython3 -m venv .venv source .venv/bin/activate pip install mcp paramiko python-dotenv uvicorn Step 1: Start With a Placeholder MCP Server Before connecting to Cisco, I first created a working MCP server with one fake tool.\nThe important class is FastMCP:\nfrom mcp.server.fastmcp import FastMCP Then I create an MCP server object:\nmcp = FastMCP( name=\"cisco-cli-lab\", host=\"0.0.0.0\", port=8000, streamable_http_path=\"/mcp\", ) We call it from inside Docker, so the host must be 0.0.0.0 to accept connections from the container.\nThis creates a Streamable HTTP MCP server.\nThe MCP endpoint is: http://localhost:8000/mcp\nBecause OpenWebUI runs in Docker, it connects to the host machine using:\nhttp://host.docker.internal:8000/mcp\nStep 2: Add the First Tool In Python, we register a tool with a decorator:\n@mcp.tool( name=\"cisco_show_version\", title=\"Cisco Show Version\", description=\"Run the Cisco 'show version' command.\", ) def cisco_show_version() -\u003e str: return \"Placeholder output\" The @mcp.tool(...) line means:\nRegister this Python function as an MCP tool.\nSo when OpenWebUI asks the MCP server what tools are available, the server can answer:\ncisco_show_version\nAt this stage, the function only returned placeholder text. This was useful because it tested the MCP connection before adding SSH.\nStep 3: Separate Tool Name From Cisco Command The MCP tool name and the Cisco command are not the same thing.\nThe MCP tool name is:\ncisco_show_version\nThe Cisco CLI command is:\nshow version\nWe made that mapping explicit:\ndef run_cisco_command(command: str) -\u003e str: return f\"Would run Cisco command: {command}\" @mcp.tool( name=\"cisco_show_version\", title=\"Cisco Show Version\", description=\"Run the Cisco 'show version' command.\", ) def cisco_show_version() -\u003e str: return run_cisco_command(\"show version\") This is an important design idea:\nThe MCP tool decides which Cisco command is allowed.\nStep 4: Add the .env Contract We loaded .env with:\nfrom dotenv import load_dotenv load_dotenv() Then we added a helper for required variables:\ndef get_required_env(name: str) -\u003e str: value = os.getenv(name) if not value: raise RuntimeError(f\"Missing required environment variable: {name}\") return value This makes errors clear. If CISCO_HOST is missing, the program says exactly what is wrong.\nStep 5: Make OpenWebUI Reach the MCP Server OpenWebUI is running in Docker.\nThat means 127.0.0.1 from inside the container does not refer to the host machine—it refers to the container itself.\nSo the MCP server must listen on all local interfaces:\nhost=\"0.0.0.0\" And in OpenWebUI, the MCP server URL is:\nhttp://host.docker.internal:8000/mcp\nThis is the important Docker networking detail.\nStep 6: Add Paramiko After the MCP tool worked with placeholder output, we replaced the helper with real SSH code.\nThe SSH helper now:\nReads router settings from .env Connects with Paramiko Opens an interactive shell Enters enable mode if CISCO_ENABLE exists Sends terminal length 0 Sends show version Reads the output Closes the SSH connection Why interactive shell instead of exec_command()?\nFor Linux servers, this often works:\nclient.exec_command(\"show version\") But Cisco network devices often behave more naturally with an interactive CLI session. So we used:\nshell = client.invoke_shell() That is closer to a human typing commands into the router.\nFinal server.py This is the working minimal version:\nimport os import time from dotenv import load_dotenv from mcp.server.fastmcp import FastMCP import paramiko load_dotenv() mcp = FastMCP( name=\"cisco-cli-lab\", host=\"0.0.0.0\", port=8000, streamable_http_path=\"/mcp\", ) def get_required_env(name: str) -\u003e str: value = os.getenv(name) if not value: raise RuntimeError(f\"Missing required environment variable: {name}\") return value def read_shell_output(shell: paramiko.Channel, wait_seconds: float = 1.0) -\u003e str: output = \"\" deadline = time.time() + wait_seconds while time.time() \u003c deadline: if shell.recv_ready(): output += shell.recv(65535).decode(errors=\"replace\") deadline = time.time() + wait_seconds else: time.sleep(0.1) return output def run_cisco_command(command: str) -\u003e str: host = get_required_env(\"CISCO_HOST\") port = int(os.getenv(\"CISCO_PORT\", \"22\")) username = get_required_env(\"CISCO_USERNAME\") password = get_required_env(\"CISCO_PASSWORD\") enable_secret = os.getenv(\"CISCO_ENABLE\") client = paramiko.SSHClient() client.set_missing_host_key_policy(paramiko.AutoAddPolicy()) try: client.connect( hostname=host, port=port, username=username, password=password, look_for_keys=False, allow_agent=False, timeout=10, ) shell = client.invoke_shell() read_shell_output(shell) if enable_secret: shell.send(\"enable\\n\") time.sleep(0.5) shell.send(f\"{enable_secret}\\n\") read_shell_output(shell) shell.send(\"terminal length 0\\n\") read_shell_output(shell) shell.send(f\"{command}\\n\") output = read_shell_output(shell, wait_seconds=2.0) return output.strip() finally: client.close() @mcp.tool( name=\"cisco_show_version\", title=\"Cisco Show Version\", description=\"Run the Cisco 'show version' command.\", ) def cisco_show_version() -\u003e str: return run_cisco_command(\"show version\") if __name__ == \"__main__\": mcp.run(transport=\"streamable-http\") Testing Without OpenWebUI Before testing through OpenWebUI, we can test the Python function directly:\nsource .venv/bin/activate python -c \"from server import cisco_show_version; print(cisco_show_version())\" If the credentials and SSH access are correct, this prints the router’s show version output.\nRunning the MCP Server Start the server:\nsource .venv/bin/activate python server.py The server listens on:\nhttp://0.0.0.0:8000/mcp For OpenWebUI in Docker, configure the MCP server URL as:\nhttp://host.docker.internal:8000/mcp OpenWebUI should discover this tool:\ncisco_show_version When the tool is called, it connects to the router and returns the raw output of:\nshow version Testing with OpenWebUI Why Start This Small? Network automation can become dangerous quickly.\nIt is tempting to create one general tool:\nrun_command(command) But that would allow the AI to send anything, including configuration or destructive commands.\nStarting with one explicit read-only tool is safer:\ncisco_show_version -\u003e show version The next safe tools could be:\ncisco_show_ip_interface_brief -\u003e show ip interface brief cisco_show_interfaces -\u003e show interfaces cisco_show_ip_route -\u003e show ip route Each tool should map to a known safe command.\nWhat We Learned We built the project in small layers:\nCreate a minimal MCP server. Register one MCP tool. Map that tool to one Cisco command. Load connection settings from .env. Make Docker-based OpenWebUI reach the server. Add Paramiko SSH. Test the tool from OpenWebUI. The most important lesson is separation:\nOpenWebUI is the user interface. MCP is the tool protocol. FastMCP is the Python server helper. Paramiko is the SSH library. The Cisco router only sees normal CLI commands. That separation makes the system easier to understand and safer to extend.\n",
+  "wordCount" : "1288",
+  "inLanguage": "en",
+  "datePublished": "2026-06-25T08:33:16Z",
+  "dateModified": "2026-06-25T08:33:16Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://sbezo.github.io/posts/simple_mcp_server/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "sbezo.github.io",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://sbezo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://sbezo.github.io/" accesskey="h" title="sbezo.github.io (Alt + H)">sbezo.github.io</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://sbezo.github.io/posts/" title="Posts">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://sbezo.github.io/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Simple MCP Server
+    </h1>
+    <div class="post-meta"><span title='2026-06-25 08:33:16 +0000 UTC'>June 25, 2026</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>This is a beginner-friendly walkthrough of building a tiny python-based MCP server built from scratch that lets
+an AI tool run one safe Cisco CLI command over SSH.</p>
+<p>I use a local qwen3:4b model on Apple Mac - <a href="/posts/Getting_started_with_local_LLM/">more details</a></p>
+<p>The goal is not to build a full network automation platform. The goal is to understand each moving part.</p>
+<h2 id="what-we-are-building">What We Are Building<a hidden class="anchor" aria-hidden="true" href="#what-we-are-building">#</a></h2>
+<p><img loading="lazy" src="/img/simple_mcp_server_1.png"></p>
+<p>OpenWebUI does not SSH into the router directly. Instead, it connects to our MCP
+server. The MCP server exposes tools. One of those tools runs the Cisco command.</p>
+<h2 id="prerequisites">Prerequisites<a hidden class="anchor" aria-hidden="true" href="#prerequisites">#</a></h2>
+<ul>
+<li>running cisco lab device (CSR1000V in my case)</li>
+<li>LLM model (I use local qwen3:4b - for concept it is enough)</li>
+<li>docker (I use docker host on Apple silicon)</li>
+</ul>
+<p>First, a little theory&hellip;</p>
+<h2 id="what-is-mcp">What Is MCP?<a hidden class="anchor" aria-hidden="true" href="#what-is-mcp">#</a></h2>
+<p>MCP means Model Context Protocol.</p>
+<p>For this project, the simple explanation is:</p>
+<p><strong>MCP lets an AI application discover and call external tools.</strong></p>
+<p>An MCP server is just a program that says:</p>
+<ul>
+<li>Here are the tools I provide.</li>
+<li>Here is how to call them.</li>
+<li>Here is the result.</li>
+</ul>
+<p>In our case, the MCP server provides only one tool:</p>
+<p><code>cisco_show_version</code></p>
+<h2 id="project-files">Project Files<a hidden class="anchor" aria-hidden="true" href="#project-files">#</a></h2>
+<p>The small project uses these 3 files to keep it simple:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>├── 📄 .env
+</span></span><span style="display:flex;"><span>├── 📄 docker-compose.yml
+</span></span><span style="display:flex;"><span>└── 📄 server.py
+</span></span></code></pre></div><h3 id="env">.env<a hidden class="anchor" aria-hidden="true" href="#env">#</a></h3>
+<p>The <code>.env</code> file contains secrets for connecting to the lab router and minimum information for the OpenWebUI client to run from Docker.</p>
+<p>Here is an example with placeholder values. If you follow along, create the <code>.env</code> file in your repository and enter the correct values.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>CISCO_HOST=10.20.16.111
+</span></span><span style="display:flex;"><span>CISCO_PORT=22
+</span></span><span style="display:flex;"><span>CISCO_USERNAME=admin
+</span></span><span style="display:flex;"><span>CISCO_PASSWORD=jAYPs3eaGubaPtsChRPV
+</span></span><span style="display:flex;"><span>CISCO_ENABLE=udbf9tJh7xs898eaWMVw
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>WEBUI_SECRET_KEY=1032edc6c329a93e08b3e97fb8cc39a61e316d78f1ac1dcf9c6c7a0d6e560cc4
+</span></span><span style="display:flex;"><span>OLLAMA_BASE_URL=http://host.docker.internal:11434
+</span></span></code></pre></div><h3 id="docker-composeyml">docker-compose.yml<a hidden class="anchor" aria-hidden="true" href="#docker-composeyml">#</a></h3>
+<p>This is for running OpenWebUI which will connect to LLM on the one side and to the MCP server on the other side.
+My exact file looks like this:</p>
+<pre tabindex="0"><code>---
+networks:
+  pa_mcp_network:
+    driver: bridge
+    
+volumes:
+  open-webui:
+    driver: local
+
+services:
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: openwebui
+    restart: unless-stopped
+    ports:
+      - &#34;8080:8080&#34;
+    networks:
+      - pa_mcp_network
+    environment:
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL}
+    volumes:
+      - open-webui:/app/backend/data
+</code></pre><blockquote>
+<p>This is not main topic here. I&rsquo;m just reusing working client from my another project to make life easier. <a href="https://github.com/sbezo/pa_mcp_2026.git">[pa_mcp_2026]</a></p></blockquote>
+<h3 id="serverpy">server.py<a hidden class="anchor" aria-hidden="true" href="#serverpy">#</a></h3>
+<p>This is the core file that contains the MCP server logic. We are going to build it step by step.</p>
+<h2 id="dependencies">Dependencies<a hidden class="anchor" aria-hidden="true" href="#dependencies">#</a></h2>
+<p>We will need some Python libraries, so I recommend using a Python virtual environment.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python3 -m venv .venv
+</span></span><span style="display:flex;"><span>source .venv/bin/activate
+</span></span><span style="display:flex;"><span>pip install mcp paramiko python-dotenv uvicorn
+</span></span></code></pre></div><h2 id="step-1-start-with-a-placeholder-mcp-server">Step 1: Start With a Placeholder MCP Server<a hidden class="anchor" aria-hidden="true" href="#step-1-start-with-a-placeholder-mcp-server">#</a></h2>
+<p>Before connecting to Cisco, I first created a working MCP server with one fake
+tool.</p>
+<p>The important class is <code>FastMCP</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> mcp.server.fastmcp <span style="color:#f92672">import</span> FastMCP
+</span></span></code></pre></div><p>Then I create an MCP server object:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>mcp <span style="color:#f92672">=</span> FastMCP(
+</span></span><span style="display:flex;"><span>    name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cisco-cli-lab&#34;</span>,
+</span></span><span style="display:flex;"><span>    host<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0.0.0.0&#34;</span>,
+</span></span><span style="display:flex;"><span>    port<span style="color:#f92672">=</span><span style="color:#ae81ff">8000</span>,
+</span></span><span style="display:flex;"><span>    streamable_http_path<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/mcp&#34;</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><blockquote>
+<p>We call it from inside Docker, so the host must be <code>0.0.0.0</code> to accept connections from the container.</p></blockquote>
+<p>This creates a Streamable HTTP MCP server.</p>
+<p>The MCP endpoint is: <code>http://localhost:8000/mcp</code></p>
+<p>Because OpenWebUI runs in Docker, it connects to the host machine using:</p>
+<p><code>http://host.docker.internal:8000/mcp</code></p>
+<h2 id="step-2-add-the-first-tool">Step 2: Add the First Tool<a hidden class="anchor" aria-hidden="true" href="#step-2-add-the-first-tool">#</a></h2>
+<p>In Python, we register a tool with a decorator:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#a6e22e">@mcp.tool</span>(
+</span></span><span style="display:flex;"><span>    name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cisco_show_version&#34;</span>,
+</span></span><span style="display:flex;"><span>    title<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Cisco Show Version&#34;</span>,
+</span></span><span style="display:flex;"><span>    description<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Run the Cisco &#39;show version&#39; command.&#34;</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">cisco_show_version</span>() <span style="color:#f92672">-&gt;</span> str:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;Placeholder output&#34;</span>
+</span></span></code></pre></div><p>The <code>@mcp.tool(...)</code> line means:</p>
+<p><strong>Register this Python function as an MCP tool.</strong></p>
+<p>So when OpenWebUI asks the MCP server what tools are available, the server can
+answer:</p>
+<p><code>cisco_show_version</code></p>
+<p>At this stage, the function only returned placeholder text. This was useful
+because it tested the MCP connection before adding SSH.</p>
+<h2 id="step-3-separate-tool-name-from-cisco-command">Step 3: Separate Tool Name From Cisco Command<a hidden class="anchor" aria-hidden="true" href="#step-3-separate-tool-name-from-cisco-command">#</a></h2>
+<p>The MCP tool name and the Cisco command are not the same thing.</p>
+<p>The MCP tool name is:</p>
+<p><code>cisco_show_version</code></p>
+<p>The Cisco CLI command is:</p>
+<p><code>show version</code></p>
+<p>We made that mapping explicit:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run_cisco_command</span>(command: str) <span style="color:#f92672">-&gt;</span> str:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Would run Cisco command: </span><span style="color:#e6db74">{</span>command<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@mcp.tool</span>(
+</span></span><span style="display:flex;"><span>    name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cisco_show_version&#34;</span>,
+</span></span><span style="display:flex;"><span>    title<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Cisco Show Version&#34;</span>,
+</span></span><span style="display:flex;"><span>    description<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Run the Cisco &#39;show version&#39; command.&#34;</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">cisco_show_version</span>() <span style="color:#f92672">-&gt;</span> str:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> run_cisco_command(<span style="color:#e6db74">&#34;show version&#34;</span>)
+</span></span></code></pre></div><p>This is an important design idea:</p>
+<blockquote>
+<p><strong>The MCP tool decides which Cisco command is allowed.</strong></p></blockquote>
+<h2 id="step-4-add-the-env-contract">Step 4: Add the .env Contract<a hidden class="anchor" aria-hidden="true" href="#step-4-add-the-env-contract">#</a></h2>
+<p>We loaded <code>.env</code> with:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> dotenv <span style="color:#f92672">import</span> load_dotenv
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>load_dotenv()
+</span></span></code></pre></div><p>Then we added a helper for required variables:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_required_env</span>(name: str) <span style="color:#f92672">-&gt;</span> str:
+</span></span><span style="display:flex;"><span>    value <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>getenv(name)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> value:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">RuntimeError</span>(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Missing required environment variable: </span><span style="color:#e6db74">{</span>name<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> value
+</span></span></code></pre></div><p>This makes errors clear. If <code>CISCO_HOST</code> is missing, the program says exactly
+what is wrong.</p>
+<h2 id="step-5-make-openwebui-reach-the-mcp-server">Step 5: Make OpenWebUI Reach the MCP Server<a hidden class="anchor" aria-hidden="true" href="#step-5-make-openwebui-reach-the-mcp-server">#</a></h2>
+<p>OpenWebUI is running in Docker.</p>
+<p>That means <code>127.0.0.1</code> from inside the container does not refer to the host machine—it refers to the container itself.</p>
+<p>So the MCP server must listen on all local interfaces:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>host<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0.0.0.0&#34;</span>
+</span></span></code></pre></div><p>And in OpenWebUI, the MCP server URL is:</p>
+<p><code>http://host.docker.internal:8000/mcp</code></p>
+<p>This is the important Docker networking detail.</p>
+<h2 id="step-6-add-paramiko">Step 6: Add Paramiko<a hidden class="anchor" aria-hidden="true" href="#step-6-add-paramiko">#</a></h2>
+<p>After the MCP tool worked with placeholder output, we replaced the helper with
+real SSH code.</p>
+<p>The SSH helper now:</p>
+<ul>
+<li>Reads router settings from .env</li>
+<li>Connects with Paramiko</li>
+<li>Opens an interactive shell</li>
+<li>Enters enable mode if CISCO_ENABLE exists</li>
+<li>Sends terminal length 0</li>
+<li>Sends show version</li>
+<li>Reads the output</li>
+<li>Closes the SSH connection</li>
+</ul>
+<p>Why interactive shell instead of <code>exec_command()</code>?</p>
+<p>For Linux servers, this often works:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>client<span style="color:#f92672">.</span>exec_command(<span style="color:#e6db74">&#34;show version&#34;</span>)
+</span></span></code></pre></div><p>But Cisco network devices often behave more naturally with an interactive CLI
+session. So we used:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>shell <span style="color:#f92672">=</span> client<span style="color:#f92672">.</span>invoke_shell()
+</span></span></code></pre></div><p>That is closer to a human typing commands into the router.</p>
+<h2 id="final-serverpy">Final server.py<a hidden class="anchor" aria-hidden="true" href="#final-serverpy">#</a></h2>
+<p>This is the working minimal version:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> time
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> dotenv <span style="color:#f92672">import</span> load_dotenv
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> mcp.server.fastmcp <span style="color:#f92672">import</span> FastMCP
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> paramiko
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>load_dotenv()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mcp <span style="color:#f92672">=</span> FastMCP(
+</span></span><span style="display:flex;"><span>    name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cisco-cli-lab&#34;</span>,
+</span></span><span style="display:flex;"><span>    host<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0.0.0.0&#34;</span>,
+</span></span><span style="display:flex;"><span>    port<span style="color:#f92672">=</span><span style="color:#ae81ff">8000</span>,
+</span></span><span style="display:flex;"><span>    streamable_http_path<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/mcp&#34;</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_required_env</span>(name: str) <span style="color:#f92672">-&gt;</span> str:
+</span></span><span style="display:flex;"><span>    value <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>getenv(name)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> value:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">RuntimeError</span>(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Missing required environment variable: </span><span style="color:#e6db74">{</span>name<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> value
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">read_shell_output</span>(shell: paramiko<span style="color:#f92672">.</span>Channel, wait_seconds: float <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span>) <span style="color:#f92672">-&gt;</span> str:
+</span></span><span style="display:flex;"><span>    output <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    deadline <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time() <span style="color:#f92672">+</span> wait_seconds
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> time<span style="color:#f92672">.</span>time() <span style="color:#f92672">&lt;</span> deadline:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> shell<span style="color:#f92672">.</span>recv_ready():
+</span></span><span style="display:flex;"><span>            output <span style="color:#f92672">+=</span> shell<span style="color:#f92672">.</span>recv(<span style="color:#ae81ff">65535</span>)<span style="color:#f92672">.</span>decode(errors<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;replace&#34;</span>)
+</span></span><span style="display:flex;"><span>            deadline <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time() <span style="color:#f92672">+</span> wait_seconds
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">0.1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> output
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run_cisco_command</span>(command: str) <span style="color:#f92672">-&gt;</span> str:
+</span></span><span style="display:flex;"><span>    host <span style="color:#f92672">=</span> get_required_env(<span style="color:#e6db74">&#34;CISCO_HOST&#34;</span>)
+</span></span><span style="display:flex;"><span>    port <span style="color:#f92672">=</span> int(os<span style="color:#f92672">.</span>getenv(<span style="color:#e6db74">&#34;CISCO_PORT&#34;</span>, <span style="color:#e6db74">&#34;22&#34;</span>))
+</span></span><span style="display:flex;"><span>    username <span style="color:#f92672">=</span> get_required_env(<span style="color:#e6db74">&#34;CISCO_USERNAME&#34;</span>)
+</span></span><span style="display:flex;"><span>    password <span style="color:#f92672">=</span> get_required_env(<span style="color:#e6db74">&#34;CISCO_PASSWORD&#34;</span>)
+</span></span><span style="display:flex;"><span>    enable_secret <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>getenv(<span style="color:#e6db74">&#34;CISCO_ENABLE&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    client <span style="color:#f92672">=</span> paramiko<span style="color:#f92672">.</span>SSHClient()
+</span></span><span style="display:flex;"><span>    client<span style="color:#f92672">.</span>set_missing_host_key_policy(paramiko<span style="color:#f92672">.</span>AutoAddPolicy())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        client<span style="color:#f92672">.</span>connect(
+</span></span><span style="display:flex;"><span>            hostname<span style="color:#f92672">=</span>host,
+</span></span><span style="display:flex;"><span>            port<span style="color:#f92672">=</span>port,
+</span></span><span style="display:flex;"><span>            username<span style="color:#f92672">=</span>username,
+</span></span><span style="display:flex;"><span>            password<span style="color:#f92672">=</span>password,
+</span></span><span style="display:flex;"><span>            look_for_keys<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>,
+</span></span><span style="display:flex;"><span>            allow_agent<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>,
+</span></span><span style="display:flex;"><span>            timeout<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>,
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        shell <span style="color:#f92672">=</span> client<span style="color:#f92672">.</span>invoke_shell()
+</span></span><span style="display:flex;"><span>        read_shell_output(shell)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> enable_secret:
+</span></span><span style="display:flex;"><span>            shell<span style="color:#f92672">.</span>send(<span style="color:#e6db74">&#34;enable</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>            time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">0.5</span>)
+</span></span><span style="display:flex;"><span>            shell<span style="color:#f92672">.</span>send(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>enable_secret<span style="color:#e6db74">}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>            read_shell_output(shell)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        shell<span style="color:#f92672">.</span>send(<span style="color:#e6db74">&#34;terminal length 0</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>        read_shell_output(shell)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        shell<span style="color:#f92672">.</span>send(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>command<span style="color:#e6db74">}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>        output <span style="color:#f92672">=</span> read_shell_output(shell, wait_seconds<span style="color:#f92672">=</span><span style="color:#ae81ff">2.0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> output<span style="color:#f92672">.</span>strip()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">finally</span>:
+</span></span><span style="display:flex;"><span>        client<span style="color:#f92672">.</span>close()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@mcp.tool</span>(
+</span></span><span style="display:flex;"><span>    name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cisco_show_version&#34;</span>,
+</span></span><span style="display:flex;"><span>    title<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Cisco Show Version&#34;</span>,
+</span></span><span style="display:flex;"><span>    description<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Run the Cisco &#39;show version&#39; command.&#34;</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">cisco_show_version</span>() <span style="color:#f92672">-&gt;</span> str:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> run_cisco_command(<span style="color:#e6db74">&#34;show version&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;__main__&#34;</span>:
+</span></span><span style="display:flex;"><span>    mcp<span style="color:#f92672">.</span>run(transport<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;streamable-http&#34;</span>)
+</span></span></code></pre></div><h2 id="testing-without-openwebui">Testing Without OpenWebUI<a hidden class="anchor" aria-hidden="true" href="#testing-without-openwebui">#</a></h2>
+<p>Before testing through OpenWebUI, we can test the Python function directly:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>source .venv/bin/activate
+</span></span><span style="display:flex;"><span>python -c <span style="color:#e6db74">&#34;from server import cisco_show_version; print(cisco_show_version())&#34;</span>
+</span></span></code></pre></div><p>If the credentials and SSH access are correct, this prints the router&rsquo;s
+<code>show version</code> output.</p>
+<h2 id="running-the-mcp-server">Running the MCP Server<a hidden class="anchor" aria-hidden="true" href="#running-the-mcp-server">#</a></h2>
+<p>Start the server:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>source .venv/bin/activate
+</span></span><span style="display:flex;"><span>python server.py
+</span></span></code></pre></div><p>The server listens on:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>http://0.0.0.0:8000/mcp
+</span></span></code></pre></div><p>For OpenWebUI in Docker, configure the MCP server URL as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>http://host.docker.internal:8000/mcp
+</span></span></code></pre></div><p>OpenWebUI should discover this tool:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>cisco_show_version
+</span></span></code></pre></div><p>When the tool is called, it connects to the router and returns the raw output of:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>show version
+</span></span></code></pre></div><h2 id="testing-with-openwebui">Testing with OpenWebUI<a hidden class="anchor" aria-hidden="true" href="#testing-with-openwebui">#</a></h2>
+<p><img loading="lazy" src="/img/simple_mcp_server_2.png"></p>
+<h2 id="why-start-this-small">Why Start This Small?<a hidden class="anchor" aria-hidden="true" href="#why-start-this-small">#</a></h2>
+<p>Network automation can become dangerous quickly.</p>
+<p>It is tempting to create one general tool:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>run_command(command)
+</span></span></code></pre></div><p>But that would allow the AI to send anything, including configuration or
+destructive commands.</p>
+<p>Starting with one explicit read-only tool is safer:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>cisco_show_version -&gt; show version
+</span></span></code></pre></div><p>The next safe tools could be:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>cisco_show_ip_interface_brief -&gt; show ip interface brief
+</span></span><span style="display:flex;"><span>cisco_show_interfaces         -&gt; show interfaces
+</span></span><span style="display:flex;"><span>cisco_show_ip_route           -&gt; show ip route
+</span></span></code></pre></div><p>Each tool should map to a known safe command.</p>
+<h2 id="what-we-learned">What We Learned<a hidden class="anchor" aria-hidden="true" href="#what-we-learned">#</a></h2>
+<p>We built the project in small layers:</p>
+<ul>
+<li>Create a minimal MCP server.</li>
+<li>Register one MCP tool.</li>
+<li>Map that tool to one Cisco command.</li>
+<li>Load connection settings from .env.</li>
+<li>Make Docker-based OpenWebUI reach the server.</li>
+<li>Add Paramiko SSH.</li>
+<li>Test the tool from OpenWebUI.</li>
+</ul>
+<p>The most important lesson is separation:</p>
+<ul>
+<li>OpenWebUI is the user interface.</li>
+<li>MCP is the tool protocol.</li>
+<li>FastMCP is the Python server helper.</li>
+<li>Paramiko is the SSH library.</li>
+<li>The Cisco router only sees normal CLI commands.</li>
+</ul>
+<p>That separation makes the system easier to understand and safer to extend.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Simple MCP Server on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fsbezo.github.io%2fposts%2fsimple_mcp_server%2f&amp;title=Simple%20MCP%20Server&amp;summary=Simple%20MCP%20Server&amp;source=https%3a%2f%2fsbezo.github.io%2fposts%2fsimple_mcp_server%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Simple MCP Server on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fsbezo.github.io%2fposts%2fsimple_mcp_server%2f&title=Simple%20MCP%20Server">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://sbezo.github.io/">sbezo.github.io</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

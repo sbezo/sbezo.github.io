@@ -2,13 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://sbezo.github.io/posts/getting_started_with_local_llm/</loc>
-    <lastmod>2026-06-12T19:20:15+00:00</lastmod>
-  </url><url>
     <loc>https://sbezo.github.io/posts/</loc>
-    <lastmod>2026-06-12T19:20:15+00:00</lastmod>
+    <lastmod>2026-06-25T08:33:16+00:00</lastmod>
   </url><url>
     <loc>https://sbezo.github.io/</loc>
+    <lastmod>2026-06-25T08:33:16+00:00</lastmod>
+  </url><url>
+    <loc>https://sbezo.github.io/posts/simple_mcp_server/</loc>
+    <lastmod>2026-06-25T08:33:16+00:00</lastmod>
+  </url><url>
+    <loc>https://sbezo.github.io/posts/getting_started_with_local_llm/</loc>
     <lastmod>2026-06-12T19:20:15+00:00</lastmod>
   </url><url>
     <loc>https://sbezo.github.io/posts/temp_dhcp/</loc>

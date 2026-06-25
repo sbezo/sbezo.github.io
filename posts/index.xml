@@ -6,8 +6,15 @@
     <description>Recent content in Posts on sbezo.github.io</description>
     <generator>Hugo -- 0.149.0-DEV</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 12 Jun 2026 19:20:15 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 25 Jun 2026 08:33:16 +0000</lastBuildDate>
     <atom:link href="https://sbezo.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Simple MCP Server</title>
+      <link>https://sbezo.github.io/posts/simple_mcp_server/</link>
+      <pubDate>Thu, 25 Jun 2026 08:33:16 +0000</pubDate>
+      <guid>https://sbezo.github.io/posts/simple_mcp_server/</guid>
+      <description>How to build Cisco CLI based MCP server from scratch with local model</description>
+    </item>
     <item>
       <title>Getting started with local LLMs</title>
       <link>https://sbezo.github.io/posts/getting_started_with_local_llm/</link>
