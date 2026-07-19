@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Projects on sbezo.github.io</title>
-    <link>http://localhost:1313/projects/</link>
+    <link>https://sbezo.github.io/projects/</link>
     <description>Recent content in Projects on sbezo.github.io</description>
     <generator>Hugo -- 0.149.0-DEV</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 07 Aug 2025 09:18:20 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/projects/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://sbezo.github.io/projects/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>chess-pairing.online</title>
-      <link>http://localhost:1313/projects/chess-pairing/</link>
+      <link>https://sbezo.github.io/projects/chess-pairing/</link>
       <pubDate>Thu, 07 Aug 2025 09:18:20 +0000</pubDate>
-      <guid>http://localhost:1313/projects/chess-pairing/</guid>
+      <guid>https://sbezo.github.io/projects/chess-pairing/</guid>
       <description>The simplest website for chess round-robin pairing ever ;)</description>
     </item>
   </channel>
