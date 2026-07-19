@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>MPLS troubleshooting AI agent powered by Codex | sbezo.github.io</title>
+<meta name="keywords" content="">
+<meta name="description" content="
+Intro
+In this post I want to show how I&rsquo;ve built AI agent which is able to troubleshoot a network issue.
+I&rsquo;d like to include all implementation details, hence anyone can reproduce it or build his own agent.
+I do not claim that this is the only right aproach, but it is my way&hellip;
+
+The usecase
+The usecase is very simple: I want an AI agent that can find an artificially injected error in a working Cisco lab. In practice, that means I break one thing, and the agent has to reason its way back to the root cause by gathering evidence from the network.">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/posts/how_to_troubleshoot_mpls_lab_with_codex/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.8fe10233a706bc87f2e08b3cf97b8bd4c0a80f10675a143675d59212121037c0.css" integrity="sha256-j&#43;ECM6cGvIfy4Is8&#43;XuL1MCoDxBnWhQ2ddWSEhIQN8A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/how_to_troubleshoot_mpls_lab_with_codex/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css" integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js" integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+        ]
+    });
+});
+</script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-X37ESW6JQL"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-X37ESW6JQL');
+        }
+      </script><meta property="og:url" content="http://localhost:1313/posts/how_to_troubleshoot_mpls_lab_with_codex/">
+  <meta property="og:site_name" content="sbezo.github.io">
+  <meta property="og:title" content="MPLS troubleshooting AI agent powered by Codex">
+  <meta property="og:description" content=" Intro In this post I want to show how I’ve built AI agent which is able to troubleshoot a network issue. I’d like to include all implementation details, hence anyone can reproduce it or build his own agent.
+I do not claim that this is the only right aproach, but it is my way…
+The usecase The usecase is very simple: I want an AI agent that can find an artificially injected error in a working Cisco lab. In practice, that means I break one thing, and the agent has to reason its way back to the root cause by gathering evidence from the network.">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-07-17T18:50:32+00:00">
+    <meta property="article:modified_time" content="2026-07-17T18:50:32+00:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MPLS troubleshooting AI agent powered by Codex">
+<meta name="twitter:description" content="
+Intro
+In this post I want to show how I&rsquo;ve built AI agent which is able to troubleshoot a network issue.
+I&rsquo;d like to include all implementation details, hence anyone can reproduce it or build his own agent.
+I do not claim that this is the only right aproach, but it is my way&hellip;
+
+The usecase
+The usecase is very simple: I want an AI agent that can find an artificially injected error in a working Cisco lab. In practice, that means I break one thing, and the agent has to reason its way back to the root cause by gathering evidence from the network.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://localhost:1313/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "MPLS troubleshooting AI agent powered by Codex",
+      "item": "http://localhost:1313/posts/how_to_troubleshoot_mpls_lab_with_codex/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "MPLS troubleshooting AI agent powered by Codex",
+  "name": "MPLS troubleshooting AI agent powered by Codex",
+  "description": " Intro In this post I want to show how I\u0026rsquo;ve built AI agent which is able to troubleshoot a network issue. I\u0026rsquo;d like to include all implementation details, hence anyone can reproduce it or build his own agent.\nI do not claim that this is the only right aproach, but it is my way\u0026hellip;\nThe usecase The usecase is very simple: I want an AI agent that can find an artificially injected error in a working Cisco lab. In practice, that means I break one thing, and the agent has to reason its way back to the root cause by gathering evidence from the network.\n",
+  "keywords": [
+    
+  ],
+  "articleBody": " Intro In this post I want to show how I’ve built AI agent which is able to troubleshoot a network issue. I’d like to include all implementation details, hence anyone can reproduce it or build his own agent.\nI do not claim that this is the only right aproach, but it is my way…\nThe usecase The usecase is very simple: I want an AI agent that can find an artificially injected error in a working Cisco lab. In practice, that means I break one thing, and the agent has to reason its way back to the root cause by gathering evidence from the network.\nMy technology stack for this project Codex (OpenAI) running as a VS Code extension My own python MCP server running on my laptop as http service Remote MPLS lab routers reachable over SSH Why Codex? The simple reason is that I use ChatGPT and Codex by default through my company account (ChatGPT Business) and I do not have any other ‘credit-card’/’token-based’ accounts.\nLast time I use local LLM, but it is just toy. If I want to troubleshoot more complex network, I need something advanced. And why VSCode? because I love it;)\nMCP server Why MCP server? This is an important point. I discovered that Codex, when used as a VS Code extension, can connect to routers directly without any MCP server. So why MCP at all?\nWith an MCP server, I can define exactly what the agent is allowed to do. In my case, I restricted it to read-only operations such as commands that start with show or ping. That is a much safer and more predictable model than giving the agent unrestricted access to network devices.\nIt is not the same as write down some instructions to .md file what is LLM allowed to do and what not. It is real hard gateway, like PAM or Proxy. LLM has not any direct access to network.\nIt is similar to giving a junior administrator a restricted shell account instead of full root access with instructions.\nLAB environment Now I’d like to introduce my LAB setup, but you can imagine any network or technology - it is no so important.\nSo in my case it is a small MPLS network running in Containerlab, based on Cisco IOS XR routers. The lab is intentionally simple, but it includes the core building blocks of an MPLS L3VPN service: OSPF in the provider underlay, MP-BGP VPNv4 exchange, VRFs, route distinguishers, route targets, and a route reflector. The idea was to introduce one configuration mistake into a working lab and let the agent find it.\nThe lab configuration is available on GitHub, and I also described the setup in my previous post.\nAll routers are accessible over SSH from my laptop.\nL3VPN over MPLS works and I can test it by successfully ping from the Loopback of CE1 to the Loopback of CE2:\nRP/0/RP0/CPU0:CE1#ping 172.16.0.2 source 172.16.0.1 Fri Jul 17 18:39:00.853 UTC Type escape sequence to abort. Sending 5, 100-byte ICMP Echos to 172.16.0.2 timeout is 2 seconds: !!!!! Success rate is 100 percent (5/5), round-trip min/avg/max = 4/4/6 ms Building the MCP server My small python MCP server is based on the FastMCP library. Its job is simple: connect to the routers, run read-only commands, and return the results to the LLM.\nIt can execute only two kind of commands. Starting with show and ping.\nLet’s take a closser look to code…\nCode just load information about routers and run http mcp server, which waits for requests.\nif __name__ == \"__main__\": load_routers() try: mcp.run(transport=\"streamable-http\") except (KeyboardInterrupt, asyncio.CancelledError): pass As routers run in containerlab, they are accessible on the same IP address under different ports. Information about routers are organized in json file for simple loading to python dictionarry.\nnodes.json:\n{ \"P0\": {\"host\": \"10.208.116.71\", \"port\": 2310}, \"PE1\": {\"host\": \"10.208.116.71\", \"port\": 2311}, \"PE2\": {\"host\": \"10.208.116.71\", \"port\": 2312}, \"CE1\": {\"host\": \"10.208.116.71\", \"port\": 2313}, \"CE2\": {\"host\": \"10.208.116.71\", \"port\": 2314}, \"RR\": {\"host\": \"10.208.116.71\", \"port\": 2315}, \"CE3\": {\"host\": \"10.208.116.71\", \"port\": 2316} } Function load_routers reads that json file and and fill dictionary variable in form of router hostname as a key and info about connection as a value. For information about routers I’ve created special imutable class Router:\n@dataclass(frozen=True) class Router: name: str host: str port: int def load_routers() -\u003e dict[str, Router]: \"\"\"Load routers from the JSON inventory in nodes.json.\"\"\" with DEFAULT_NODES_FILE.open(encoding=\"utf-8\") as inventory: nodes = json.load(inventory) routers: dict[str, Router] = {} for name, connection in nodes.items(): router = Router( name=name, host=connection[\"host\"], port=connection[\"port\"], ) routers[name.casefold()] = router return routers One of curent 3 MCP tools, which are exposed to MCP clients is then list_cisco_routers:\n@mcp.tool( name=\"list_cisco_routers\", title=\"List Cisco Routers\", description=\"List the router names available in the Cisco lab inventory.\", ) def list_cisco_routers() -\u003e list[str]: return [router.name for router in load_routers().values()] So if MCP client (Codex in my case) asks to list routers, it gets list of router’s hostnames.\nNow take a look to next tool provided by MCP server: cisco_show_command.\nIt is implemented as a decorator to mcp.tool method again:\n@mcp.tool( name=\"cisco_show_command\", title=\"Run Cisco Show Command\", description=( \"Run one read-only, single-line Cisco CLI command beginning with 'show' \" \"on a named lab router. Examples: 'show clock', 'show interfaces brief', \" \"or 'show route'.\" ), ) def cisco_show_command(router: str, command: str) -\u003e str: return run_cisco_command(router, validate_show_command(command)) So MCP client can ask for any command starting with keyword show in form of (router: str, command: str).\nAnd the essential thing here is validation. Function validate_show_command does a real regexp validation - command passed by client (It can be LLM as a Codex or deterministic python client as we will saw later) should satisfy conditions:\ncannot be empty string cannot contains any non-printable characters like text formating directives must start with show followed by space def validate_show_command(command: str) -\u003e str: \"\"\"Return a normalized command only when it is a safe, single-line show command.\"\"\" normalized = command.strip() if not normalized: raise ValueError(\"Command cannot be empty\") if not normalized.isprintable(): raise ValueError(\"Command must not contain non-printable characters\") if not re.match(r\"^show(?:\\s)\", normalized, flags=re.IGNORECASE): raise ValueError(\"Only commands beginning with 'show' are allowed\") return normalized After validation by validate_show_command the command is passed to the function run_cisco_command which invoke Netmiko library in order to connect to requested router and perform requested show command:\ndef run_cisco_command(router_name: str, command: str) -\u003e str: router = get_router(router_name) username, password = get_credentials() enable_secret = os.getenv(\"CISCO_ENABLE\") device: dict[str, object] = { \"device_type\": \"cisco_ios\", \"host\": router.host, \"port\": router.port, \"username\": username, \"password\": password, \"secret\": enable_secret, \"conn_timeout\": 10, } try: with ConnectHandler(**device) as connection: if enable_secret: connection.enable() output = connection.send_command( command, ) except Exception as exc: raise RuntimeError( f\"SSH command failed on {router.name} ({router.host}:{router.port}): {exc}\" ) from exc return output.strip() It is function from classic automation world, but still interesting. After invoking it calls next two function:\nget_router(router_name) to get complete connection information based on provided hostname in form of Router’s class object get_credentials() to get connection credentials from environment variables def get_router(name: str) -\u003e Router: routers = load_routers() router = routers.get(name.strip().casefold()) if router is None: available = \", \".join(item.name for item in routers.values()) raise ValueError(f\"Unknown router {name!r}. Available routers: {available}\") return router def get_credentials() -\u003e tuple[str, str]: username = os.getenv(\"CISCO_USERNAME\") password = os.getenv(\"CISCO_PASSWORD\") if not username or not password: raise RuntimeError( \"Missing credentials. Set CISCO_USERNAME and CISCO_PASSWORD in .env.\" ) return username, password just side note, that CISCO_USERNAME and CISCO_PASSWORD should be defined in .env file like:\nCISCO_USERNAME=your_username CISCO_PASSWORD=your_password Then Netmico funcion continues with connection to requested router and will get output from requested show command.\nOutput is then returned to MCP client.\nAnd that is whole concept of MCP server. Very similair is implemented ping tool and in that fashion can be eassily extend to any aditional commands.\nTo firmly grasp this mental model I’ve prepared a small deterministic Python MCP client. And I thing this is a real cornerstone of whole MCP concept.\nYou can utilize MCP server by this client without any LLM mirracle. Simply like this:\npython client_simple.py --router PE1 --command \"show clock\" Sun Jul 19 06:30:58.911 UTC 06:30:58.932 UTC Sun Jul 19 2026 Or:\npython client_simple.py --router CE2 --command \"show ip route\" Sun Jul 19 06:33:15.330 UTC Codes: C - connected, S - static, R - RIP, B - BGP, (\u003e) - Diversion path D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2 E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP i - ISIS, L1 - IS-IS level-1, L2 - IS-IS level-2 ia - IS-IS inter area, su - IS-IS summary null, * - candidate default U - per-user static route, o - ODR, L - local, G - DAGR, l - LISP A - access/subscriber, a - Application route M - mobile route, r - RPL, t - Traffic Engineering, (!) - FRR Backup path s - local SRv6 route, z - local IID route Gateway of last resort is not set C 10.10.0.4/30 is directly connected, 2w4d, GigabitEthernet0/0/0/0 L 10.10.0.6/32 is directly connected, 2w4d, GigabitEthernet0/0/0/0 S 172.16.0.1/32 [1/0] via 10.10.0.5, 2w4d L 172.16.0.2/32 is directly connected, 2w4d, Loopback0 C 192.168.200.0/24 is directly connected, 2w4d, GigabitEthernet0/0/0/1.200 L 192.168.200.2/32 is directly connected, 2w4d, GigabitEthernet0/0/0/1.200 C 192.168.230.0/24 is directly connected, 2w4d, GigabitEthernet0/0/0/1.300 L 192.168.230.2/32 is directly connected, 2w4d, GigabitEthernet0/0/0/1.300 (.venv) stefanbezo@Stefans-MacBook-Pro MPLS_troubleshooting_agent_2026 % This was quit long excurse to code of MCP, but I think, that it was important for those, who really want to understand this concept.\nNext step is registering MCP server to VSCode.\nRegistering MCP server to Codex This is very simple step, but also important - It interconnects Codex powered by ChatGPT with new MCP server.\nAdd these two lines to ~/.codex/config.toml:\ncat \u003e\u003e ~/.codex/config.toml [mcp_servers.cisco-lab] url = \"http://127.0.0.1:8000/mcp\" Then reload curent VSCode window by Shift + CMD + P and run Developer: Reload Window.\nAfter that new MCP server should appear in Codex plugin settings in VScode: Testing LAB reachibility by Codex As I already tested MCP server itself by my Python MCP client, the next step is to check if also Codex can reach my LAB through MCP server. So let’s try some canary test…\nFirst I created some fresh new project to not influence Codex by any way and asked him to:\n- Connect to cisco-lab MCP server - Check configurations - You do not need to diagnose anything yet - Tell me short conclusion about network And Codex answer:\nThe seven-router lab is configured as a coherent MPLS provider network: OSPF + LDP core with P0, PE1, PE2, and RR. VPNv4 iBGP through the route reflector. CUST-A L3VPN connects CE1 and CE2. VLAN 200 uses a point-to-point L2VPN; VLAN 300 uses a multipoint bridge/VPLS service including CE3. Overall, the configurations are structurally consistent. This was configuration review only—not a live-health diagnosis. Perfect, It is able to use MCP and it understand routers configurations.\nSo it is time to prepare exam for Codex:)\nAnd it’s exam time Now everything is ready to test Codex in troubleshooting of MPLS network.\nI let Codex work in repo with MCP server to have all files together. And I prepare some guidline for him:\n- You are troubleshooting expert for Cisco IOS XR platform - Use native running MCP server 'cisco-lab' - Log all commands and outputs to session.log file - Log all your reassoning and short record of our communication with timestamps to reasoning.log file Then started chat:\n1. Read AGENT.md file with general instructions 2. check connectivity to all routers via MCP server 3. check connectivity from CE1 to CE2 via L3VPN MPLS network by 'ping 172.16.0.2 source 172.16.0.1' Codex has found network healthy.\nThen I injected artificial error to network - Changed IP MTU on PE interface to break OSPF process in underlaying MPLS network.\nThen continue with chgallenge for Codex:\n4. I injected configuration error to one of the nodes to test your troubleshooting skills. Try to find it and propose solution. The session log with all issued commands\nThere are also timestamps to see how quickly Codex worked.\nI have also logged reasoning process, which is also very interesting.\nSo, Codex found the root cause, suggest correct solution and passed my exam:) Conclusion It was a bit long post, but I’d like to explain all technical details for those, who would like to build something similair.\nIt can be another network, Kubernetes cluster, Firewall - concept stays the same and only MCP server should be slightly changed.\nHappy building…;)\n",
+  "wordCount" : "2077",
+  "inLanguage": "en",
+  "datePublished": "2026-07-17T18:50:32Z",
+  "dateModified": "2026-07-17T18:50:32Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://localhost:1313/posts/how_to_troubleshoot_mpls_lab_with_codex/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "sbezo.github.io",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://localhost:1313/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="sbezo.github.io (Alt + H)">sbezo.github.io</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/posts/" title="Posts">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      MPLS troubleshooting AI agent powered by Codex
+      <span class="entry-hint" title="Draft">
+        <svg xmlns="http://www.w3.org/2000/svg" height="35" viewBox="0 -960 960 960" fill="currentColor">
+          <path
+            d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z" />
+        </svg>
+      </span>
+    </h1>
+    <div class="post-meta"><span title='2026-07-17 18:50:32 +0000 UTC'>July 17, 2026</span>
+
+</div>
+  </header> 
+  <div class="post-content"><hr>
+<h2 id="intro">Intro<a hidden class="anchor" aria-hidden="true" href="#intro">#</a></h2>
+<p>In this post I want to show how I&rsquo;ve built AI agent which is able to troubleshoot a network issue.
+I&rsquo;d like to include all implementation details, hence anyone can reproduce it or build his own agent.<br>
+I do not claim that this is the only right aproach, but it is my way&hellip;</p>
+<hr>
+<h2 id="the-usecase">The usecase<a hidden class="anchor" aria-hidden="true" href="#the-usecase">#</a></h2>
+<p>The usecase is very simple: I want an AI agent that can find an artificially injected error in a working Cisco lab. In practice, that means I break one thing, and the agent has to reason its way back to the root cause by gathering evidence from the network.</p>
+<hr>
+<h2 id="my-technology-stack-for-this-project">My technology stack for this project<a hidden class="anchor" aria-hidden="true" href="#my-technology-stack-for-this-project">#</a></h2>
+<ul>
+<li>Codex (OpenAI) running as a VS Code extension</li>
+<li>My own python MCP server running on my laptop as http service</li>
+<li>Remote MPLS lab routers reachable over SSH</li>
+</ul>
+<p><img loading="lazy" src="/img/how_to_troubleshoot_MPLS_3.png"></p>
+<h3 id="why-codex">Why Codex?<a hidden class="anchor" aria-hidden="true" href="#why-codex">#</a></h3>
+<p>The simple reason is that I use ChatGPT and Codex by default through my company account (ChatGPT Business) and I do not have any other &lsquo;credit-card&rsquo;/&rsquo;token-based&rsquo; accounts.<br>
+Last time I use <a href="https://sbezo.github.io/posts/getting_started_with_local_llm/">local LLM</a>, but it is just toy. If I want to troubleshoot more complex network, I need something advanced.
+And why VSCode? because I love it;)</p>
+<h3 id="mcp-server">MCP server<a hidden class="anchor" aria-hidden="true" href="#mcp-server">#</a></h3>
+<p>Why MCP server? This is an important point. I discovered that Codex, when used as a VS Code extension, can <strong>connect to routers directly without any MCP server</strong>. So why MCP at all?</p>
+<p>With an MCP server, I can define exactly what the agent is allowed to do. In my case, I restricted it to read-only operations such as commands that start with <code>show</code> or <code>ping</code>. That is a much safer and more predictable model than giving the agent unrestricted access to network devices.</p>
+<p>It is not the same as write down some instructions to .md file what is LLM allowed to do and what not. It is real hard gateway, like PAM or Proxy. LLM has not any direct access to network.</p>
+<p>It is similar to giving a junior administrator a restricted shell account instead of full root access with instructions.</p>
+<h3 id="lab-environment">LAB environment<a hidden class="anchor" aria-hidden="true" href="#lab-environment">#</a></h3>
+<p>Now I&rsquo;d like to introduce my LAB setup, but you can imagine any network or technology - it is no so important.</p>
+<p>So in my case it is a small MPLS network running in Containerlab, based on Cisco IOS XR routers. The lab is intentionally simple, but it includes the core building blocks of an MPLS L3VPN service: OSPF in the provider underlay, MP-BGP VPNv4 exchange, VRFs, route distinguishers, route targets, and a route reflector. The idea was to introduce one configuration mistake into a working lab and let the agent find it.</p>
+<p>The lab configuration is available <a href="https://github.com/sbezo/ContainerLab-2026/tree/main/Configurations/ISP">on GitHub</a>, and I also described the setup in <a href="https://sbezo.github.io/posts/containerlab_cisco_iosxrd/">my previous post</a>.</p>
+<p><img loading="lazy" src="/img/how_to_troubleshoot_MPLS_2.png"></p>
+<p>All routers are accessible over SSH from my laptop.</p>
+<p>L3VPN over MPLS works and I can test it by successfully ping from the Loopback of CE1 to the Loopback of CE2:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>RP/0/RP0/CPU0:CE1#ping 172.16.0.2 source 172.16.0.1
+</span></span><span style="display:flex;"><span>Fri Jul 17 18:39:00.853 UTC
+</span></span><span style="display:flex;"><span>Type escape sequence to abort.
+</span></span><span style="display:flex;"><span>Sending 5, 100-byte ICMP Echos to 172.16.0.2 timeout is 2 seconds:
+</span></span><span style="display:flex;"><span>!!!!!
+</span></span><span style="display:flex;"><span>Success rate is 100 percent (5/5), round-trip min/avg/max = 4/4/6 ms
+</span></span></code></pre></div><hr>
+<h2 id="building-the-mcp-server">Building the MCP server<a hidden class="anchor" aria-hidden="true" href="#building-the-mcp-server">#</a></h2>
+<p>My small python <a href="https://github.com/sbezo/MPLS_troubleshooting_agent_2026/blob/main/server.py">MCP server</a> is based on the FastMCP library. Its job is simple: connect to the routers, run read-only commands, and return the results to the LLM.</p>
+<p>It can execute only two kind of commands. Starting with <code>show</code> and <code>ping</code>.</p>
+<p>Let&rsquo;s take a  closser look to code&hellip;</p>
+<p>Code just load information about routers and run http mcp server, which waits for requests.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;__main__&#34;</span>:
+</span></span><span style="display:flex;"><span>    load_routers()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        mcp<span style="color:#f92672">.</span>run(transport<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;streamable-http&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> (<span style="color:#a6e22e">KeyboardInterrupt</span>, asyncio<span style="color:#f92672">.</span>CancelledError):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">pass</span>
+</span></span></code></pre></div><p>As routers run in containerlab, they are accessible on the same IP address under different ports. Information about routers are organized in <code>json</code> file for simple loading to python dictionarry.<br>
+<code>nodes.json</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;P0&#34;</span>: {<span style="color:#f92672">&#34;host&#34;</span>: <span style="color:#e6db74">&#34;10.208.116.71&#34;</span>, <span style="color:#f92672">&#34;port&#34;</span>: <span style="color:#ae81ff">2310</span>},
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;PE1&#34;</span>: {<span style="color:#f92672">&#34;host&#34;</span>: <span style="color:#e6db74">&#34;10.208.116.71&#34;</span>, <span style="color:#f92672">&#34;port&#34;</span>: <span style="color:#ae81ff">2311</span>},
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;PE2&#34;</span>: {<span style="color:#f92672">&#34;host&#34;</span>: <span style="color:#e6db74">&#34;10.208.116.71&#34;</span>, <span style="color:#f92672">&#34;port&#34;</span>: <span style="color:#ae81ff">2312</span>},
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;CE1&#34;</span>: {<span style="color:#f92672">&#34;host&#34;</span>: <span style="color:#e6db74">&#34;10.208.116.71&#34;</span>, <span style="color:#f92672">&#34;port&#34;</span>: <span style="color:#ae81ff">2313</span>},
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;CE2&#34;</span>: {<span style="color:#f92672">&#34;host&#34;</span>: <span style="color:#e6db74">&#34;10.208.116.71&#34;</span>, <span style="color:#f92672">&#34;port&#34;</span>: <span style="color:#ae81ff">2314</span>},
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;RR&#34;</span>: {<span style="color:#f92672">&#34;host&#34;</span>: <span style="color:#e6db74">&#34;10.208.116.71&#34;</span>, <span style="color:#f92672">&#34;port&#34;</span>: <span style="color:#ae81ff">2315</span>},
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;CE3&#34;</span>: {<span style="color:#f92672">&#34;host&#34;</span>: <span style="color:#e6db74">&#34;10.208.116.71&#34;</span>, <span style="color:#f92672">&#34;port&#34;</span>: <span style="color:#ae81ff">2316</span>}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Function <code>load_routers</code> reads that json file and and fill dictionary variable in form of <code>router hostname</code> as a key and info about connection as a value. For information about routers I&rsquo;ve created special imutable class <code>Router</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#a6e22e">@dataclass</span>(frozen<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Router</span>:
+</span></span><span style="display:flex;"><span>    name: str
+</span></span><span style="display:flex;"><span>    host: str
+</span></span><span style="display:flex;"><span>    port: int
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">load_routers</span>() <span style="color:#f92672">-&gt;</span> dict[str, Router]:
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;Load routers from the JSON inventory in nodes.json.&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> DEFAULT_NODES_FILE<span style="color:#f92672">.</span>open(encoding<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;utf-8&#34;</span>) <span style="color:#66d9ef">as</span> inventory:
+</span></span><span style="display:flex;"><span>        nodes <span style="color:#f92672">=</span> json<span style="color:#f92672">.</span>load(inventory)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    routers: dict[str, Router] <span style="color:#f92672">=</span> {}
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> name, connection <span style="color:#f92672">in</span> nodes<span style="color:#f92672">.</span>items():
+</span></span><span style="display:flex;"><span>        router <span style="color:#f92672">=</span> Router(
+</span></span><span style="display:flex;"><span>            name<span style="color:#f92672">=</span>name,
+</span></span><span style="display:flex;"><span>            host<span style="color:#f92672">=</span>connection[<span style="color:#e6db74">&#34;host&#34;</span>],
+</span></span><span style="display:flex;"><span>            port<span style="color:#f92672">=</span>connection[<span style="color:#e6db74">&#34;port&#34;</span>],
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>        routers[name<span style="color:#f92672">.</span>casefold()] <span style="color:#f92672">=</span> router
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> routers
+</span></span></code></pre></div><p>One of curent 3 MCP tools, which are exposed to MCP clients is then <code>list_cisco_routers</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#a6e22e">@mcp.tool</span>(
+</span></span><span style="display:flex;"><span>    name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;list_cisco_routers&#34;</span>,
+</span></span><span style="display:flex;"><span>    title<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;List Cisco Routers&#34;</span>,
+</span></span><span style="display:flex;"><span>    description<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;List the router names available in the Cisco lab inventory.&#34;</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">list_cisco_routers</span>() <span style="color:#f92672">-&gt;</span> list[str]:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> [router<span style="color:#f92672">.</span>name <span style="color:#66d9ef">for</span> router <span style="color:#f92672">in</span> load_routers()<span style="color:#f92672">.</span>values()]
+</span></span></code></pre></div><p>So if MCP client (Codex in my case) asks to list routers, it gets list of router&rsquo;s hostnames.<br>
+Now take a look to next tool provided by MCP server: <code>cisco_show_command</code>.<br>
+It is implemented as a decorator to <code>mcp.tool</code> method again:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#a6e22e">@mcp.tool</span>(
+</span></span><span style="display:flex;"><span>    name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cisco_show_command&#34;</span>,
+</span></span><span style="display:flex;"><span>    title<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Run Cisco Show Command&#34;</span>,
+</span></span><span style="display:flex;"><span>    description<span style="color:#f92672">=</span>(
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;Run one read-only, single-line Cisco CLI command beginning with &#39;show&#39; &#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;on a named lab router. Examples: &#39;show clock&#39;, &#39;show interfaces brief&#39;, &#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;or &#39;show route&#39;.&#34;</span>
+</span></span><span style="display:flex;"><span>    ),
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">cisco_show_command</span>(router: str, command: str) <span style="color:#f92672">-&gt;</span> str:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> run_cisco_command(router, validate_show_command(command))
+</span></span></code></pre></div><p>So MCP client can ask for any command starting with keyword <code>show</code> in form of <code>(router: str, command: str)</code>.<br>
+And the essential thing here is validation. Function <code>validate_show_command</code> does a real regexp validation - command passed by client (It can be LLM as a Codex or deterministic python client as we will saw later) should satisfy conditions:</p>
+<ul>
+<li>cannot be empty string</li>
+<li>cannot contains any non-printable characters like text formating directives</li>
+<li>must start with <code>show</code> followed by space</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">validate_show_command</span>(command: str) <span style="color:#f92672">-&gt;</span> str:
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;Return a normalized command only when it is a safe, single-line show command.&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    normalized <span style="color:#f92672">=</span> command<span style="color:#f92672">.</span>strip()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> normalized:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">ValueError</span>(<span style="color:#e6db74">&#34;Command cannot be empty&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> normalized<span style="color:#f92672">.</span>isprintable():
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">ValueError</span>(<span style="color:#e6db74">&#34;Command must not contain non-printable characters&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> re<span style="color:#f92672">.</span><span style="color:#66d9ef">match</span>(<span style="color:#e6db74">r</span><span style="color:#e6db74">&#34;^show(?:\s)&#34;</span>, normalized, flags<span style="color:#f92672">=</span>re<span style="color:#f92672">.</span>IGNORECASE):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">ValueError</span>(<span style="color:#e6db74">&#34;Only commands beginning with &#39;show&#39; are allowed&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> normalized
+</span></span></code></pre></div><p>After validation by <code>validate_show_command</code> the command is passed to the function <code>run_cisco_command</code> which invoke Netmiko library in order to connect to requested router and perform requested show command:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run_cisco_command</span>(router_name: str, command: str) <span style="color:#f92672">-&gt;</span> str:
+</span></span><span style="display:flex;"><span>    router <span style="color:#f92672">=</span> get_router(router_name)
+</span></span><span style="display:flex;"><span>    username, password <span style="color:#f92672">=</span> get_credentials()
+</span></span><span style="display:flex;"><span>    enable_secret <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>getenv(<span style="color:#e6db74">&#34;CISCO_ENABLE&#34;</span>)
+</span></span><span style="display:flex;"><span>    device: dict[str, object] <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;device_type&#34;</span>: <span style="color:#e6db74">&#34;cisco_ios&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;host&#34;</span>: router<span style="color:#f92672">.</span>host,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;port&#34;</span>: router<span style="color:#f92672">.</span>port,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;username&#34;</span>: username,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;password&#34;</span>: password,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;secret&#34;</span>: enable_secret,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;conn_timeout&#34;</span>: <span style="color:#ae81ff">10</span>,
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">with</span> ConnectHandler(<span style="color:#f92672">**</span>device) <span style="color:#66d9ef">as</span> connection:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> enable_secret:
+</span></span><span style="display:flex;"><span>                connection<span style="color:#f92672">.</span>enable()
+</span></span><span style="display:flex;"><span>            output <span style="color:#f92672">=</span> connection<span style="color:#f92672">.</span>send_command(
+</span></span><span style="display:flex;"><span>                command,
+</span></span><span style="display:flex;"><span>            )
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> exc:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">RuntimeError</span>(
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;SSH command failed on </span><span style="color:#e6db74">{</span>router<span style="color:#f92672">.</span>name<span style="color:#e6db74">}</span><span style="color:#e6db74"> (</span><span style="color:#e6db74">{</span>router<span style="color:#f92672">.</span>host<span style="color:#e6db74">}</span><span style="color:#e6db74">:</span><span style="color:#e6db74">{</span>router<span style="color:#f92672">.</span>port<span style="color:#e6db74">}</span><span style="color:#e6db74">): </span><span style="color:#e6db74">{</span>exc<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>        ) <span style="color:#f92672">from</span> exc
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> output<span style="color:#f92672">.</span>strip()
+</span></span></code></pre></div><p>It is function from classic automation world, but still interesting.
+After invoking it calls next two function:</p>
+<ul>
+<li><code>get_router(router_name)</code> to get complete connection information based on provided hostname in form of Router&rsquo;s class object</li>
+<li><code>get_credentials()</code> to get connection credentials from environment variables</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_router</span>(name: str) <span style="color:#f92672">-&gt;</span> Router:
+</span></span><span style="display:flex;"><span>    routers <span style="color:#f92672">=</span> load_routers()
+</span></span><span style="display:flex;"><span>    router <span style="color:#f92672">=</span> routers<span style="color:#f92672">.</span>get(name<span style="color:#f92672">.</span>strip()<span style="color:#f92672">.</span>casefold())
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> router <span style="color:#f92672">is</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        available <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;, &#34;</span><span style="color:#f92672">.</span>join(item<span style="color:#f92672">.</span>name <span style="color:#66d9ef">for</span> item <span style="color:#f92672">in</span> routers<span style="color:#f92672">.</span>values())
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">ValueError</span>(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Unknown router </span><span style="color:#e6db74">{</span>name<span style="color:#e6db74">!r}</span><span style="color:#e6db74">. Available routers: </span><span style="color:#e6db74">{</span>available<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> router
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_credentials</span>() <span style="color:#f92672">-&gt;</span> tuple[str, str]:
+</span></span><span style="display:flex;"><span>    username <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>getenv(<span style="color:#e6db74">&#34;CISCO_USERNAME&#34;</span>)
+</span></span><span style="display:flex;"><span>    password <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>getenv(<span style="color:#e6db74">&#34;CISCO_PASSWORD&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> username <span style="color:#f92672">or</span> <span style="color:#f92672">not</span> password:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">RuntimeError</span>(
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;Missing credentials. Set CISCO_USERNAME and CISCO_PASSWORD in .env.&#34;</span>
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> username, password
+</span></span></code></pre></div><blockquote>
+<p>just side note, that <code>CISCO_USERNAME</code> and <code>CISCO_PASSWORD</code> should be defined in <code>.env</code> file like:</p>
+<pre tabindex="0"><code>CISCO_USERNAME=your_username
+CISCO_PASSWORD=your_password
+</code></pre></blockquote>
+<p>Then Netmico funcion continues with connection to requested router and will get output from requested show command.<br>
+Output is then returned to MCP client.</p>
+<p>And that is whole concept of MCP server. Very similair is implemented <code>ping</code> tool and in that fashion can be eassily extend to any aditional commands.</p>
+<p>To firmly grasp this mental model I&rsquo;ve prepared a small deterministic <a href="https://github.com/sbezo/MPLS_troubleshooting_agent_2026/blob/main/client_simple.py">Python MCP client</a>. And <strong>I thing this is a real cornerstone of whole MCP concept</strong>.</p>
+<p>You can utilize MCP server by this client <strong>without</strong> any LLM mirracle.
+Simply like this:</p>
+<pre tabindex="0"><code>python client_simple.py --router PE1 --command &#34;show clock&#34;
+Sun Jul 19 06:30:58.911 UTC
+06:30:58.932 UTC Sun Jul 19 2026
+</code></pre><p>Or:</p>
+<pre tabindex="0"><code>python client_simple.py --router CE2 --command &#34;show ip route&#34;  
+Sun Jul 19 06:33:15.330 UTC
+
+Codes: C - connected, S - static, R - RIP, B - BGP, (&gt;) - Diversion path
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - ISIS, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, su - IS-IS summary null, * - candidate default
+       U - per-user static route, o - ODR, L - local, G  - DAGR, l - LISP
+       A - access/subscriber, a - Application route
+       M - mobile route, r - RPL, t - Traffic Engineering, (!) - FRR Backup path
+       s - local SRv6 route, z - local IID route
+
+Gateway of last resort is not set
+
+C    10.10.0.4/30 is directly connected, 2w4d, GigabitEthernet0/0/0/0
+L    10.10.0.6/32 is directly connected, 2w4d, GigabitEthernet0/0/0/0
+S    172.16.0.1/32 [1/0] via 10.10.0.5, 2w4d
+L    172.16.0.2/32 is directly connected, 2w4d, Loopback0
+C    192.168.200.0/24 is directly connected, 2w4d, GigabitEthernet0/0/0/1.200
+L    192.168.200.2/32 is directly connected, 2w4d, GigabitEthernet0/0/0/1.200
+C    192.168.230.0/24 is directly connected, 2w4d, GigabitEthernet0/0/0/1.300
+L    192.168.230.2/32 is directly connected, 2w4d, GigabitEthernet0/0/0/1.300
+(.venv) stefanbezo@Stefans-MacBook-Pro MPLS_troubleshooting_agent_2026 % 
+</code></pre><p>This was quit long excurse to code of MCP, but I think, that it was important for those, who really want to understand this concept.<br>
+Next step is registering MCP server to VSCode.</p>
+<h2 id="registering-mcp-server-to-codex">Registering MCP server to Codex<a hidden class="anchor" aria-hidden="true" href="#registering-mcp-server-to-codex">#</a></h2>
+<p>This is very simple step, but also important - It interconnects Codex powered by ChatGPT with new MCP server.<br>
+Add these two lines to <code>~/.codex/config.toml</code>:</p>
+<pre tabindex="0"><code>cat &gt;&gt; ~/.codex/config.toml
+[mcp_servers.cisco-lab]
+url = &#34;http://127.0.0.1:8000/mcp&#34;
+</code></pre><p>Then reload curent VSCode window by <code>Shift + CMD + P</code> and run <code>Developer: Reload Window</code>.<br>
+After that new MCP server should appear in Codex plugin settings in VScode:
+<img loading="lazy" src="/img/how_to_troubleshoot_MPLS_4.png"></p>
+<h2 id="testing-lab-reachibility-by-codex">Testing LAB reachibility by Codex<a hidden class="anchor" aria-hidden="true" href="#testing-lab-reachibility-by-codex">#</a></h2>
+<p>As I already tested MCP server itself by my Python MCP client, the next step is to check if also Codex can reach my LAB through MCP server. <br>
+So let&rsquo;s try some canary test&hellip;</p>
+<p>First I created some fresh new project to not influence Codex by any way and asked him to:</p>
+<pre tabindex="0"><code>- Connect to cisco-lab MCP server
+- Check configurations
+- You do not need to diagnose anything yet
+- Tell me short conclusion about network
+</code></pre><p>And Codex answer:</p>
+<pre tabindex="0"><code>The seven-router lab is configured as a coherent MPLS provider network:
+OSPF + LDP core with P0, PE1, PE2, and RR.
+VPNv4 iBGP through the route reflector.
+CUST-A L3VPN connects CE1 and CE2.
+VLAN 200 uses a point-to-point L2VPN; VLAN 300 uses a multipoint bridge/VPLS service including CE3.
+Overall, the configurations are structurally consistent. This was configuration review only—not a live-health diagnosis.
+</code></pre><p>Perfect, It is able to use MCP and it understand routers configurations.<br>
+So it is time to prepare exam for Codex:)</p>
+<h2 id="and-its-exam-time">And it&rsquo;s exam time<a hidden class="anchor" aria-hidden="true" href="#and-its-exam-time">#</a></h2>
+<p>Now everything is ready to test Codex in troubleshooting of MPLS network.<br>
+I let Codex work in repo with MCP server to have all files together. And I prepare some guidline for him:</p>
+<pre tabindex="0"><code>- You are troubleshooting expert for Cisco IOS XR platform
+- Use native running MCP server &#39;cisco-lab&#39;
+- Log all commands and outputs to session.log file
+- Log all your reassoning and short record of our communication with timestamps to reasoning.log file
+</code></pre><p>Then started chat:</p>
+<pre tabindex="0"><code>1. Read AGENT.md file with general instructions
+2. check connectivity to all routers via MCP server
+3. check connectivity from CE1 to CE2 via L3VPN MPLS network by &#39;ping 172.16.0.2 source 172.16.0.1&#39;
+</code></pre><p>Codex has found network healthy.</p>
+<p>Then I injected artificial error to network - Changed IP MTU on PE interface to break OSPF process in underlaying MPLS network.</p>
+<p><img loading="lazy" src="/img/how_to_troubleshoot_MPLS_5.png"></p>
+<p>Then continue with chgallenge for Codex:</p>
+<pre tabindex="0"><code>4. I injected configuration error to one of the nodes to test your troubleshooting skills. Try to find it and propose solution.
+</code></pre><p>The session log with all <a href="https://github.com/sbezo/MPLS_troubleshooting_agent_2026/blob/main/session.log">issued commands</a></p>
+<p>There are also timestamps to see how quickly Codex worked.</p>
+<p>I have also logged <a href="https://github.com/sbezo/MPLS_troubleshooting_agent_2026/blob/main/reasoning.log">reasoning process</a>, which is also very interesting.</p>
+<p>So, Codex found the root cause, suggest correct solution and passed my exam:)
+<img loading="lazy" src="/img/how_to_troubleshoot_MPLS_6.png"></p>
+<h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
+<p>It was a bit long post, but I&rsquo;d like to explain all technical details for those, who would like to build something similair.<br>
+It can be another network, Kubernetes cluster, Firewall - concept stays the same and only MCP server should be slightly changed.<br>
+Happy building&hellip;;)</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share MPLS troubleshooting AI agent powered by Codex on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2flocalhost%3a1313%2fposts%2fhow_to_troubleshoot_mpls_lab_with_codex%2f&amp;title=MPLS%20troubleshooting%20AI%20agent%20powered%20by%20Codex&amp;summary=MPLS%20troubleshooting%20AI%20agent%20powered%20by%20Codex&amp;source=http%3a%2f%2flocalhost%3a1313%2fposts%2fhow_to_troubleshoot_mpls_lab_with_codex%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share MPLS troubleshooting AI agent powered by Codex on reddit"
+            href="https://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fposts%2fhow_to_troubleshoot_mpls_lab_with_codex%2f&title=MPLS%20troubleshooting%20AI%20agent%20powered%20by%20Codex">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="http://localhost:1313/">sbezo.github.io</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
