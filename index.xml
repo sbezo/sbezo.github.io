@@ -15,12 +15,12 @@
       <guid>http://localhost:1313/posts/how_to_troubleshoot_mpls_lab_with_codex/</guid>
       <description>&lt;hr&gt;
 &lt;h2 id=&#34;intro&#34;&gt;Intro&lt;/h2&gt;
-&lt;p&gt;In this post I want to show how I&amp;rsquo;ve built AI agent which is able to troubleshoot a network issue.
-I&amp;rsquo;d like to include all implementation details, hence anyone can reproduce it or build his own agent.&lt;br&gt;
-I do not claim that this is the only right aproach, but it is my way&amp;hellip;&lt;/p&gt;
+&lt;p&gt;In this post I want to show how I&amp;rsquo;ve built an AI agent which is able to troubleshoot a network issue.
+I&amp;rsquo;d like to include all implementation details; hence, anyone can reproduce it or build his own agent.&lt;br&gt;
+I do not claim that this is the only right approach, but it is my way&amp;hellip;&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id=&#34;the-usecase&#34;&gt;The usecase&lt;/h2&gt;
-&lt;p&gt;The usecase is very simple: I want an AI agent that can find an artificially injected error in a working Cisco lab. In practice, that means I break one thing, and the agent has to reason its way back to the root cause by gathering evidence from the network.&lt;/p&gt;</description>
+&lt;h2 id=&#34;the-use-case&#34;&gt;The use case&lt;/h2&gt;
+&lt;p&gt;The use case is very simple: I want an AI agent that can find an artificially injected error in a working Cisco lab. In practice, that means I break one thing, and the agent has to reason its way back to the root cause by gathering evidence from the network.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Simple MCP Server</title>
