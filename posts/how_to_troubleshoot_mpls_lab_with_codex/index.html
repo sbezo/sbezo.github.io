@@ -7,14 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>MPLS troubleshooting AI agent powered by Codex | sbezo.github.io</title>
 <meta name="keywords" content="">
-<meta name="description" content="
-Intro
-In this post I want to show how I&rsquo;ve built an AI agent which is able to troubleshoot a network issue.
-I&rsquo;d like to include all implementation details; hence, anyone can reproduce it or build his own agent.
-I do not claim that this is the only right approach, but it is my way&hellip;
-
-The use case
-The use case is very simple: I want an AI agent that can find an artificially injected error in a working Cisco lab. In practice, that means I break one thing, and the agent has to reason its way back to the root cause by gathering evidence from the network.">
+<meta name="description" content="Codex diagnoses MPLS lab via filtered MCP commands">
 <meta name="author" content="">
 <link rel="canonical" href="https://sbezo.github.io/posts/how_to_troubleshoot_mpls_lab_with_codex/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.8fe10233a706bc87f2e08b3cf97b8bd4c0a80f10675a143675d59212121037c0.css" integrity="sha256-j&#43;ECM6cGvIfy4Is8&#43;XuL1MCoDxBnWhQ2ddWSEhIQN8A=" rel="preload stylesheet" as="style">
@@ -99,9 +92,7 @@ document.addEventListener("DOMContentLoaded", function() {
       </script><meta property="og:url" content="https://sbezo.github.io/posts/how_to_troubleshoot_mpls_lab_with_codex/">
   <meta property="og:site_name" content="sbezo.github.io">
   <meta property="og:title" content="MPLS troubleshooting AI agent powered by Codex">
-  <meta property="og:description" content=" Intro In this post I want to show how I’ve built an AI agent which is able to troubleshoot a network issue. I’d like to include all implementation details; hence, anyone can reproduce it or build his own agent.
-I do not claim that this is the only right approach, but it is my way…
-The use case The use case is very simple: I want an AI agent that can find an artificially injected error in a working Cisco lab. In practice, that means I break one thing, and the agent has to reason its way back to the root cause by gathering evidence from the network.">
+  <meta property="og:description" content="Codex diagnoses MPLS lab via filtered MCP commands">
   <meta property="og:locale" content="en-us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
@@ -109,14 +100,7 @@ The use case The use case is very simple: I want an AI agent that can find an ar
     <meta property="article:modified_time" content="2026-07-17T18:50:32+00:00">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MPLS troubleshooting AI agent powered by Codex">
-<meta name="twitter:description" content="
-Intro
-In this post I want to show how I&rsquo;ve built an AI agent which is able to troubleshoot a network issue.
-I&rsquo;d like to include all implementation details; hence, anyone can reproduce it or build his own agent.
-I do not claim that this is the only right approach, but it is my way&hellip;
-
-The use case
-The use case is very simple: I want an AI agent that can find an artificially injected error in a working Cisco lab. In practice, that means I break one thing, and the agent has to reason its way back to the root cause by gathering evidence from the network.">
+<meta name="twitter:description" content="Codex diagnoses MPLS lab via filtered MCP commands">
 
 
 <script type="application/ld+json">
@@ -145,7 +129,7 @@ The use case is very simple: I want an AI agent that can find an artificially in
   "@type": "BlogPosting",
   "headline": "MPLS troubleshooting AI agent powered by Codex",
   "name": "MPLS troubleshooting AI agent powered by Codex",
-  "description": " Intro In this post I want to show how I\u0026rsquo;ve built an AI agent which is able to troubleshoot a network issue. I\u0026rsquo;d like to include all implementation details; hence, anyone can reproduce it or build his own agent.\nI do not claim that this is the only right approach, but it is my way\u0026hellip;\nThe use case The use case is very simple: I want an AI agent that can find an artificially injected error in a working Cisco lab. In practice, that means I break one thing, and the agent has to reason its way back to the root cause by gathering evidence from the network.\n",
+  "description": "Codex diagnoses MPLS lab via filtered MCP commands",
   "keywords": [
     
   ],

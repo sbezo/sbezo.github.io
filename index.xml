@@ -6,8 +6,15 @@
     <description>Recent content on sbezo.github.io</description>
     <generator>Hugo -- 0.149.0-DEV</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 18 Sep 2026 18:54:03 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 27 Sep 2026 18:35:38 +0000</lastBuildDate>
     <atom:link href="https://sbezo.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Using an AI agent inside a live SecureCRT session</title>
+      <link>https://sbezo.github.io/posts/attaching_ai_agent_to_securecrt_tab/</link>
+      <pubDate>Sun, 27 Sep 2026 18:35:38 +0000</pubDate>
+      <guid>https://sbezo.github.io/posts/attaching_ai_agent_to_securecrt_tab/</guid>
+      <description>How to connect Codex to SecureCRT safely via session bridge</description>
+    </item>
     <item>
       <title>My current understanding of AI staff</title>
       <link>https://sbezo.github.io/posts/my_curent_understanding_of_ai_agents/</link>
@@ -20,14 +27,7 @@
       <link>https://sbezo.github.io/posts/how_to_troubleshoot_mpls_lab_with_codex/</link>
       <pubDate>Fri, 17 Jul 2026 18:50:32 +0000</pubDate>
       <guid>https://sbezo.github.io/posts/how_to_troubleshoot_mpls_lab_with_codex/</guid>
-      <description>&lt;hr&gt;
-&lt;h2 id=&#34;intro&#34;&gt;Intro&lt;/h2&gt;
-&lt;p&gt;In this post I want to show how I&amp;rsquo;ve built an AI agent which is able to troubleshoot a network issue.
-I&amp;rsquo;d like to include all implementation details; hence, anyone can reproduce it or build his own agent.&lt;br&gt;
-I do not claim that this is the only right approach, but it is my way&amp;hellip;&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;the-use-case&#34;&gt;The use case&lt;/h2&gt;
-&lt;p&gt;The use case is very simple: I want an AI agent that can find an artificially injected error in a working Cisco lab. In practice, that means I break one thing, and the agent has to reason its way back to the root cause by gathering evidence from the network.&lt;/p&gt;</description>
+      <description>Codex diagnoses MPLS lab via filtered MCP commands</description>
     </item>
     <item>
       <title>Simple MCP Server</title>

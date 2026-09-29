@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Using an AI agent inside a live SecureCRT session | sbezo.github.io</title>
+<meta name="keywords" content="">
+<meta name="description" content="How to connect Codex to SecureCRT safely via session bridge">
+<meta name="author" content="">
+<link rel="canonical" href="https://sbezo.github.io/posts/attaching_ai_agent_to_securecrt_tab/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.8fe10233a706bc87f2e08b3cf97b8bd4c0a80f10675a143675d59212121037c0.css" integrity="sha256-j&#43;ECM6cGvIfy4Is8&#43;XuL1MCoDxBnWhQ2ddWSEhIQN8A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://sbezo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://sbezo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://sbezo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://sbezo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://sbezo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://sbezo.github.io/posts/attaching_ai_agent_to_securecrt_tab/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css" integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js" integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+        ]
+    });
+});
+</script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-X37ESW6JQL"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-X37ESW6JQL');
+        }
+      </script><meta property="og:url" content="https://sbezo.github.io/posts/attaching_ai_agent_to_securecrt_tab/">
+  <meta property="og:site_name" content="sbezo.github.io">
+  <meta property="og:title" content="Using an AI agent inside a live SecureCRT session">
+  <meta property="og:description" content="How to connect Codex to SecureCRT safely via session bridge">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-09-27T18:35:38+00:00">
+    <meta property="article:modified_time" content="2026-09-27T18:35:38+00:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Using an AI agent inside a live SecureCRT session">
+<meta name="twitter:description" content="How to connect Codex to SecureCRT safely via session bridge">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://sbezo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Using an AI agent inside a live SecureCRT session",
+      "item": "https://sbezo.github.io/posts/attaching_ai_agent_to_securecrt_tab/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Using an AI agent inside a live SecureCRT session",
+  "name": "Using an AI agent inside a live SecureCRT session",
+  "description": "How to connect Codex to SecureCRT safely via session bridge",
+  "keywords": [
+    
+  ],
+  "articleBody": "The problem is obvious: I have a lot of sessions stored in SecureCRT (it is a terminal app like PuTTY). Each has its host, credentials, and some have a logon script. Each session is logged.\nSay that I want to ask an AI agent for help.\nThere are three key issues here:\nCredentials security. I can somehow pass the host, credentials, and enable password to an AI agent. But that is a security issue. The agent will have credentials to some system, and you cannot be sure where they will appear in the future. Even if you do it in a fairly secure fashion, the agent still simply needs them.\nMental friction. If you have to hassle with finding and passing credentials to the agent, it can be a reason to give it up.\nPrivileges control. If you give credentials to an agent, you are literally losing control of what the agent can really do on the terminal. Of course, it can ask for permissions, and you can write .md instructions, but in the end, you give the agent the steering wheel.\nIs it even possible? Yes, it is. And without an agent computer-use tool (nor screen reading nor accessibility text).\nThere is a way to literally “attach” an AI agent to an open SecureCRT session. Not so easy, but it is.\nThere is a possibility to read and write a stream from an active SecureCRT session. It is possible to use something like a “bridge” or “terminal stream adapter” to an existing SSH session through SecureCRT application features such as Screen.send() and Screen.write().\nThat bridge allows agent communication through an MCP server.\nArchitecture The high level overview of the solution is defined by this flow:\nThe user connects to one or more devices in SecureCRT. In each tab to share, the user starts securecrt_bridge.py, for example using a button. The user selects a profile in SecureCRT. It declares the expected shell (iosxe, panos, linux …) and access level. The user should choose the profile that matches that tab. The user starts Codex and makes a request. Codex connects to the registered MCP server, securecrt_server.py. Codex makes the server’s available tools—such as list_sessions, run_command, and read_output—available to the agent. Based on the request, the agent chooses and calls an appropriate tool. The server checks requests and passes them through bridge_client.py to the matching tab’s local socket. bridge_core.py, running inside SecureCRT, checks the profile permissions defined in command_profiles.py, sends allowed input to the terminal, and captures returning text. Commands and their output appear in the SecureCRT terminal. The agent-to-server/socket messages are not shown there. The user can detach or stop the bridge. This does not disconnect SecureCRT, and a command already running may continue; interrupt it explicitly if needed. Code Until now, it was just a concept, but real code is here: The README contains all implementation details like registering the MCP server to Codex and how to make it work on your computer.\nHonestly, the code was AI-assisted, especially the bridge streaming part - it was beyond my current Python skills;)\nHow it looks From an already open SSH session, I click a button that starts a bridge script for allowing streaming input/output from the terminal to the MCP server. I get a popup window where I can select a profile - it is fully customizable. “full” in my case means that agent input is not filtered. “readonly” checks agent commands against a list of allowed prefixes. (you can set it up so that a command must start with “show” or “ping” only)\nSay, that I choose “5” - profile with full access to linux CLI. Important thing is that based on selected profile AI agent explicitley knows which kind of device is connected. Nothing happens, but bridge is now open and I can start codex.\nOne note - I have a special subagent with name “tana” (as “t\"roubleshooting agent;)) configured in codex. It allows me ask directly agent by name and he immediately knows, that he have to use MCP and do not try to use plugin: cua_repl MCP server (codex plugin: “unified-computer-use”). It allows me also choose particular model and give agent some special instructions. I wrote more about subagent setup in previous post\nIn the next step, I open the CLI Codex agent in a terminal window. I open an empty dummy folder in it. I ask agent “tana” for information regarding Docker. It sends commands through the MCP and SecureCRT bridge and evaluates the answers.\nI can watch it work live and disconnect the bridge anytime with the SecureCRT button (stop the script)\nTesting boundaries Now try to test if the agent is able to cross security boundaries. I choose profile 3 (iosxe-readonly). I configured a few lines and ask the agent to commit changes.\nThe agent sees that it is on a different platform (iosxr vs iosxe), and the bridge deterministically does not allow commands except those starting with “ping” or “show”.\nConclusion This is not about giving an AI raw access to a terminal. It is about giving it a controlled lane inside a session the user still owns. The profile defines the rules, the bridge enforces them, and the terminal stays visible, interruptible, and under human control.\nThat is the key point: the agent can help, but it cannot silently cross the boundaries you define.\n",
+  "wordCount" : "892",
+  "inLanguage": "en",
+  "datePublished": "2026-09-27T18:35:38Z",
+  "dateModified": "2026-09-27T18:35:38Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://sbezo.github.io/posts/attaching_ai_agent_to_securecrt_tab/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "sbezo.github.io",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://sbezo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://sbezo.github.io/" accesskey="h" title="sbezo.github.io (Alt + H)">sbezo.github.io</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://sbezo.github.io/posts/" title="Posts">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://sbezo.github.io/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Using an AI agent inside a live SecureCRT session
+    </h1>
+    <div class="post-meta"><span title='2026-09-27 18:35:38 +0000 UTC'>September 27, 2026</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>The problem is obvious: I have a lot of sessions stored in SecureCRT (it is a terminal app like PuTTY). Each has its host, credentials, and some have a logon script. Each session is logged.<br>
+Say that <strong>I want to ask an AI agent for help.</strong></p>
+<p>There are three key issues here:</p>
+<ol>
+<li>
+<p><strong>Credentials security</strong>. I can somehow pass the host, credentials, and enable password to an AI agent. But that is a security issue. The agent will have credentials to some system, and you cannot be sure where they will appear in the future. Even if you do it in a fairly secure fashion, the agent still simply needs them.</p>
+</li>
+<li>
+<p><strong>Mental friction</strong>. If you have to hassle with finding and passing credentials to the agent, it can be a reason to give it up.</p>
+</li>
+<li>
+<p><strong>Privileges control</strong>. If you give credentials to an agent, you are literally losing control of what the agent can really do on the terminal. Of course, it can ask for permissions, and you can write .md instructions, but in the end, you give the agent the steering wheel.</p>
+</li>
+</ol>
+<h2 id="is-it-even-possible">Is it even possible?<a hidden class="anchor" aria-hidden="true" href="#is-it-even-possible">#</a></h2>
+<p>Yes, it is. And without an agent computer-use tool (nor screen reading nor accessibility text).<br>
+There is a way to literally &ldquo;attach&rdquo; an AI agent to an open SecureCRT session. Not so easy, but it is.<br>
+There is a possibility to read and write a stream from an active SecureCRT session. It is possible to use something like a &ldquo;bridge&rdquo; or &ldquo;terminal stream adapter&rdquo; to an existing SSH session through SecureCRT application features such as Screen.send() and Screen.write().<br>
+That bridge allows agent communication through an MCP server.</p>
+<h2 id="architecture">Architecture<a hidden class="anchor" aria-hidden="true" href="#architecture">#</a></h2>
+<p>The high level overview of the solution is defined by this flow:</p>
+<ol>
+<li>The user connects to one or more devices in SecureCRT.</li>
+<li>In each tab to share, the user starts securecrt_bridge.py, for example using a button. The user selects a profile in SecureCRT. It declares the expected shell (iosxe, panos, linux &hellip;) and access level. The user should choose the profile that matches that tab.</li>
+<li>The user starts Codex and makes a request. Codex connects to the registered MCP server, securecrt_server.py.</li>
+<li>Codex makes the server’s available tools—such as list_sessions, run_command, and read_output—available to the agent.</li>
+<li>Based on the request, the agent chooses and calls an appropriate tool.</li>
+<li>The server checks requests and passes them through bridge_client.py to the matching tab’s local socket.</li>
+<li>bridge_core.py, running inside SecureCRT, checks the profile permissions defined in command_profiles.py, sends allowed input to the terminal, and captures returning text. Commands and their output appear in the SecureCRT terminal. The agent-to-server/socket messages are not shown there.</li>
+<li>The user can detach or stop the bridge. This does not disconnect SecureCRT, and a command already running may continue; interrupt it explicitly if needed.</li>
+</ol>
+<p><img loading="lazy" src="/img/SecureCRT_MCP.png"></p>
+<h2 id="code">Code<a hidden class="anchor" aria-hidden="true" href="#code">#</a></h2>
+<p>Until now, it was just a concept, but real code is <a href="https://github.com/sbezo/SecureCRT_MCP">here:</a>
+The README contains all implementation details like registering the MCP server to Codex and how to make it work on your computer.<br>
+Honestly, the code was AI-assisted, especially the bridge streaming part - it was beyond my current Python skills;)</p>
+<h2 id="how-it-looks">How it looks<a hidden class="anchor" aria-hidden="true" href="#how-it-looks">#</a></h2>
+<p>From an already open SSH session, I click a button that starts a bridge script for allowing streaming input/output from the terminal to the MCP server. I get a popup window where I can select a profile - it is fully customizable.
+&ldquo;full&rdquo; in my case means that agent input is not filtered. &ldquo;readonly&rdquo; checks agent commands against a list of allowed prefixes. (you can set it up so that a command must start with &ldquo;show&rdquo; or &ldquo;ping&rdquo; only)</p>
+<p><img loading="lazy" src="/img/SecureCRT_MCP_2.png"></p>
+<p>Say, that I choose &ldquo;5&rdquo; - profile with full access to linux CLI. Important thing is that based on selected profile AI agent explicitley knows which kind of device is connected.
+Nothing happens, but bridge is now open and I can start codex.</p>
+<blockquote>
+<p>One note - I have a special subagent with name &ldquo;tana&rdquo; (as &ldquo;t&quot;roubleshooting agent;)) configured in codex. It allows me ask directly agent by name and he immediately knows, that he have to use MCP and do not try to use plugin: cua_repl MCP server (codex plugin: &ldquo;unified-computer-use&rdquo;). It allows me also choose particular model and give agent some special instructions. I wrote more about subagent setup in previous <a href="/posts/My_curent_understanding_of_AI_agents">post</a></p></blockquote>
+<p>In the next step, I open the CLI Codex agent in a terminal window. I open an empty dummy folder in it.
+I ask agent &ldquo;tana&rdquo; for information regarding Docker. It sends commands through the MCP and SecureCRT bridge and evaluates the answers.<br>
+<img loading="lazy" src="/img/SecureCRT_MCP_3.png"></p>
+<p>I can watch it work live and disconnect the bridge anytime with the SecureCRT button (stop the script)</p>
+<h2 id="testing-boundaries">Testing boundaries<a hidden class="anchor" aria-hidden="true" href="#testing-boundaries">#</a></h2>
+<p>Now try to test if the agent is able to cross security boundaries. I choose profile 3 (iosxe-readonly). I configured a few lines and ask the agent to commit changes.<br>
+<img loading="lazy" src="/img/SecureCRT_MCP_4.png"></p>
+<p>The agent sees that it is on a different platform (iosxr vs iosxe), and the bridge deterministically does not allow commands except those starting with &ldquo;ping&rdquo; or &ldquo;show&rdquo;.</p>
+<h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
+<p>This is not about giving an AI raw access to a terminal. It is about giving it a controlled lane inside a session the user still owns. The profile defines the rules, the bridge enforces them, and the terminal stays visible, interruptible, and under human control.</p>
+<p>That is the key point: the agent can help, but it cannot silently cross the boundaries you define.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Using an AI agent inside a live SecureCRT session on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fsbezo.github.io%2fposts%2fattaching_ai_agent_to_securecrt_tab%2f&amp;title=Using%20an%20AI%20agent%20inside%20a%20live%20SecureCRT%20session&amp;summary=Using%20an%20AI%20agent%20inside%20a%20live%20SecureCRT%20session&amp;source=https%3a%2f%2fsbezo.github.io%2fposts%2fattaching_ai_agent_to_securecrt_tab%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Using an AI agent inside a live SecureCRT session on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fsbezo.github.io%2fposts%2fattaching_ai_agent_to_securecrt_tab%2f&title=Using%20an%20AI%20agent%20inside%20a%20live%20SecureCRT%20session">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://sbezo.github.io/">sbezo.github.io</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
