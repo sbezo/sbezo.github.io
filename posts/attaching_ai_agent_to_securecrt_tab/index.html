@@ -243,7 +243,7 @@ That bridge allows agent communication through an MCP server.</p>
 <ol>
 <li>The user connects to one or more devices in SecureCRT.</li>
 <li>In each tab to share, the user starts <code>securecrt_bridge.py</code>, for example using a button. The user selects a profile in SecureCRT. It declares the expected shell (iosxe, panos, linux &hellip;) and access level. The user should choose the profile that matches that tab.</li>
-<li>The user starts Codex and makes a request. Codex connects to the registered MCP server, securecrt_server.py.</li>
+<li>The user starts Codex and makes a request. Codex connects to the registered MCP server, <code>securecrt_server.py</code>.</li>
 <li>Codex makes the server’s tools—such as <code>list_sessions</code>, <code>run_command</code>, and <code>read_output</code> available to the agent.</li>
 <li>Based on the request, the agent chooses and calls an appropriate tool.</li>
 <li>The server checks requests and passes them through <code>bridge_client.py</code> to the matching tab’s local socket.</li>
