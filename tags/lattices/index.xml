@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Lattices on sbezo.github.io</title>
+    <link>http://localhost:1313/tags/lattices/</link>
+    <description>Recent content in Lattices on sbezo.github.io</description>
+    <generator>Hugo -- 0.149.0-DEV</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 16 Aug 2025 14:35:18 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/lattices/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Breaking a Noisy LWE System with Lattices</title>
+      <link>http://localhost:1313/posts/noisy_system_solved_by_lattice/</link>
+      <pubDate>Sat, 16 Aug 2025 14:35:18 +0000</pubDate>
+      <guid>http://localhost:1313/posts/noisy_system_solved_by_lattice/</guid>
+      <description>Lattices - Part 3: How to use Lattice to break LWE system with small errors.</description>
+    </item>
+    <item>
+      <title>Knapsack and Lattice</title>
+      <link>http://localhost:1313/posts/knapsack_and_lattice/</link>
+      <pubDate>Thu, 14 Aug 2025 12:57:15 +0000</pubDate>
+      <guid>http://localhost:1313/posts/knapsack_and_lattice/</guid>
+      <description>Lattices - Part 2: How to break Merkle–Hellman knapsack cryptosystem with Lattice</description>
+    </item>
+    <item>
+      <title>Lattices by example</title>
+      <link>http://localhost:1313/posts/lattices_by_example_1/</link>
+      <pubDate>Fri, 08 Aug 2025 11:38:28 +0000</pubDate>
+      <guid>http://localhost:1313/posts/lattices_by_example_1/</guid>
+      <description>Lattices - Part 1: Solving an equation with irrational numbers with Lattice</description>
+    </item>
+  </channel>
+</rss>

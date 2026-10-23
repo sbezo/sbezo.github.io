@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
 <title>SecureCRT as a personal automation controller | sbezo.github.io</title>
-<meta name="keywords" content="">
+<meta name="keywords" content="automation">
 <meta name="description" content="How to start Virtual Machines by clicking to one button">
 <meta name="author" content="">
 <link rel="canonical" href="https://sbezo.github.io/posts/securecrt_as_automation_controller/">
@@ -98,6 +98,7 @@ document.addEventListener("DOMContentLoaded", function() {
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2025-09-03T05:18:09+00:00">
     <meta property="article:modified_time" content="2025-09-03T05:18:09+00:00">
+    <meta property="article:tag" content="Automation">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SecureCRT as a personal automation controller">
 <meta name="twitter:description" content="How to start Virtual Machines by clicking to one button">
@@ -131,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function() {
   "name": "SecureCRT as a personal automation controller",
   "description": "How to start Virtual Machines by clicking to one button",
   "keywords": [
-    
+    "automation"
   ],
   "articleBody": "If you’ve ever written a small script to make your life easier, you probably know the next part well…\nThe script works perfectly from the CLI or even inside VSCode.\nI’m talking about lightweight and personal script, so no CI/CD pipelines or other complicated solutions this time..\nThe problem? Every time you want to run it, you have to hunt down the repository, find the script, and launch it manually.\nI don’t know about you, but I prefer to reduce the number of clicks in my daily routine as much as possible.\nI know, that there can be a lot of solution of this problem. Shortcuts, Widgets, another apps…\nBut now I want to tell you about my idea:)\nSecureCRT One of my “always open” apps on my MacBook is SecureCRT—right there with Firefox, VSCode, OneNote, and ChatGPT.\nSecureCRT is a commercial SSH client (think of it as a polished cousin of PuTTY) and, for me as a network engineer, it’s a must-have tool.\nAnd here’s the trick: at the bottom of the SecureCRT window, there’s a button bar. Its visibility can be set by “View - Button Bar” setup.\nI can add any number of buttons of any color with any label. Buttons can be organized to groups if needed. And I can assign some action to each button.\nJump to my real example for better understanding.\nStarting VMs through vCenter This is an example of my small, personal automation script. My use-case is to start or stop any of my virtual machines running in vSphere infrastructure.\nWith limited resources, I don’t want to run all my virtual machines all the time. When I need, I start some VM. When I do not need it anymore, I just stop it.\nThis is my almost daily routine.\nThe usual way would be to open the vCenter page in a browser, log in, find the folder with my VMs, and start or stop a particular VM. For me, that’s a ‘no way’.\nSo I’ve created python script which connects to vCenter, list all my VMs and ask me, which of them I want to start or stop.\nSome people might find the script itself interesting, so I’ll spend a bit of time on it. If you don’t care about the details, feel free to skip ahead to the integration part.\nPython script for starting VMs There will be described just script for starting VMs. But script for stopping VMs is very similar.\nWhen it comes to small personal projects, I usually prefer a simple Python venv rather than setting up Docker. So I created new folder for all my SecureCRT automation scripts and created python virtual environment for this repository. And import some important modules for this project.\nmkdir SCRT_2025 cd SCRT_2025 python3 -m venv .venv source .venv/bin/activate pip3 install pyvim pip3 install pyVmomi pip3 install python-dotenv Then I need to create a file with credentials for vCenter.\nIf you use Source Control, do not forget to exclude this credential file in .gitignore\necho \"username=password\" \u003e\u003e .env echo \".env\" \u003e\u003e .gitignore And finally my awesome python VMs_On_run.py script. It is customized to my vSphere environment, but everything should be clear and self-explaining.\n#! /usr/bin/env python from pyvim import connect import os from pyVmomi import vim from dotenv import load_dotenv load_dotenv(\"/Users/stefanbezo/Documents/Dev/SCRT_2025/.env\") token = os.getenv(\"sbezo_vsphere_local\") # All my VMs are organized in folder with name \"SB\" my_folder = 'SB' connection = connect.Connect(\"vc.demo.corp\", 443, \"sbezo@vsphere.local\", token, disableSslCertValidation=True) content = connection.RetrieveContent() container = content.viewManager.CreateContainerView(content.rootFolder, [vim.Folder], True) count = 1 My_Dict = {} for folder in container.view: if folder.name == my_folder: vms = folder.childEntity # List of VM objects in the my_folder for vm in vms: print(f\"{count:\u003c6} {vm.name:\u003c30} {vm.runtime.powerState}\") My_Dict[str(count)] = vm count += 1 vstup = input('\\nNapis ktore chces nastartovat, cisla oddel ciarkami... ') MyList = vstup.split(\",\") print(MyList) for item in MyList: print(\"idem nastartovat \", My_Dict[item].name) vstup = input(\"potvrd \") if vstup == \"Yes\": for item in MyList: print(\"Startujem \", My_Dict[item].name) My_Dict[item].PowerOn() print(\"Startujem... \", My_Dict[item].name) else: print(\"Nezadal si Y - rusim startovanie\") container.Destroy() connect.Disconnect(connection) Now I have ready to use script which I want to run by clicking to button in SecureCRT.\nButton controller I can assign any of following actions to my new button:\nAnd I select “Run Script” this time.\nThere is a small, but important catch - I cannot run directly my new VMs_On_run.py script, because SecureCRT run default python interpreter and I need to run my script under its venv environment. So I need some kind of midleware - simple button controller, which is able to run under default system python and activate my automation script.\nI named my button controller script as VMs_On_controller.py and it looks like:\nimport subprocess cmd = \"/Users/stefanbezo/Documents/Dev/SCRT_2025/.venv/bin/python /Users/stefanbezo/Documents/Dev/SCRT_2025/VMs_On_run.py\" osascript_command = f''' tell application \"Terminal\" activate do script \"{cmd}\" end tell ''' subprocess.Popen([\"osascript\", \"-e\", osascript_command]) It only does a few things:\nopen Mac terminal bring it front run VMs_On_run.py script inside its virtual environment So now I can assign this button controller script to new button\nFinal result Now it’s time to test my new workflow:\nSecureCRT Button —\u003e button controller (system python) —\u003e automation script (specific venv)\nAfter click on button I see exactly something like this:\nConclusion This post doesn’t claim to show the best possible way to handle personal automation scripts.\nI know it’s pretty closely tied to my own environment and tools, but it works great for me and I hope, that could inspire also somebody else.\nSecureCRT provides much more scripting functionalities of course, but diving deep was not my goal. I just wanted to run something independent by simple click on button;)\n",
   "wordCount" : "933",
@@ -200,8 +201,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 </a>
             </li>
             <li>
-                <a href="https://sbezo.github.io/projects/" title="Projects">
-                    <span>Projects</span>
+                <a href="https://sbezo.github.io/tags/" title="Tags">
+                    <span>Tags</span>
                 </a>
             </li>
         </ul>
@@ -345,6 +346,7 @@ SecureCRT provides much more scripting functionalities of course, but diving dee
 
   <footer class="post-footer">
     <ul class="post-tags">
+      <li><a href="https://sbezo.github.io/tags/automation/">Automation</a></li>
     </ul>
 
 <ul class="share-buttons">

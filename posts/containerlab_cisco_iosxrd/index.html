@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
 <title>Running Cisco IOS XRd in Containerlab | sbezo.github.io</title>
-<meta name="keywords" content="">
+<meta name="keywords" content="networking">
 <meta name="description" content="A short note on getting Cisco IOS XRd running in Containerlab and the one detail I missed the first time.">
 <meta name="author" content="">
 <link rel="canonical" href="https://sbezo.github.io/posts/containerlab_cisco_iosxrd/">
@@ -98,6 +98,7 @@ document.addEventListener("DOMContentLoaded", function() {
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2026-03-27T13:33:22+00:00">
     <meta property="article:modified_time" content="2026-03-27T13:33:22+00:00">
+    <meta property="article:tag" content="Networking">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Running Cisco IOS XRd in Containerlab">
 <meta name="twitter:description" content="A short note on getting Cisco IOS XRd running in Containerlab and the one detail I missed the first time.">
@@ -131,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function() {
   "name": "Running Cisco IOS XRd in Containerlab",
   "description": "A short note on getting Cisco IOS XRd running in Containerlab and the one detail I missed the first time.",
   "keywords": [
-    
+    "networking"
   ],
   "articleBody": "This is my second attempt to run a Cisco image in Containerlab. My first try, about two years ago, ended in frustration, so I stayed with Arista and FRR labs for a while.\nThe reason turned out to be very simple: I had missed one important note on the Containerlab IOS XRd page. Only the control plane version of IOS XRd is supported.\nSo the working image is this one:\nOnce I used the correct image, the rest was surprisingly smooth.\nAutomation first I like to automate even small labs, so I built the environment like this:\nTerraform to deploy a remote Ubuntu VM Ansible to install required packages and prepare the host Ansible again to copy lab topologies and perform basic lab operations IOS XRd needs an x86 platform, so running the lab on a remote Ubuntu VM worked well for me.\nAll files are available here: ContainerLab-2026\nFirst lab Because IOS XRd is aimed at service provider use cases, my first test was a small MPLS topology:\nAnd the corresponding Containerlab topology file looks like this:\nname: xrd-lab topology: kinds: cisco_xrd: image: ios-xr/xrd-control-plane:25.4.1 env: CLAB_MGMT_VRF: Mgmt-intf nodes: P0: kind: cisco_xrd mgmt-ipv4: 172.20.20.30 ports: - \"2310:22\" PE1: kind: cisco_xrd mgmt-ipv4: 172.20.20.31 ports: - \"2311:22\" PE2: kind: cisco_xrd mgmt-ipv4: 172.20.20.32 ports: - \"2312:22\" CE1: kind: cisco_xrd mgmt-ipv4: 172.20.20.33 ports: - \"2313:22\" CE2: kind: cisco_xrd mgmt-ipv4: 172.20.20.34 ports: - \"2314:22\" RR: kind: cisco_xrd mgmt-ipv4: 172.20.20.35 ports: - \"2315:22\" CE3: kind: cisco_xrd mgmt-ipv4: 172.20.20.36 ports: - \"2316:22\" links: - endpoints: [\"CE1:Gi0-0-0-0\", \"PE1:Gi0-0-0-1\"] - endpoints: [\"PE1:Gi0-0-0-0\", \"P0:Gi0-0-0-0\"] - endpoints: [\"P0:Gi0-0-0-1\", \"PE2:Gi0-0-0-0\"] - endpoints: [\"PE2:Gi0-0-0-1\", \"CE2:Gi0-0-0-0\"] - endpoints: [\"P0:Gi0-0-0-2\", \"RR:Gi0-0-0-0\"] - endpoints: [\"CE3:Gi0-0-0-0\", \"PE1:Gi0-0-0-2\"] - endpoints: [\"PE1:Gi0-0-0-3\", \"CE1:Gi0-0-0-1\"] - endpoints: [\"PE2:Gi0-0-0-2\", \"CE2:Gi0-0-0-1\"] That is really all it took to get started. If you are trying IOS XRd in Containerlab for the first time, the main thing to remember is simple: use the control plane image, not the full variant.\nFor me, that one overlooked detail made the difference between a failed experiment and a very usable Cisco lab.\nI love containers and I love also Containerlab now :)\n",
   "wordCount" : "344",
@@ -200,8 +201,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 </a>
             </li>
             <li>
-                <a href="https://sbezo.github.io/projects/" title="Projects">
-                    <span>Projects</span>
+                <a href="https://sbezo.github.io/tags/" title="Tags">
+                    <span>Tags</span>
                 </a>
             </li>
         </ul>
@@ -309,6 +310,7 @@ topology:
 
   <footer class="post-footer">
     <ul class="post-tags">
+      <li><a href="https://sbezo.github.io/tags/networking/">Networking</a></li>
     </ul>
 
 <ul class="share-buttons">

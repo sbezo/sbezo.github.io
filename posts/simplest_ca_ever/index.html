@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
 <title>Simplest CA ever | sbezo.github.io</title>
-<meta name="keywords" content="">
+<meta name="keywords" content="networking, security">
 <meta name="description" content="How to quickly get a few certificates for lab use">
 <meta name="author" content="">
 <link rel="canonical" href="https://sbezo.github.io/posts/simplest_ca_ever/">
@@ -98,6 +98,8 @@ document.addEventListener("DOMContentLoaded", function() {
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2025-09-07T00:00:00+00:00">
     <meta property="article:modified_time" content="2025-09-07T00:00:00+00:00">
+    <meta property="article:tag" content="Networking">
+    <meta property="article:tag" content="Security">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Simplest CA ever">
 <meta name="twitter:description" content="How to quickly get a few certificates for lab use">
@@ -131,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function() {
   "name": "Simplest CA ever",
   "description": "How to quickly get a few certificates for lab use",
   "keywords": [
-    
+    "networking", "security"
   ],
   "articleBody": "Do you know following problem?\n“I need some certificates for my lab devices to test something”.\nBut as always, old lab CA is broken and I have no time to hassle with a new full-blown CA. Just need a few (not self-signed) certificates, and quickly, of course ;).\nSo here is my the shortest known recipe:\n1. Open Alpine in Docker Run this from the folder where you want your new certificates will land:\ndocker run --rm -it -v \"$PWD\":/root alpine It will run a small Linux container, open a shell, map the current folder to the container’s /root, and clean up after exiting.\n2. Generate CA certificate # install openssl apk update \u0026\u0026 apk add openssl cd /root # CA private key openssl genrsa -out ca.key 2048 # CA certificate (self-signed) openssl req -x509 -new -nodes -key ca.key -sha256 -days 3650 \\ -subj \"/C=SK/O=LabCA/CN=LabRootCA\" \\ -out ca.crt It installs openssl package It creates file ca.key containing CA’s private key. It creates file ca.crt containing CA certificate. 3. Generate identity certificate for router in my case\n# router private key openssl genrsa -out router.key 2048 # router CSR openssl req -new -key router.key \\ -subj \"/C=SK/O=LabCA/CN=router.lab\" \\ -out router.csr # Sign CSR with CA openssl x509 -req -in router.csr -CA ca.crt -CAkey ca.key \\ -CAcreateserial -out router.crt -days 365 -sha256 It creates file router.key with private key for identity certificate of your host. It creates file router.csr with CSR for router. It signs CSR and creates file router.crt You can adjust any parameters as you need.\nYou can change ‘router’ to any name and create another certificates if you wish.\nConclusion And that is all. You can find certificates and keys in your working folder now. If nobody else cares, at least this short post serves as a good memo for me ;)\n",
   "wordCount" : "303",
@@ -200,8 +202,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 </a>
             </li>
             <li>
-                <a href="https://sbezo.github.io/projects/" title="Projects">
-                    <span>Projects</span>
+                <a href="https://sbezo.github.io/tags/" title="Tags">
+                    <span>Tags</span>
                 </a>
             </li>
         </ul>
@@ -275,6 +277,8 @@ If nobody else cares, at least this short post serves as a good memo for me ;)</
 
   <footer class="post-footer">
     <ul class="post-tags">
+      <li><a href="https://sbezo.github.io/tags/networking/">Networking</a></li>
+      <li><a href="https://sbezo.github.io/tags/security/">Security</a></li>
     </ul>
 
 <ul class="share-buttons">

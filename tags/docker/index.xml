@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Docker on sbezo.github.io</title>
+    <link>http://localhost:1313/tags/docker/</link>
+    <description>Recent content in Docker on sbezo.github.io</description>
+    <generator>Hugo -- 0.149.0-DEV</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 23 Apr 2026 13:32:26 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Temporary DHCP server</title>
+      <link>http://localhost:1313/posts/temp_dhcp/</link>
+      <pubDate>Thu, 23 Apr 2026 13:32:26 +0000</pubDate>
+      <guid>http://localhost:1313/posts/temp_dhcp/</guid>
+      <description>How to quickly spin up a short-lived DHCP server in a container</description>
+    </item>
+    <item>
+      <title>Running Cisco IOS XRd in Containerlab</title>
+      <link>http://localhost:1313/posts/containerlab_cisco_iosxrd/</link>
+      <pubDate>Fri, 27 Mar 2026 13:33:22 +0000</pubDate>
+      <guid>http://localhost:1313/posts/containerlab_cisco_iosxrd/</guid>
+      <description>A short note on getting Cisco IOS XRd running in Containerlab and the one detail I missed the first time.</description>
+    </item>
+    <item>
+      <title>Full-blown IPSec on Linux with LibreSwan, VTI, RSA, and BGP</title>
+      <link>http://localhost:1313/posts/ipsec_on_linux/</link>
+      <pubDate>Fri, 19 Sep 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/ipsec_on_linux/</guid>
+      <description>LAB notes</description>
+    </item>
+    <item>
+      <title>Simplest CA ever</title>
+      <link>http://localhost:1313/posts/simplest_ca_ever/</link>
+      <pubDate>Sun, 07 Sep 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/simplest_ca_ever/</guid>
+      <description>How to quickly get a few certificates for lab use</description>
+    </item>
+    <item>
+      <title>Hugo from Docker</title>
+      <link>http://localhost:1313/posts/hugo-1/</link>
+      <pubDate>Wed, 06 Aug 2025 18:11:33 +0000</pubDate>
+      <guid>http://localhost:1313/posts/hugo-1/</guid>
+      <description>Hugo - Part 1: Very Quick Start with the PaperMod theme</description>
+    </item>
+  </channel>
+</rss>

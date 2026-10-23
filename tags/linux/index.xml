@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Linux on sbezo.github.io</title>
+    <link>http://localhost:1313/tags/linux/</link>
+    <description>Recent content in Linux on sbezo.github.io</description>
+    <generator>Hugo -- 0.149.0-DEV</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 29 Jan 2026 14:44:23 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Playing with Linux interfaces</title>
+      <link>http://localhost:1313/posts/playing_with_linux_interfaces/</link>
+      <pubDate>Thu, 29 Jan 2026 14:44:23 +0000</pubDate>
+      <guid>http://localhost:1313/posts/playing_with_linux_interfaces/</guid>
+      <description>Cheatsheet for the most common network configurations on my 4 favourite distros: Alpine, Ubuntu, Debian, Rocky</description>
+    </item>
+    <item>
+      <title>Full-blown IPSec on Linux with LibreSwan, VTI, RSA, and BGP</title>
+      <link>http://localhost:1313/posts/ipsec_on_linux/</link>
+      <pubDate>Fri, 19 Sep 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/ipsec_on_linux/</guid>
+      <description>LAB notes</description>
+    </item>
+  </channel>
+</rss>

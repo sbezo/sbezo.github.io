@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
 <title>Hugo to github.io | sbezo.github.io</title>
-<meta name="keywords" content="">
+<meta name="keywords" content="development">
 <meta name="description" content="Hugo - Part 2: Continue with publishing of personal web site">
 <meta name="author" content="">
 <link rel="canonical" href="https://sbezo.github.io/posts/hugo-2/">
@@ -98,6 +98,7 @@ document.addEventListener("DOMContentLoaded", function() {
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2025-08-07T10:09:54+00:00">
     <meta property="article:modified_time" content="2025-08-07T10:09:54+00:00">
+    <meta property="article:tag" content="Development">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hugo to github.io">
 <meta name="twitter:description" content="Hugo - Part 2: Continue with publishing of personal web site">
@@ -131,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function() {
   "name": "Hugo to github.io",
   "description": "Hugo - Part 2: Continue with publishing of personal web site",
   "keywords": [
-    
+    "development"
   ],
   "articleBody": "I have my simple web page with blog running locally on HUGO server - as a container.\nNow it is time to make it public…\nWhat I want? Generate code for my web page Setup workflow for publishing And finally see my page on internet :) Primary goal of HUGO, as static site generator, is simply generate html, css and js code for web site.\nAnd next step is very easy. Just attach shell to container and type hugo.\ndocker exec -it hugo_2025-server-1 bash hugo Now I have complete code generated in /public folder of my sbezo.github.io project.\nAnd I need to get it to github server.\nFirst a little bit a git woodoo ;) I have already git initiated in parent folder HUGO of my site folder sbezo.github.io.\npublic folder is inside site. Simply something like this:\n📁 HUGO ├── 📄 .gitignore ├── 📄 docker-compose.yml ├── 📁 .git/ ├── 📁 sbezo.github.io/ ├── 📁 public/ ├── 📁 content/ ├── 📁 content/ ├── 📁 ... └── 📄 hugo.yaml As I want to push complete HUGO folder as private repository to github.com, I did it in VSCode as usually. Nothing special to explain.\nBut I also want to push /public folder as public repository to one special github repository with name sbezo/sbezo.github.io.\nEach Github user can publish static web content from this special repository with name username/username.github.io and can be served on https://username.github.io for free.\nSo I excluded /public from git by modifying .gitignore file under HUGO folder by adding record:\nsbezo.github.io/public And then I initialized another git inside /public/ folder and push repository to remote.\ncd public git init git add * git commit -m \"1st commit\" git remote add origin git@github.com:sbezo/sbezo.github.io.git git push origin main --force I had repository sbezo/sbezo.github.io already on github.com with some obsolete data.\nSmall tunning on github repository under Settings \u003e Pages is necessary:\n.\nAlso some changes in VSCode to see both repositories in Source Control are necessary:\ngo to File \u003e Add Folder to Workspace… Select the public/ folder go to File \u003e Save Workspace As Both repositories should be open as Workspace next time\nFinal workflow Create new post with HUGO docker compose up docker exec -it hugo_2025-server-1 bash hugo new posts/My_new_post.md Edit My_new_post.md as needed\nGenerate new content for web site\ndocker exec -it hugo_2025-server-1 bash hugo Commit and push both repositories to remote github.com from VSCode. First public, then HUGO Result Now I have a my simple personal website running on internet.\nI do not claim, that it is perfectly correct setup. But it is most logic for me and it works !. I hope it could helps somebody else…\n",
   "wordCount" : "439",
@@ -200,8 +201,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 </a>
             </li>
             <li>
-                <a href="https://sbezo.github.io/projects/" title="Projects">
-                    <span>Projects</span>
+                <a href="https://sbezo.github.io/tags/" title="Tags">
+                    <span>Tags</span>
                 </a>
             </li>
         </ul>
@@ -303,6 +304,7 @@ I hope it could helps somebody else&hellip;</p>
 
   <footer class="post-footer">
     <ul class="post-tags">
+      <li><a href="https://sbezo.github.io/tags/development/">Development</a></li>
     </ul>
 
 <ul class="share-buttons">

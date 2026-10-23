@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
 <title>Creating VM with PowerCLI | sbezo.github.io</title>
-<meta name="keywords" content="">
+<meta name="keywords" content="automation">
 <meta name="description" content="How to spin up new VM in vSphere from ISO image without hassling with vCenter GUI">
 <meta name="author" content="">
 <link rel="canonical" href="https://sbezo.github.io/posts/creating_vm_with_powercli/">
@@ -98,6 +98,7 @@ document.addEventListener("DOMContentLoaded", function() {
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2026-01-23T07:24:41+00:00">
     <meta property="article:modified_time" content="2026-01-23T07:24:41+00:00">
+    <meta property="article:tag" content="Automation">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Creating VM with PowerCLI">
 <meta name="twitter:description" content="How to spin up new VM in vSphere from ISO image without hassling with vCenter GUI">
@@ -131,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function() {
   "name": "Creating VM with PowerCLI",
   "description": "How to spin up new VM in vSphere from ISO image without hassling with vCenter GUI",
   "keywords": [
-    
+    "automation"
   ],
   "articleBody": "Why? I’m quite bored of creating new VM from ISO image with vCenter GUI. You know it:\nopen browser upload iso image to datastore from local machine run wizard for creating new VM go through all required parameters and finally boot VM from ISO image I have a little project in my mind, which requires deploying 4 different Linux distros. So it is a good time to test creating new VMs with PowerCLI.\nPowerCLI is a command line tool for interacting with vSphere management. It runs on top of PowerShell.\nPrerequisites Install powershell (Mac in my case):\nbrew install --cask powershell Run powershell:\npwsh And connect to vCenter with valid credentials:\nconnect-VIServer -Server vc.demo.corp -Protocol https Some useful commands before starting Get Datacenters:\nGet-Datacenter Get Datastores:\nGet-Datastore Get ESXi servers:\nGet-VMHost Say my datacenter calls ‘DC’ and datastore where I want to upload ISO image, and also deploy VM is ‘DATASTORE’, then:\nGet folders inside given datastore:\nGet-ChildItem vmstore:/DC/DATASTORE/ I will also need to assign valid OS family to my new VM. To get all available:\n$anyHost = Get-VMHost | Select-Object -First 1 $envBrowser = Get-View -Id (Get-View -Id $anyHost.ExtensionData.Parent).EnvironmentBrowser $vmxVersion = ($envBrowser.QueryConfigOptionDescriptor() | Where-Object {$_.DefaultConfigOption}).Key $envBrowser.QueryConfigOption($vmxVersion, $null).GuestOSDescriptor | Select-Object Id, FullName I will need also network (distributed port group in my case), list them all:\nGet-VDPortgroup As we have VMs organized under different folders, I can check current folders:\nGet-folder Now I have all information for creating new VM.\nUploading iso Say my image is located locally here: /Users/stefanbezo/Downloads/Rocky-10.1-x86_64-minimal.iso And I want to upload image here: DATASTORE/ISO\nThen command for uploading is:\nCopy-DatastoreItem -Item /Users/stefanbezo/Downloads/Rocky-10.1-x86_64-minimal.iso -Destination \"vmstore:/DC/DATASTORE/ISO\" Creating new VM First I need to assign my parameters for new VM under variables - it is usefull for next builds, everything I have on one place. Here:\n$vmName = \"SB-Rocky-Template\" $hostName = \"lab-esx4.demo.sk\" $datastore = \"DATASTORE\" $network = \"DPG-VLAN116\" $isoPath = \"[$datastore] ISO/Rocky-10.1-x86_64-minimal.iso\" $folder = \"SB\" $cpu = 2 $mem = 4 $disk = 40 $guestID = \"rockylinux_64Guest\" Parameters are self-explanatory.\nAnd some object definitions required during creating VM:\n$vmHostObj = Get-VMHost -Name $hostName $folderObj = Get-Folder -Name $folder $DPGObj = Get-VDPortgroup -name $network And finaly, script for VM creating:\n$vm = New-VM ` -Name $vmName ` -VMHost $vmHostObj ` -Datastore $datastore ` -Location $folderObj ` -NumCpu $cpu ` -MemoryGB $mem ` -DiskGB $disk ` -Portgroup $DPGObj ` -GuestId $guestID Next I need to add CD drive with iso file for VM boot:\nNew-CDDrive ` -VM $vm ` -IsoPath $isoPath ` -StartConnected ` -Confirm:$false And after few seconds I can start my shiny new VM with:\nStart-VM $vm Now VM is ready to connect and setup with console.\nSome other usefull commands Power VM Off\nStop-VM -VM $vm -Confirm:$false -ErrorAction SilentlyContinue Reload VM object if needed base on VM name:\n$vm = Get-VM -Name $vmName Delete VM from disk\nRemove-VM -VM $vm -DeletePermanently -Confirm:$false ",
   "wordCount" : "474",
@@ -200,8 +201,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 </a>
             </li>
             <li>
-                <a href="https://sbezo.github.io/projects/" title="Projects">
-                    <span>Projects</span>
+                <a href="https://sbezo.github.io/tags/" title="Tags">
+                    <span>Tags</span>
                 </a>
             </li>
         </ul>
@@ -315,6 +316,7 @@ $DPGObj = Get-VDPortgroup -name $network
 
   <footer class="post-footer">
     <ul class="post-tags">
+      <li><a href="https://sbezo.github.io/tags/automation/">Automation</a></li>
     </ul>
 
 <ul class="share-buttons">

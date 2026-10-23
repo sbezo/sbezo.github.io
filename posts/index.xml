@@ -163,6 +163,13 @@
       <description>Hugo - Part 2: Continue with publishing of personal web site</description>
     </item>
     <item>
+      <title>chess-pairing.online</title>
+      <link>https://sbezo.github.io/posts/chess-pairing/</link>
+      <pubDate>Thu, 07 Aug 2025 09:18:20 +0000</pubDate>
+      <guid>https://sbezo.github.io/posts/chess-pairing/</guid>
+      <description>The simplest website for chess round-robin pairing ever ;)</description>
+    </item>
+    <item>
       <title>Hugo from Docker</title>
       <link>https://sbezo.github.io/posts/hugo-1/</link>
       <pubDate>Wed, 06 Aug 2025 18:11:33 +0000</pubDate>
