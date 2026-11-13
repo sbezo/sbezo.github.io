@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Mechanical computer | sbezo.github.io</title>
+<meta name="keywords" content="">
+<meta name="description" content="How a simple mechanical feedback loop solves a differential equation">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/posts/theexponentialhiddeninaspinningwheel/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.8fe10233a706bc87f2e08b3cf97b8bd4c0a80f10675a143675d59212121037c0.css" integrity="sha256-j&#43;ECM6cGvIfy4Is8&#43;XuL1MCoDxBnWhQ2ddWSEhIQN8A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/theexponentialhiddeninaspinningwheel/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css" integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js" integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+        ]
+    });
+});
+</script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-X37ESW6JQL"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-X37ESW6JQL');
+        }
+      </script><meta property="og:url" content="http://localhost:1313/posts/theexponentialhiddeninaspinningwheel/">
+  <meta property="og:site_name" content="sbezo.github.io">
+  <meta property="og:title" content="Mechanical computer">
+  <meta property="og:description" content="How a simple mechanical feedback loop solves a differential equation">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-11-13T14:24:36+00:00">
+    <meta property="article:modified_time" content="2026-11-13T14:24:36+00:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mechanical computer">
+<meta name="twitter:description" content="How a simple mechanical feedback loop solves a differential equation">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://localhost:1313/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Mechanical computer",
+      "item": "http://localhost:1313/posts/theexponentialhiddeninaspinningwheel/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Mechanical computer",
+  "name": "Mechanical computer",
+  "description": "How a simple mechanical feedback loop solves a differential equation",
+  "keywords": [
+    
+  ],
+  "articleBody": "From time to time, I need a break from digital technology. This time, I’m exploring a fun old idea: solving a differential equation with a mechanical “computer”. Let me explain it with a simple example.\nChallenge Let’s start with a freshly brewed cup of tea at 90°C. This is our starting temperature $T_0$ at time $t_0 = 0$.\nThe question is: How long will it take for the tea to cool down to $T_f$ = 50°C? We know that the room temperature is $T_r$ = 20°C, and we are allowed to take only one additional temperature measurement, at time $t_1$ = 120 seconds.\nExperiment The values can differ depending on the amount of water and the material and shape of the cup. My measurements are:\nTime Temperature $t_0$ = 0 s $T_0$ = 90°C $t_1$ = 120 s $T_1$ = 83°C $t_f$ = ? s $T_f$ = 50°C A little bit of theory Our one reference measurement tells us that the tea cooled down by 7°C in the first $120$ seconds. To calculate what happens later, we need a model of cooling.\nNewton’s law of cooling tells us something simple: the greater the difference between the tea’s temperature and room temperature, the faster the tea cools down. As this difference gets smaller, cooling slows down.\nWe can write it as:\n$$ \\frac{dT}{dt} = -k(T - T_r) $$\nHere $k \u003e 0$ tells us how fast the tea cools down, and the minus sign means that its temperature is going down.\nIn other words: the rate of temperature change is proportional to the temperature difference.\nMechanical solution Now comes the interesting part. Instead of solving the equation with logarithms and exponentials, let’s build a mechanical system that follows the same equation as our cooling model.\nI need something that slows down as it approaches its final destination. Here is the idea.\nImagine a horizontal disk rotating at a constant speed. Above it, we place a small wheel with a radius of 10 mm. The wheel rests on the disk’s surface, and its axis points toward the center of the disk.\nThe wheel is mounted directly on a fixed threaded rod passing above the disk’s center. Its hub contains an internal thread, so whenever the wheel rotates, it also moves along the rod.\nSomething like this:\nNow let’s give this mechanism a meaning.\nWe will use the distance between the spinning wheel and the center of the disk to represent the difference between the tea’s temperature and room temperature.\nLet’s say that every degree Celsius of temperature difference corresponds to 1 mm.\nWith our measurements:\nAt 90°C, the temperature difference is $90 - 20 = 70$, so the wheel starts 70 mm from the center. At 83°C, the wheel should be 63 mm from the center. At our target temperature of 50°C, the wheel must reach 30 mm from the center. The center represents thermal equilibrium: the tea is at room temperature, and there is no temperature difference left. A wheel at the center would stop rotating even while the disk keeps moving. In our ideal model, however, the wheel keeps approaching the center without ever reaching it.\nAlthough the disk rotates at a constant angular speed, its surface doesn’t move equally fast everywhere. Near the outer edge, the surface travels a greater distance during each revolution. Near the center, it travels a shorter distance. This means that the farther our wheel is from the center, the faster it rotates.\nSince our wheel has an internal thread and rotates on a stationary threaded rod, each revolution also moves it along the rod. We choose the disk’s rotation direction so that the thread moves the wheel toward the center.\nLet’s use a thread pitch of 1 mm per revolution. Every time the wheel completes one rotation, it moves exactly 1 mm inward. When the wheel is far from the center, it rotates quickly and moves inward quickly. As it approaches the center, it rotates more slowly.\nThe mechanism slows itself down through mechanical feedback.\nThis is the same behavior we see in our tea cooling model. The two systems follow the same mathematical relationship.\nA bit of math again Let’s compare both systems mathematically…\nFor the tea, Newton’s law says:\n$$ \\frac{dT}{dt}=-k(T-T_r) $$\nFor our wheel, the disk’s surface speed at a distance $\\rho$ from the center is:\n$$ v=2\\pi f\\rho $$\nHere $f$ is the disk’s number of revolutions per unit of time. For a wheel with radius $r$, the number of wheel revolutions per unit of time is:\n$$ n=\\frac{f\\rho}{r} $$\nEach wheel revolution moves it inward by the thread pitch $p$. Therefore:\n$$ \\frac{d\\rho}{dt}=-pn=-\\frac{pf}{r}\\rho $$\nLook at these equations:\n$$ \\underbrace{\\frac{d(T-T_r)}{dt}=-k(T-T_r)}_{\\text{Cooling tea}} $$\n$$ \\underbrace{\\frac{d\\rho}{dt}=-\\frac{pf}{r}\\rho}_{\\text{Mechanical computer}} $$\nThey have exactly the same mathematical form.\nThe temperature difference in the first equation corresponds to the wheel’s distance from the center in the second. The cooling constant $k$ corresponds to the combination of screw pitch, wheel radius, and disk speed. Programming our mechanical computer We still don’t know the cooling constant. And that’s fine! We don’t actually need to calculate it.\nThe tea started at 90°C and cooled to 83°C after 120 seconds. We can use this measurement to calibrate our mechanical computer.\nFirst, position the wheel 70 mm from the center. Start rotating the disk and measure how far the wheel moves in 120 seconds. Our goal is to make it reach exactly 63 mm from the center, corresponding to the measured temperature of 83°C.\nIf the wheel moves too far, slow down the disk. If it doesn’t move far enough, speed it up. Return the wheel to 70 mm from the center before each attempt. Repeat until the movement matches our observation.\nAnd finally, let’s start the computer :) We have now encoded the cooling constant into the mechanical system without ever calculating its numerical value.\nReturn the wheel to its starting position, start the stopwatch, and let the machine run. When the wheel reaches 30 mm from the center, our mechanical computer tells us when the tea should reach 50°C.\nNo logarithms, no exponential calculations, and no Python required. The wheel simply moves according to the same differential equation as our cooling model.\nWe are assuming an idealized mechanism, ignoring mechanical losses and the small sideways sliding at the contact between the wheel and the disk. We also assume that the room temperature and the cooling constant stay the same throughout the experiment.\nSolution Solving the differential equation tells us that the tea should reach 50°C after 16 minutes and 5 seconds. In my experiment, it took slightly longer. For me, the beauty is in using a mechanical model to represent a process described by a differential equation, just as people did in the 19th century.\n",
+  "wordCount" : "1127",
+  "inLanguage": "en",
+  "datePublished": "2026-11-13T14:24:36Z",
+  "dateModified": "2026-11-13T14:24:36Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://localhost:1313/posts/theexponentialhiddeninaspinningwheel/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "sbezo.github.io",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://localhost:1313/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="sbezo.github.io (Alt + H)">sbezo.github.io</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/posts/" title="Posts">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Mechanical computer
+    </h1>
+    <div class="post-meta"><span title='2026-11-13 14:24:36 +0000 UTC'>November 13, 2026</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>From time to time, I need a break from digital technology. This time, I&rsquo;m exploring a fun old idea: solving a differential equation with a <strong>mechanical &ldquo;computer&rdquo;</strong>. Let me explain it with a simple example.</p>
+<h2 id="challenge">Challenge<a hidden class="anchor" aria-hidden="true" href="#challenge">#</a></h2>
+<p>Let&rsquo;s start with a freshly brewed cup of tea at 90°C. This is our starting temperature $T_0$ at time $t_0 = 0$.<br>
+<strong>The question is:</strong> How long will it take for the tea to cool down to $T_f$ = 50°C?
+We know that the room temperature is $T_r$ = 20°C, and we are allowed to take only one additional temperature measurement, at time $t_1$ = 120 seconds.</p>
+<h2 id="experiment">Experiment<a hidden class="anchor" aria-hidden="true" href="#experiment">#</a></h2>
+<p>The values can differ depending on the amount of water and the material and shape of the cup. My measurements are:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Time</th>
+          <th>Temperature</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>$t_0$ = 0 s</td>
+          <td>$T_0$ = 90°C</td>
+      </tr>
+      <tr>
+          <td>$t_1$ = 120 s</td>
+          <td>$T_1$ = 83°C</td>
+      </tr>
+      <tr>
+          <td>$t_f$ = <strong>?</strong> s</td>
+          <td>$T_f$ = 50°C</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="a-little-bit-of-theory">A little bit of theory<a hidden class="anchor" aria-hidden="true" href="#a-little-bit-of-theory">#</a></h2>
+<p>Our one reference measurement tells us that the tea cooled down by 7°C in the first $120$ seconds. To calculate what happens later, we need a <strong>model of cooling</strong>.</p>
+<p>Newton&rsquo;s law of cooling tells us something simple: the greater the difference between the tea&rsquo;s temperature and room temperature, the faster the tea cools down. As this difference gets smaller, cooling slows down.</p>
+<p>We can write it as:</p>
+<p>$$
+\frac{dT}{dt} = -k(T - T_r)
+$$</p>
+<p>Here $k &gt; 0$ tells us how fast the tea cools down, and the minus sign means that its temperature is going down.</p>
+<p>In other words: <strong>the rate of temperature change is proportional to the temperature difference</strong>.</p>
+<h3 id="mechanical-solution">Mechanical solution<a hidden class="anchor" aria-hidden="true" href="#mechanical-solution">#</a></h3>
+<p>Now comes the interesting part. Instead of solving the equation with logarithms and exponentials, let&rsquo;s build a mechanical system that follows the same equation as our cooling model.</p>
+<p>I need something that slows down as it approaches its final destination. Here is the idea.</p>
+<p>Imagine a horizontal disk rotating at a <strong>constant speed</strong>. Above it, we place a small wheel with a radius of 10 mm. The wheel rests on the disk&rsquo;s surface, and its axis points toward the center of the disk.</p>
+<p>The wheel is mounted directly on a fixed threaded rod passing above the disk&rsquo;s center. Its hub contains an internal thread, so whenever the wheel rotates, it also moves along the rod.</p>
+<p>Something like this:</p>
+<p><img loading="lazy" src="/img/mechanical_computer.jpeg"></p>
+<p>Now let&rsquo;s give this mechanism a meaning.</p>
+<p>We will use the <strong>distance between the spinning wheel and the center</strong> of the disk to represent the <strong>difference between the tea&rsquo;s temperature and room temperature</strong>.</p>
+<p>Let&rsquo;s say that every degree Celsius of temperature difference corresponds to 1 mm.</p>
+<p>With our measurements:</p>
+<ul>
+<li>At 90°C, the temperature difference is $90 - 20 = 70$, so the wheel starts 70 mm from the center.</li>
+<li>At 83°C, the wheel should be 63 mm from the center.</li>
+<li>At our target temperature of 50°C, the wheel must reach 30 mm from the center.</li>
+</ul>
+<p><img loading="lazy" src="/img/mechanical_computer_2.jpeg"></p>
+<p>The center represents <strong>thermal equilibrium</strong>: the tea is at room temperature, and there is no temperature difference left. A wheel at the center would stop rotating even while the disk keeps moving. In our ideal model, however, the wheel keeps approaching the center without ever reaching it.</p>
+<p>Although the disk rotates at a constant angular speed, its surface doesn&rsquo;t move equally fast everywhere. Near the outer edge, the surface travels a greater distance during each revolution. Near the center, it travels a shorter distance. This means that the farther our wheel is from the center, the faster it rotates.</p>
+<p>Since our wheel has an internal thread and rotates on a stationary threaded rod, each revolution also moves it along the rod. We choose the disk&rsquo;s rotation direction so that the thread moves the wheel toward the center.</p>
+<p>Let&rsquo;s use a thread pitch of 1 mm per revolution. Every time the wheel completes one rotation, it moves exactly 1 mm inward. When the wheel is far from the center, it rotates quickly and moves inward quickly. As it approaches the center, it rotates more slowly.</p>
+<p><strong>The mechanism slows itself down through mechanical feedback.</strong></p>
+<p>This is the same behavior we see in our tea cooling model. The two systems follow the same mathematical relationship.</p>
+<h3 id="a-bit-of-math-again">A bit of math again<a hidden class="anchor" aria-hidden="true" href="#a-bit-of-math-again">#</a></h3>
+<p>Let&rsquo;s compare both systems mathematically&hellip;</p>
+<p>For the tea, Newton&rsquo;s law says:</p>
+<p>$$
+\frac{dT}{dt}=-k(T-T_r)
+$$</p>
+<p>For our wheel, the disk&rsquo;s surface speed at a distance $\rho$ from the center is:</p>
+<p>$$
+v=2\pi f\rho
+$$</p>
+<p>Here $f$ is the disk&rsquo;s number of revolutions per unit of time.
+For a wheel with radius $r$, the number of wheel revolutions per unit of time is:</p>
+<p>$$
+n=\frac{f\rho}{r}
+$$</p>
+<p>Each wheel revolution moves it inward by the thread pitch $p$. Therefore:</p>
+<p>$$
+\frac{d\rho}{dt}=-pn=-\frac{pf}{r}\rho
+$$</p>
+<p>Look at these equations:</p>
+<p>$$
+\underbrace{\frac{d(T-T_r)}{dt}=-k(T-T_r)}_{\text{Cooling tea}}
+$$</p>
+<p>$$
+\underbrace{\frac{d\rho}{dt}=-\frac{pf}{r}\rho}_{\text{Mechanical computer}}
+$$</p>
+<p>They have exactly the same mathematical form.</p>
+<ul>
+<li>The temperature difference in the first equation corresponds to the wheel&rsquo;s distance from the center in the second.</li>
+<li>The cooling constant $k$ corresponds to the combination of screw pitch, wheel radius, and disk speed.</li>
+</ul>
+<h3 id="programming-our-mechanical-computer">Programming our mechanical computer<a hidden class="anchor" aria-hidden="true" href="#programming-our-mechanical-computer">#</a></h3>
+<p>We still don&rsquo;t know the cooling constant. And that&rsquo;s fine! We don&rsquo;t actually need to calculate it.</p>
+<p>The tea started at 90°C and cooled to 83°C after 120 seconds. We can use this measurement to calibrate our mechanical computer.</p>
+<p>First, position the wheel 70 mm from the center. Start rotating the disk and measure how far the wheel moves in 120 seconds.
+Our goal is to make it reach exactly 63 mm from the center, corresponding to the measured temperature of 83°C.</p>
+<p>If the wheel moves too far, slow down the disk. If it doesn&rsquo;t move far enough, speed it up. Return the wheel to 70 mm from the center before each attempt. Repeat until the movement matches our observation.</p>
+<h3 id="and-finally-lets-start-the-computer-">And finally, let&rsquo;s start the computer :)<a hidden class="anchor" aria-hidden="true" href="#and-finally-lets-start-the-computer-">#</a></h3>
+<p>We have now encoded the cooling constant into the mechanical system without ever calculating its numerical value.</p>
+<p>Return the wheel to its starting position, start the stopwatch, and let the machine run.
+When the wheel reaches 30 mm from the center, our mechanical computer tells us when the tea should reach 50°C.</p>
+<p>No logarithms, no exponential calculations, and no Python required.
+The wheel simply moves according to the same differential equation as our cooling model.</p>
+<blockquote>
+<p>We are assuming an idealized mechanism, ignoring mechanical losses and the small sideways sliding at the contact between the wheel and the disk. We also assume that the room temperature and the cooling constant stay the same throughout the experiment.</p></blockquote>
+<h3 id="solution">Solution<a hidden class="anchor" aria-hidden="true" href="#solution">#</a></h3>
+<p>Solving the differential equation tells us that the tea should reach 50°C after 16 minutes and 5 seconds. In my experiment, it took slightly longer. For me, the beauty is in using a mechanical model to represent a process described by a differential equation, just as people did in the 19th century.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Mechanical computer on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2flocalhost%3a1313%2fposts%2ftheexponentialhiddeninaspinningwheel%2f&amp;title=Mechanical%20computer&amp;summary=Mechanical%20computer&amp;source=http%3a%2f%2flocalhost%3a1313%2fposts%2ftheexponentialhiddeninaspinningwheel%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Mechanical computer on reddit"
+            href="https://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fposts%2ftheexponentialhiddeninaspinningwheel%2f&title=Mechanical%20computer">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="http://localhost:1313/">sbezo.github.io</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
